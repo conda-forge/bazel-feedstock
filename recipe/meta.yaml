@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 2b737be42678900470ae9e48c975ac5b2296d9ae23c007bf118350dbe7c0552b
+  sha256: 2157b05309614d6af0e4bbc6065987aede590822634a0522161f3af5d647abc9
   patches:
     - xcode_locator.patch  # [osx]
     - ld.gold.patch        # [osx]
