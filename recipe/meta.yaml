@@ -41,9 +41,10 @@ about:
   doc_url: https://www.bazel.io/versions/master/docs/install.html
   license: Apache 2.0
   license_family: Apache
-  license_file: LICENSE.txt
+#  license_file: LICENSE.txt
 
 extra:
   recipe-maintainers:
     - jjhelmus
     - nehaljwani
+    - abhi18av
