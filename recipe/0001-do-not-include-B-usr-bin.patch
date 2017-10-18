@@ -1,0 +1,34 @@
+From c7f68692bd6675657ea005b263619859c46cd1cc Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Wed, 18 Oct 2017 15:59:18 -0500
+Subject: [PATCH] do not include -B/usr/bin
+
+---
+ tools/cpp/cc_configure.bzl | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/cpp/cc_configure.bzl b/tools/cpp/cc_configure.bzl
+index 2a82763..0dcec8c 100644
+--- a/tools/cpp/cc_configure.bzl
++++ b/tools/cpp/cc_configure.bzl
+@@ -243,7 +243,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
+           ] if darwin else [
+               "-B" + str(repository_ctx.path(cc).dirname),
+               # Always have -B/usr/bin, see https://github.com/bazelbuild/bazel/issues/760.
+-              "-B/usr/bin",
++              #"-B/usr/bin",
+               # Stamp the binary with a unique identifier.
+               "-Wl,--build-id=md5",
+               "-Wl,--hash-style=gnu"
+@@ -281,7 +281,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
+       ] + (["-Wthread-safety", "-Wself-assign"] if darwin else [
+           "-B" + str(repository_ctx.path(cc).dirname),
+           # Always have -B/usr/bin, see https://github.com/bazelbuild/bazel/issues/760.
+-          "-B/usr/bin",
++          #"-B/usr/bin",
+       ]) + (
+           # Disable problematic warnings.
+           _add_option_if_supported(repository_ctx, cc, "-Wunused-but-set-parameter") +
+-- 
+2.11.1
+
