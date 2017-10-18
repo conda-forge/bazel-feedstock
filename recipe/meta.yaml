@@ -16,9 +16,13 @@ build:
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
+  skip: True  # [linux32]
 
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
     - openjdk >=8
     - unzip  # [linux]
     - zip    # [linux]
