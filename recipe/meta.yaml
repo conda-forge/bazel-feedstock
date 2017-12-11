@@ -1,4 +1,4 @@
-{% set version = "0.4.5" %}
+{% set version = "0.8.1" %}
 
 package:
   name: bazel
@@ -6,10 +6,9 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 2b737be42678900470ae9e48c975ac5b2296d9ae23c007bf118350dbe7c0552b
+  sha256: dfd0761e0b7e36c1d74c928ad986500c905be5ebcfbc29914d574af1db7218cf
   patches:
     - xcode_locator.patch  # [osx]
-    - ld.gold.patch        # [osx]
 
 build:
   number: 0
@@ -41,7 +40,7 @@ about:
   doc_url: https://www.bazel.io/versions/master/docs/install.html
   license: Apache 2.0
   license_family: Apache
-  license_file: LICENSE.txt
+  license_file: LICENSE
 
 extra:
   recipe-maintainers:
