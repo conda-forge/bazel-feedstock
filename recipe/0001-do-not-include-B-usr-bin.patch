@@ -1,7 +1,7 @@
 From 168bc685c0df5a197b85dc2028e9a2ea896827bb Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Wed, 18 Oct 2017 17:49:16 -0500
-Subject: [PATCH] do not include -B/usr/bin
+Subject: [PATCH 1/4] do not include -B/usr/bin
 
 ---
  tools/cpp/unix_cc_configure.bzl | 4 ++--

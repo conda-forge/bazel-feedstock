@@ -1,0 +1,27 @@
+From ab064b3cd004275d083ec2881daeccdff3ee5e5f Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Mon, 15 Jan 2018 15:23:50 -0600
+Subject: [PATCH 2/4] allow args to be passed to bazel_build
+
+Allow arguments to be passed to bazel_build via the BAZEL_BUILD_OPTS
+environment variable.
+---
+ compile.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/compile.sh b/compile.sh
+index b5a325e..0b6bcf7 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -120,7 +120,7 @@ if [ $DO_COMPILE ]; then
+   new_step 'Building Bazel with Bazel'
+   display "."
+   log "Building output/bazel"
+-  bazel_build "src:bazel${EXE_EXT}" \
++  bazel_build ${BAZEL_BUILD_OPTS} "src:bazel${EXE_EXT}" \
+     || fail "Could not build Bazel"
+   bazel_bin_path="$(get_bazel_bin_path)/src/bazel${EXE_EXT}"
+   [ -e "$bazel_bin_path" ] \
+-- 
+2.11.1
+

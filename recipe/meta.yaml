@@ -10,18 +10,23 @@ source:
   patches:
     - xcode_locator.patch  # [osx]
     - 0001-do-not-include-B-usr-bin.patch  # [linux]
+    - 0002-allow-args-to-be-passed-to-bazel_build.patch
+    # apply statically link libstd++ patch in build.sh
+    #- 0003-statically-link-libstdc.patch
+    - 0004-unpatched-unix_cc_configure.bzl-in-embedded-tools.patch
 
 build:
   number: 0
   ignore_prefix_files: True
-  binary_relocation: False
   skip: True  # [win]
   skip: True  # [linux32]
+  skip: True  # [osx]
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - patch
   host:
     - openjdk >=8
     - unzip  # [linux]
@@ -30,8 +35,15 @@ requirements:
     - openjdk >=8
 
 test:
+  requires:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
   commands:
     - bazel -h
+    - readelf -d $PREFIX/bin/bazel
+    # manually check that -lstdc++ appears in the bundled unix_cc_configure.bzl
+    # tar xf /path/to/pkgs/bazel-0.5.4-hf484d3e_0.tar.bz2 bin/bazel
+    # unzip -p bin/bazel embedded_tools/tools/cpp/unix_cc_configure.bzl | grep stdc++
 
 about:
   home: https://www.bazel.io/

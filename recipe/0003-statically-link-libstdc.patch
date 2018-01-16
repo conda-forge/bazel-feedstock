@@ -1,0 +1,32 @@
+From 832bf4b84d12e65d359c973a2dbc267ded38367b Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Mon, 15 Jan 2018 16:12:33 -0600
+Subject: [PATCH 3/4] statically link libstdc++
+
+Statically link libstdc++ in the Bazel binaries. Since bazel is unpacked into a
+cache directory the path to the conda provided libstdc++ will not be relative
+and an absolute path should not be used.
+
+Implementation follows the method described in:
+https://github.com/bazelbuild/bazel/issues/2840
+https://github.com/bazelbuild/bazel/commit/2aeaeba66857c561dd6d63c79a213f1cabc3650d
+---
+ tools/cpp/unix_cc_configure.bzl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/cpp/unix_cc_configure.bzl b/tools/cpp/unix_cc_configure.bzl
+index 94f5f37..709be15 100644
+--- a/tools/cpp/unix_cc_configure.bzl
++++ b/tools/cpp/unix_cc_configure.bzl
+@@ -174,7 +174,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
+           "-std=c++0x",
+       ] + _escaped_cplus_include_paths(repository_ctx),
+       "linker_flag": [
+-          "-lstdc++",
++          "-l:libstdc++.a",
+           "-lm",  # Some systems expect -lm in addition to -lstdc++
+           # Anticipated future default.
+       ] + (
+-- 
+2.11.1
+
