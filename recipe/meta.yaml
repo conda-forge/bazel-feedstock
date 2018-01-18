@@ -13,6 +13,7 @@ source:
     # apply statically link libstd++ patch in build.sh
     #- 0003-statically-link-libstdc.patch
     - 0004-unpatched-unix_cc_configure.bzl-in-embedded-tools.patch  # [linux]
+    - xcode_locator.patch  # [osx]
 
 build:
   number: 1
