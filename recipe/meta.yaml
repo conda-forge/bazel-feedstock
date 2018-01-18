@@ -8,19 +8,18 @@ source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
   sha256: 2157b05309614d6af0e4bbc6065987aede590822634a0522161f3af5d647abc9
   patches:
-    - xcode_locator.patch  # [osx]
     - 0001-do-not-include-B-usr-bin.patch  # [linux]
     - 0002-allow-args-to-be-passed-to-bazel_build.patch
     # apply statically link libstd++ patch in build.sh
     #- 0003-statically-link-libstdc.patch
-    - 0004-unpatched-unix_cc_configure.bzl-in-embedded-tools.patch
+    - 0004-unpatched-unix_cc_configure.bzl-in-embedded-tools.patch  # [linux]
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: True
+  binary_relocation: False  # [osx]
   skip: True  # [win]
   skip: True  # [linux32]
-  skip: True  # [osx]
 
 requirements:
   build:
@@ -40,7 +39,8 @@ test:
     - {{ compiler('cxx') }}
   commands:
     - bazel -h
-    - readelf -d $PREFIX/bin/bazel
+    - readelf -d $PREFIX/bin/bazel  # [linux]
+    - conda inspect linkages -p $PREFIX bazel
     # manually check that -lstdc++ appears in the bundled unix_cc_configure.bzl
     # tar xf /path/to/pkgs/bazel-0.5.4-hf484d3e_0.tar.bz2 bin/bazel
     # unzip -p bin/bazel embedded_tools/tools/cpp/unix_cc_configure.bzl | grep stdc++
