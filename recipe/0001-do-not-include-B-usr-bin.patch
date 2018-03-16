@@ -1,4 +1,4 @@
-From 168bc685c0df5a197b85dc2028e9a2ea896827bb Mon Sep 17 00:00:00 2001
+From cb8400620f538213dcd4c297254cb60bc2fe4550 Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Wed, 18 Oct 2017 17:49:16 -0500
 Subject: [PATCH 1/4] do not include -B/usr/bin
@@ -8,21 +8,21 @@ Subject: [PATCH 1/4] do not include -B/usr/bin
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/cpp/unix_cc_configure.bzl b/tools/cpp/unix_cc_configure.bzl
-index 14b0780..94f5f37 100644
+index f67b9b5..e6adf30 100644
 --- a/tools/cpp/unix_cc_configure.bzl
 +++ b/tools/cpp/unix_cc_configure.bzl
-@@ -190,7 +190,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
-           ] if darwin else [
-               "-B" + str(repository_ctx.path(cc).dirname),
+@@ -250,7 +250,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
+           "-headerpad_max_install_names",
+           ] if darwin else bin_search_flag + [
                # Always have -B/usr/bin, see https://github.com/bazelbuild/bazel/issues/760.
 -              "-B/usr/bin",
 +              #"-B/usr/bin",
                # Gold linker only? Can we enable this by default?
                # "-Wl,--warn-execstack",
                # "-Wl,--detect-odr-violations"
-@@ -223,7 +223,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
-       ] + (["-Wthread-safety", "-Wself-assign"] if darwin else [
-           "-B" + escape_string(str(repository_ctx.path(cc).dirname)),
+@@ -279,7 +279,7 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
+           # Enable a few more warnings that aren't part of -Wall.
+       ] + (["-Wthread-safety", "-Wself-assign"] if darwin else bin_search_flag + [
            # Always have -B/usr/bin, see https://github.com/bazelbuild/bazel/issues/760.
 -          "-B/usr/bin",
 +          #"-B/usr/bin",
@@ -30,5 +30,5 @@ index 14b0780..94f5f37 100644
            # Disable problematic warnings.
            _add_option_if_supported(repository_ctx, cc, "-Wunused-but-set-parameter") +
 -- 
-2.11.1
+2.7.4
 
