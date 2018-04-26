@@ -1,7 +1,7 @@
-From e3996d031983bec862617049a8856349fa2370bd Mon Sep 17 00:00:00 2001
+From 4c67ad692d4f0e799d77483540ffe875e5b18e27 Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Mon, 15 Jan 2018 18:00:32 -0600
-Subject: [PATCH 4/4] unpatched unix_cc_configure.bzl in embedded tools
+Subject: [PATCH 4/5] unpatched unix_cc_configure.bzl in embedded tools
 
 Include the unpatched unix_cc_configure.bzl file in the embedded tools zip
 file.  Patching unix_cc_configure.bzl to use a static libstdc++ is needed when
@@ -14,10 +14,10 @@ link libstdc++.  Using the unpatched file results in dynamic linking.
  1 file changed, 6 insertions(+)
 
 diff --git a/src/create_embedded_tools.py b/src/create_embedded_tools.py
-index 352069c..db2568e 100644
+index 2fb96f276a..d6d1e89abd 100644
 --- a/src/create_embedded_tools.py
 +++ b/src/create_embedded_tools.py
-@@ -135,10 +135,16 @@ def main():
+@@ -136,10 +136,16 @@ def main():
        if os.path.basename(archive_file) in ('jdk.tar.gz', 'jdk.zip'):
          copy_jdk_into_archive(output_zip, archive_file, input_file)
        else:
@@ -35,5 +35,5 @@ index 352069c..db2568e 100644
            output_zip.writestr(zipinfo, f.read())
  
 -- 
-2.7.4
+2.17.0
 

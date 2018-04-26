@@ -2,19 +2,13 @@
 
 set -v -x
 
-if [[ ${HOST} =~ .*linux.* ]]; then
-    # copy unpatched unix_cc_configure for inclusion in the embedded tools zip file
-    cp tools/cpp/unix_cc_configure.bzl tools/cpp/unix_cc_configure.bzl.orig
-    patch -p1 < $RECIPE_DIR/0003-statically-link-libstdc.patch
-fi
-
 # useful for debugging:
 #export BAZEL_BUILD_OPTS="--logging=6 --subcommands --verbose_failures --linkopt=-static-libgcc"
-if [[ ${HOST} =~ .*darwin.* ]]; then
-    export BAZEL_BUILD_OPTS=""
-else
-    export BAZEL_BUILD_OPTS="--linkopt=-static-libgcc"
-fi
+
+# xref: https://github.com/bazelbuild/bazel/blob/0.12.0/tools/cpp/unix_cc_configure.bzl#L257-L258
+# xref: https://github.com/bazelbuild/bazel/blob/0.12.0/tools/cpp/lib_cc_configure.bzl#L25-L39
+export BAZEL_LINKOPTS="-static-libgcc:-static-libstdc++:-l%:libstdc++.a:-lm:-Wl,--disable-new-dtags"
+
 sh compile.sh
 mv output/bazel $PREFIX/bin
 
