@@ -19,16 +19,16 @@ build:
   number: 0
   ignore_prefix_files: True
   binary_relocation: False  # [osx]
-  skip: True  # [win]
   skip: True  # [linux32]
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - patch
+    - patch  # [unix]
   host:
     - openjdk >=8
+    - posix  # [win]
     - unzip  # [linux]
     - zip    # [linux]
   run:
@@ -41,7 +41,7 @@ test:
   commands:
     - bazel -h
     - readelf -d $PREFIX/bin/bazel  # [linux]
-    - conda inspect linkages -p $PREFIX bazel
+    - conda inspect linkages -p $PREFIX bazel # [unix]
     # manually check that -lstdc++ appears in the bundled unix_cc_configure.bzl
     # tar xf /path/to/pkgs/bazel-0.5.4-hf484d3e_0.tar.bz2 bin/bazel
     # unzip -p bin/bazel embedded_tools/tools/cpp/unix_cc_configure.bzl | grep stdc++
