@@ -1,7 +1,7 @@
-From 06fb618152937dc29cef2a3b77228caf1b3577a2 Mon Sep 17 00:00:00 2001
+From 51ab275620e81a7bcefb864a8412819fa93d4b0b Mon Sep 17 00:00:00 2001
 From: Nehal J Wani <nehaljw.kkd1@gmail.com>
 Date: Thu, 26 Apr 2018 10:15:38 -0500
-Subject: [PATCH 5/5] Use LSFindApplicationForInfo for locating xcode
+Subject: [PATCH 3/3] Use LSFindApplicationForInfo for locating xcode
 
 ---
  tools/osx/xcode_locator.m | 45 ++++++++++++++++++---------------------
