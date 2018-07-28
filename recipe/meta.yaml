@@ -1,4 +1,4 @@
-{% set version = "0.14.0" %}
+{% set version = "0.15.2" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 259627de8b9d415cc80904523facf3d50e6e8e68448ab968eb1c9cb8ca1ef843
+  sha256: bf53ec73be3a6d412d85ef612cec6e9c85db45da42001fab0cf1dad44cfc03f1
   patches:
     - 0001-do-not-include-B-usr-bin.patch  # [linux]
     - 0002-allow-args-to-be-passed-to-bazel_build.patch  # [unix]
@@ -17,6 +17,7 @@ build:
   ignore_prefix_files: True
   binary_relocation: False  # [osx]
   skip: True  # [linux32]
+  skip: True  # [win and vc<14]
 
 requirements:
   build:
