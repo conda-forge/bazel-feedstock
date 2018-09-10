@@ -1,4 +1,4 @@
-From 51ab275620e81a7bcefb864a8412819fa93d4b0b Mon Sep 17 00:00:00 2001
+From cb903a75569f1f7b0a817de71f8774c8ee958a02 Mon Sep 17 00:00:00 2001
 From: Nehal J Wani <nehaljw.kkd1@gmail.com>
 Date: Thu, 26 Apr 2018 10:15:38 -0500
 Subject: [PATCH 3/3] Use LSFindApplicationForInfo for locating xcode

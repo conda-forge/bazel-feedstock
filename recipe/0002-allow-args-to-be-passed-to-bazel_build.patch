@@ -1,4 +1,4 @@
-From a45813dde67dc69b44c3b30cef9e0c0982be5696 Mon Sep 17 00:00:00 2001
+From 598083a162a7e8332ae0c19ec9a6d204e75c464c Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Fri, 16 Mar 2018 12:10:51 -0500
 Subject: [PATCH 2/3] allow args to be passed to bazel_build
@@ -10,15 +10,15 @@ environment variable.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/compile.sh b/compile.sh
-index 48359e3777..cfc76f3456 100755
+index ed506d28c2..1d5e24a43e 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -92,7 +92,7 @@ display "."
  log "Building output/bazel"
  # We set host and target platform directly since the defaults in @bazel_tools
  # have not yet been generated.
--bazel_build "src:bazel${EXE_EXT}" \
-+bazel_build ${BAZEL_BUILD_OPTS} "src:bazel${EXE_EXT}" \
+-bazel_build "src:bazel_nojdk${EXE_EXT}" \
++bazel_build ${BAZEL_BUILD_OPTS} "src:bazel_nojdk${EXE_EXT}" \
    --host_platform=@bazel_tools//platforms:host_platform \
    --platforms=@bazel_tools//platforms:target_platform \
    || fail "Could not build Bazel"
