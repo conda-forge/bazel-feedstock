@@ -1,50 +1,101 @@
-From cb903a75569f1f7b0a817de71f8774c8ee958a02 Mon Sep 17 00:00:00 2001
+From a0c2d7af2a0c5e4a4b028db93df050b8b57686a7 Mon Sep 17 00:00:00 2001
 From: Nehal J Wani <nehaljw.kkd1@gmail.com>
 Date: Thu, 26 Apr 2018 10:15:38 -0500
-Subject: [PATCH 3/3] Use LSFindApplicationForInfo for locating xcode
+Subject: [PATCH] Make code compatible with 10.9 SDK
 
+- Use LSFindApplicationForInfo for locating xcode
+- Revert "Use a parameterized dict and simplify an iteration in xcode-locator."
 ---
- tools/osx/xcode_locator.m | 45 ++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 24 deletions(-)
+ tools/osx/xcode_locator.m | 62 +++++++++++++++++++++++++++--------------------
+ 1 file changed, 36 insertions(+), 26 deletions(-)
 
 diff --git a/tools/osx/xcode_locator.m b/tools/osx/xcode_locator.m
-index 20f72df372..4a3919ab99 100644
+index e247395..71654f4 100644
 --- a/tools/osx/xcode_locator.m
 +++ b/tools/osx/xcode_locator.m
-@@ -130,32 +130,29 @@ int main(int argc, const char * argv[]) {
+@@ -62,9 +62,8 @@
+ //    precedence over installed versions.)
+ //
+ // 2. Not older (at least as high version number).
+-static void AddEntryToDictionary(
+-  XcodeVersionEntry *entry,
+-  NSMutableDictionary<NSString *, XcodeVersionEntry *> *dict) {
++static void AddEntryToDictionary(XcodeVersionEntry *entry,
++                                 NSMutableDictionary *dict) {
+   BOOL inApplications =
+       [entry.url.path rangeOfString:@"/Applications/"].location != NSNotFound;
+   NSString *entryVersion = entry.version;
+@@ -114,12 +113,10 @@ static NSString *ExpandVersion(NSString *version) {
+ //
+ // If there is a problem locating the Xcodes, prints one or more error messages
+ // and returns nil.
+-static NSMutableDictionary<NSString *, XcodeVersionEntry *> *FindXcodes()
+-  __attribute((ns_returns_retained)) {
++static NSMutableDictionary *FindXcodes() __attribute((ns_returns_retained)) {
+   CFStringRef bundleID = CFSTR("com.apple.dt.Xcode");
+ 
+-  NSMutableDictionary<NSString *, XcodeVersionEntry *> *dict =
+-      [[NSMutableDictionary alloc] init];
++  NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+   CFErrorRef cfError;
+   NSArray *array = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier(
+       bundleID, &cfError));
+@@ -174,22 +171,17 @@ static NSMutableDictionary<NSString *, XcodeVersionEntry *> *FindXcodes()
+ 
+ // Prints out the located Xcodes as a set of lines where each line contains the
+ // list of versions for a given Xcode and its location on disk.
+-static void DumpAsVersionsOnly(
+-  FILE *output,
+-  NSMutableDictionary<NSString *, XcodeVersionEntry *> *dict) {
+-  NSSet<XcodeVersionEntry *> *distinctValues =
+-      [[NSSet alloc] initWithArray:dict.allValues];
+-  NSMutableDictionary<NSString *, NSMutableSet <NSString *> *> *aliasDict =
+-      [[NSMutableDictionary alloc] init];
+-  [dict enumerateKeysAndObjectsUsingBlock:^(NSString *aliasVersion,
+-                                            XcodeVersionEntry *entry,
+-                                            BOOL *stop) {
+-    NSString *versionString = entry.version;
++static void DumpAsVersionsOnly(FILE *output, NSMutableDictionary *dict) {
++  NSSet *distinctValues = [[NSSet alloc] initWithArray:[dict allValues]];
++  NSMutableDictionary *aliasDict = [[NSMutableDictionary alloc] init];
++  for (XcodeVersionEntry *value in distinctValues) {
++    NSString *versionString = value.version;
+     if (aliasDict[versionString] == nil) {
+       aliasDict[versionString] = [[NSMutableSet alloc] init];
+     }
+-    [aliasDict[versionString] addObject:aliasVersion];
+-  }];
++    [aliasDict[versionString]
++        addObjectsFromArray:[dict allKeysForObject:value]];
++  }
+   for (NSString *version in aliasDict) {
+     XcodeVersionEntry *entry = dict[version];
+     fprintf(output, "%s:%s:%s\n",
+@@ -201,9 +193,7 @@ static void DumpAsVersionsOnly(
+ }
+ 
+ // Prints out the located Xcodes in JSON format.
+-static void DumpAsJson(
+-  FILE *output,
+-  NSMutableDictionary<NSString *, XcodeVersionEntry *> *dict) {
++static void DumpAsJson(FILE *output, NSMutableDictionary *dict) {
+   fprintf(output, "{\n");
+   for (NSString *version in dict) {
+     XcodeVersionEntry *entry = dict[version];
+@@ -260,10 +250,30 @@ int main(int argc, const char * argv[]) {
+       return 1;
      }
  
-     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
--    CFErrorRef cfError;
--    NSArray *array = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier(
--        CFSTR("com.apple.dt.Xcode"), &cfError));
--    if (array == nil) {
--      NSError *nsError = (__bridge NSError *)cfError;
--      printf("error: %s\n", nsError.description.UTF8String);
+-    NSMutableDictionary<NSString *, XcodeVersionEntry *> *dict = FindXcodes();
+-    if (dict == nil) {
 -      return 1;
++    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 +    CFURLRef t_url = NULL;
 +    int rc = LSFindApplicationForInfo(kLSUnknownCreator, CFSTR("com.apple.dt.Xcode"), nil, nil, &t_url);
 +    if (rc == kLSApplicationNotFoundErr) {
 +	    printf("error: %d\n", rc);
 +	    return 1;
-     }
--    for (NSURL *url in array) {
--      NSBundle *bundle = [NSBundle bundleWithURL:url];
--      if (!bundle) {
--        printf("error: Unable to open bundle at URL: %s\n", url.description.UTF8String);
--        return 1;
--      }
--      NSString *version = bundle.infoDictionary[@"CFBundleShortVersionString"];
--      if (!version) {
--        printf("error: Unable to extract CFBundleShortVersionString from URL: %s\n",
--               url.description.UTF8String);
--        return 1;
--      }
--      version = ExpandVersion(version);
--      NSURL *developerDir = [url URLByAppendingPathComponent:@"Contents/Developer"];
--      XcodeVersionEntry *entry =
--          [[XcodeVersionEntry alloc] initWithVersion:version url:developerDir];
--      AddEntryToDictionary(entry, dict);
++    }
 +    NSURL *url = (__bridge NSURL *)t_url;
 +    NSBundle *bundle = [NSBundle bundleWithURL:url];
 +    if (!bundle) {
@@ -66,5 +117,5 @@ index 20f72df372..4a3919ab99 100644
      XcodeVersionEntry *entry = [dict objectForKey:versionArg];
      if (entry) {
 -- 
-2.17.0
+2.5.4 (Apple Git-61)
 
