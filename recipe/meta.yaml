@@ -18,7 +18,7 @@ build:
 
 requirements:
   build:
-    - openjdk >=8
+    - openjdk >=8,<11
     - unzip  # [linux]
     - zip    # [linux]
   run:
