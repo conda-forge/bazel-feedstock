@@ -1,4 +1,4 @@
-From ddc1915c55d673d771fffc661a2e2d7d9c30db7d Mon Sep 17 00:00:00 2001
+From 9735219083bb67f4dd8f4bb30562baae2b5a5157 Mon Sep 17 00:00:00 2001
 From: Nehal J Wani <nehaljw.kkd1@gmail.com>
 Date: Thu, 26 Apr 2018 10:15:38 -0500
 Subject: [PATCH] Make code compatible with 10.9 SDK
@@ -6,11 +6,11 @@ Subject: [PATCH] Make code compatible with 10.9 SDK
 - Use LSFindApplicationForInfo for locating xcode
 - Revert "Use a parameterized dict and simplify an iteration in xcode-locator."
 ---
- tools/osx/xcode_locator.m | 62 +++++++++++++++++++++++----------------
- 1 file changed, 36 insertions(+), 26 deletions(-)
+ tools/osx/xcode_locator.m | 60 +++++++++++++++++++++++----------------
+ 1 file changed, 36 insertions(+), 24 deletions(-)
 
 diff --git a/tools/osx/xcode_locator.m b/tools/osx/xcode_locator.m
-index cd44267dea..fff0f2642a 100644
+index 6e318d7e56..fff0f2642a 100644
 --- a/tools/osx/xcode_locator.m
 +++ b/tools/osx/xcode_locator.m
 @@ -62,9 +62,8 @@
@@ -41,15 +41,13 @@ index cd44267dea..fff0f2642a 100644
    CFErrorRef cfError;
    NSArray *array = CFBridgingRelease(LSCopyApplicationURLsForBundleIdentifier(
        cfBundleID, &cfError));
-@@ -188,22 +185,17 @@ static NSMutableDictionary<NSString *, XcodeVersionEntry *> *FindXcodes()
+@@ -188,20 +185,17 @@ static NSMutableDictionary<NSString *, XcodeVersionEntry *> *FindXcodes()
  
  // Prints out the located Xcodes as a set of lines where each line contains the
  // list of versions for a given Xcode and its location on disk.
 -static void DumpAsVersionsOnly(
 -  FILE *output,
 -  NSMutableDictionary<NSString *, XcodeVersionEntry *> *dict) {
--  NSSet<XcodeVersionEntry *> *distinctValues =
--      [[NSSet alloc] initWithArray:dict.allValues];
 -  NSMutableDictionary<NSString *, NSMutableSet <NSString *> *> *aliasDict =
 -      [[NSMutableDictionary alloc] init];
 -  [dict enumerateKeysAndObjectsUsingBlock:^(NSString *aliasVersion,
@@ -72,7 +70,7 @@ index cd44267dea..fff0f2642a 100644
    for (NSString *version in aliasDict) {
      XcodeVersionEntry *entry = dict[version];
      fprintf(output, "%s:%s:%s\n",
-@@ -215,9 +207,7 @@ static void DumpAsVersionsOnly(
+@@ -213,9 +207,7 @@ static void DumpAsVersionsOnly(
  }
  
  // Prints out the located Xcodes in JSON format.
@@ -83,7 +81,7 @@ index cd44267dea..fff0f2642a 100644
    fprintf(output, "{\n");
    for (NSString *version in dict) {
      XcodeVersionEntry *entry = dict[version];
-@@ -274,10 +264,30 @@ int main(int argc, const char * argv[]) {
+@@ -272,10 +264,30 @@ int main(int argc, const char * argv[]) {
        return 1;
      }
  
