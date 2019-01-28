@@ -1,4 +1,4 @@
-{% set version = "0.20.0" %}
+{% set version = "0.22.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 1945afa84fd8858b0a3c68c09915a4bc81065c61df2591387b2985e2297d30bd
+  sha256: 6860a226c8123770b122189636fb0c156c6e5c9027b5b245ac3b2315b7b55641
   patches:
     - xcode_locator.patch  # [osx]
 
