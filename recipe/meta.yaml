@@ -1,4 +1,4 @@
-{% set version = "0.18.0" %}
+{% set version = "0.22.0" %}
 
 package:
   name: bazel
@@ -6,9 +6,8 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: d0e86d2f7881ec8742a9823a986017452d2da0dfe4e989111da787cb89257155
+  sha256: 6860a226c8123770b122189636fb0c156c6e5c9027b5b245ac3b2315b7b55641
   patches:
-    - 0001-do-not-include-B-usr-bin.patch  # [linux]
     - 0002-allow-args-to-be-passed-to-bazel_build.patch  # [unix]
     - 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch  # [osx]
 
@@ -19,6 +18,10 @@ build:
   skip: True  # [linux32]
   skip: True  # [win and vc<14]
   skip: True  # [win32]
+  # libc++/libstdc++: statically linked
+  ignore_run_exports:
+    - libcxx
+    - libstdcxx-ng
 
 requirements:
   build:
