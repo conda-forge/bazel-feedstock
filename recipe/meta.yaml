@@ -21,6 +21,9 @@ requirements:
     - openjdk >=8,<11
     - unzip  # [linux]
     - zip    # [linux]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - openjdk >=8
   run:
     - openjdk >=8
 
