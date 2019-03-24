@@ -1,0 +1,39 @@
+From 4c67ad692d4f0e799d77483540ffe875e5b18e27 Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Mon, 15 Jan 2018 18:00:32 -0600
+Subject: [PATCH 4/5] unpatched unix_cc_configure.bzl in embedded tools
+
+Include the unpatched unix_cc_configure.bzl file in the embedded tools zip
+file.  Patching unix_cc_configure.bzl to use a static libstdc++ is needed when
+building Bazel but should not be propagated in the embedded tools zip file.
+
+If the patched file was propagated, binaries created by Bazel would statically
+link libstdc++.  Using the unpatched file results in dynamic linking.
+---
+ src/create_embedded_tools.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/create_embedded_tools.py b/src/create_embedded_tools.py
+index 2fb96f276a..d6d1e89abd 100644
+--- a/src/create_embedded_tools.py
++++ b/src/create_embedded_tools.py
+@@ -136,10 +136,16 @@ def main():
+       if os.path.basename(archive_file) in ('jdk.tar.gz', 'jdk.zip'):
+         copy_jdk_into_archive(output_zip, archive_file, input_file)
+       else:
++        if input_file.endswith('unix_cc_configure.bzl.orig'):
++            # do not include the unpatched file with the .orig suffix
++            continue
+         zipinfo = zipfile.ZipInfo(archive_file, (1980, 1, 1, 0, 0, 0))
+         zipinfo.external_attr = 0o755 << 16 if is_executable(
+             input_file) else 0o644 << 16
+         zipinfo.compress_type = zipfile.ZIP_DEFLATED
++        if input_file.endswith('unix_cc_configure.bzl'):
++            # include the unpatched file in place of the patched file
++            input_file = input_file + '.orig'
+         with open(input_file, 'rb') as f:
+           output_zip.writestr(zipinfo, f.read())
+ 
+-- 
+2.17.0
+

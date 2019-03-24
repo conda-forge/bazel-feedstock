@@ -1,4 +1,4 @@
-{% set version = "0.20.0" %}
+{% set version = "0.22.0" %}
 
 package:
   name: bazel
@@ -6,27 +6,48 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 1945afa84fd8858b0a3c68c09915a4bc81065c61df2591387b2985e2297d30bd
+  sha256: 6860a226c8123770b122189636fb0c156c6e5c9027b5b245ac3b2315b7b55641
   patches:
-    - xcode_locator.patch  # [osx]
+    - 0002-allow-args-to-be-passed-to-bazel_build.patch  # [unix]
+    - 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch  # [osx]
 
 build:
   number: 0
   ignore_prefix_files: True
-  binary_relocation: False
-  skip: True  # [win]
+  binary_relocation: False  # [osx]
+  skip: True  # [linux32]
+  skip: True  # [win and vc<14]
+  skip: True  # [win32]
+  # libc++/libstdc++: statically linked
+  ignore_run_exports:
+    - libcxx
+    - libstdcxx-ng
 
 requirements:
   build:
-    - openjdk >=8,<11
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - patch  # [unix]
+  host:
+    - openjdk >=8
+    - posix  # [win]
     - unzip  # [linux]
     - zip    # [linux]
   run:
     - openjdk >=8
+    - posix  # [win]
 
 test:
+  requires:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
   commands:
     - bazel -h
+    - readelf -d $PREFIX/bin/bazel  # [linux]
+    - conda inspect linkages -p $PREFIX bazel # [unix]
+    # manually check that -lstdc++ appears in the bundled unix_cc_configure.bzl
+    # tar xf /path/to/pkgs/bazel-0.5.4-hf484d3e_0.tar.bz2 bin/bazel
+    # unzip -p bin/bazel embedded_tools/tools/cpp/unix_cc_configure.bzl | grep stdc++
 
 about:
   home: https://www.bazel.io/
