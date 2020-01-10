@@ -2,4 +2,5 @@
 
 set -v -x
 ./compile.sh
-mv output/bazel $PREFIX/bin
+mkdir -p $PREFIX/bin/
+cp output/bazel $PREFIX/bin/
