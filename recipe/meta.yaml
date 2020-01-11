@@ -9,7 +9,6 @@ source:
   sha256: 6ccb831e683179e0cfb351cb11ea297b4db48f9eab987601c038aa0f83037db4
   patches:
     - xcode_locator.patch  # [osx]
-    - fix_path.patch  # [linux]
 
 build:
   number: 0
