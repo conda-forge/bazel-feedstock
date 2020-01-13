@@ -1,5 +1,6 @@
 #!/bin/bash
 
 set -v -x
-sh compile.sh
-mv output/bazel $PREFIX/bin
+./compile.sh
+mkdir -p $PREFIX/bin/
+cp output/bazel $PREFIX/bin/

@@ -1,0 +1,12 @@
+diff --git a/compile.sh b/compile.sh
+index c2460fa..d31d952 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -94,6 +94,7 @@ log "Building output/bazel"
+ # have not yet been generated.
+ bazel_build "src:bazel_nojdk${EXE_EXT}" \
+   --action_env=PATH \
++  --incompatible_strict_action_env=false \
+   --host_platform=@bazel_tools//platforms:host_platform \
+   --platforms=@bazel_tools//platforms:target_platform \
+   || fail "Could not build Bazel"
