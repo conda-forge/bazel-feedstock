@@ -1,4 +1,4 @@
-{% set version = "0.21.0" %}
+{% set version = "2.0.0" %}
 
 package:
   name: bazel
@@ -6,24 +6,23 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 6ccb831e683179e0cfb351cb11ea297b4db48f9eab987601c038aa0f83037db4
-  patches:
-    - xcode_locator.patch  # [osx]
-    - fix_path.patch  # [linux]
+  sha256: 724da3c656f68e787a86ebb9844773aa1c2e3a873cc39462a8f1b336153d6cbb
 
 build:
   number: 0
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
+  missing_dso_whitelist:
+    - '*'
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - openjdk >=8,<11
-    - unzip  # [linux]
-    - zip    # [linux]
+    - openjdk >=8
+    - unzip
+    - zip
   run:
     - openjdk >=8
 
