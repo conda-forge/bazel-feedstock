@@ -1,4 +1,4 @@
-MACOSX_DEPLOYMENT_TARGET:
-- '10.12'
-macos_min_version:
-- '10.12'
+MACOSX_DEPLOYMENT_TARGET:  # [osx]
+- '10.12'                  # [osx]
+macos_min_version:         # [osx]
+- '10.12'                  # [osx]
