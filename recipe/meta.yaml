@@ -23,6 +23,8 @@ requirements:
     - openjdk >=8
     - unzip
     - zip
+  run_constrained:
+    - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx]
   run:
     - openjdk >=8
 
