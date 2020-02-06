@@ -13,8 +13,6 @@ build:
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
-  missing_dso_whitelist:
-    - '*'
 
 requirements:
   build:
