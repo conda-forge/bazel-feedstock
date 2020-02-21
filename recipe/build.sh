@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -v -x
+export LD_LIBRARY_PATH=$PREFIX/lib:$LD_LIBRARY_PATH
 
 if [ $(uname) == Darwin ]; then
     if [[ $(basename $CONDA_BUILD_SYSROOT) != "MacOSX10.12.sdk" ]]; then
