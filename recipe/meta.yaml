@@ -9,7 +9,7 @@ source:
   sha256: 724da3c656f68e787a86ebb9844773aa1c2e3a873cc39462a8f1b336153d6cbb
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
