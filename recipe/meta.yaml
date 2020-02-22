@@ -7,12 +7,21 @@ package:
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
   sha256: 724da3c656f68e787a86ebb9844773aa1c2e3a873cc39462a8f1b336153d6cbb
+  patches:
+    - 0001-allow-args-to-be-passed-to-bazel_build.patch
+    - 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch
 
 build:
   number: 0
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
+  # libc++/libstdc++: statically linked
+  ignore_run_exports:
+    - libcxx # [not osx]
+    - libstdcxx-ng
+  missing_dso_whitelist:
+    - "*/libc++.1.dylib" # [osx]
 
 requirements:
   build:
