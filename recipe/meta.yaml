@@ -26,8 +26,14 @@ requirements:
     - openjdk >=8
 
 test:
+  requires:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
   commands:
     - bazel -h
+    - bazel version
+    # libstdc++ should not be included in this listing as it is statically linked
+    - readelf -d $PREFIX/bin/bazel  # [linux]
 
 about:
   home: https://www.bazel.io/
