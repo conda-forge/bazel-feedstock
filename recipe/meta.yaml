@@ -18,10 +18,10 @@ build:
   skip: True  # [win]
   # libc++/libstdc++: statically linked
   ignore_run_exports:
-    - libcxx # [not osx]
-    - libstdcxx-ng
+    - libcxx  # [osx]
+    - libstdcxx-ng  # [not osx]
   missing_dso_whitelist:
-    - "*/libc++.1.dylib" # [osx]
+    - "*/libc++.1.dylib"  # [osx]
 
 requirements:
   build:
