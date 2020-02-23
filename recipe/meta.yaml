@@ -9,7 +9,7 @@ source:
   sha256: 3371cd9050989173a3b27364668328653a65653a50a85c320adc53953b4d5f46
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch
+   #- 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch
 
 build:
   number: 0
