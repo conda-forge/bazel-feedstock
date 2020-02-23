@@ -16,12 +16,9 @@ build:
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
-  # libc++/libstdc++: statically linked
-  ignore_run_exports:
-    - libcxx  # [osx]
+  # libstdc++: statically linked
+  ignore_run_exports:  # [not osx]
     - libstdcxx-ng  # [not osx]
-  missing_dso_whitelist:
-    - "*/libc++.1.dylib"  # [osx]
 
 requirements:
   build:

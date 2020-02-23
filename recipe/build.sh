@@ -13,26 +13,20 @@ export BAZEL_BUILD_OPTS=""
 # the TMPDIR environment variable. It might be necessary to pass
 # "--materialize_param_files" to Bazel.
 
-if [[ ${HOST} =~ .*darwin.* ]]; then
-    # macOS: set up bazel config file for conda provided clang toolchain
-    # CROSSTOOL file contains flags for statically linking libc++
-    cp -r ${RECIPE_DIR}/custom_clang_toolchain .
-    cd custom_clang_toolchain
-    sed -e "s:\${CLANG}:${CLANG}:" \
-        -e "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL}:" \
-        -e "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" \
-        cc_wrapper.sh.template > cc_wrapper.sh
-    chmod +x cc_wrapper.sh
-    sed -i "" "s:\${PREFIX}:${BUILD_PREFIX}:" cc_toolchain_config.bzl
-    sed -i "" "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" cc_toolchain_config.bzl
-    sed -i "" "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" cc_toolchain_config.bzl
-    sed -i "" "s:\${LD}:${LD}:" cc_toolchain_config.bzl
-    sed -i "" "s:\${NM}:${NM}:" cc_toolchain_config.bzl
-    sed -i "" "s:\${STRIP}:${STRIP}:" cc_toolchain_config.bzl
-    sed -i "" "s:\${LIBTOOL}:${LIBTOOL}:" cc_toolchain_config.bzl
-    cd ..
-    export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
-    export BAZEL_BUILD_OPTS="--verbose_failures --crosstool_top=//custom_clang_toolchain:toolchain"
+if [ $(uname) == Darwin ]; then
+    if [[ $(basename $CONDA_BUILD_SYSROOT) != "MacOSX10.12.sdk" ]]; then
+      echo "WARNING: You asked me to use $CONDA_BUILD_SYSROOT as the MacOS SDK"
+      echo "         But because of the use of Objective-C Generics we need at"
+      echo "         least MacOSX10.12.sdk"
+      CONDA_BUILD_SYSROOT=/opt/MacOSX10.12.sdk
+      if [[ ! -d $CONDA_BUILD_SYSROOT ]]; then
+        echo "ERROR: $CONDA_BUILD_SYSROOT is not a directory"
+        exit 1
+      fi
+    fi
+    ./compile.sh
+    mkdir -p $PREFIX/bin/
+    mv output/bazel $PREFIX/bin
 else
     # The bazel binary is a self extracting zip file which contains binaries
     # and libraries, some of which are linked to libstdc++.
@@ -79,8 +73,7 @@ EOF
     chmod +x wrapper.sh
     cp wrapper.sh ${BUILD_PREFIX}/bin/
     export CC=${BUILD_PREFIX}/bin/wrapper.sh
+	./compile.sh
+	mkdir -p $PREFIX/bin/
+	mv output/bazel $PREFIX/bin
 fi
-
-./compile.sh
-mkdir -p $PREFIX/bin/
-mv output/bazel $PREFIX/bin
