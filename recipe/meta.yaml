@@ -1,4 +1,4 @@
-{% set version = "2.0.0" %}
+{% set version = "2.1.0" %}
 
 package:
   name: bazel
@@ -6,18 +6,25 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 724da3c656f68e787a86ebb9844773aa1c2e3a873cc39462a8f1b336153d6cbb
+  sha256: 3371cd9050989173a3b27364668328653a65653a50a85c320adc53953b4d5f46
+  patches:
+    - 0001-allow-args-to-be-passed-to-bazel_build.patch
+   #- 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch
 
 build:
   number: 0
   ignore_prefix_files: True
   binary_relocation: False
   skip: True  # [win]
+  # libstdc++: statically linked
+  ignore_run_exports:  # [not osx]
+    - libstdcxx-ng  # [not osx]
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+  host:
     - openjdk >=8
     - unzip
     - zip
@@ -25,8 +32,14 @@ requirements:
     - openjdk >=8
 
 test:
+  requires:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
   commands:
     - bazel -h
+    - bazel version
+    # libstdc++ should not be included in this listing as it is statically linked
+    - readelf -d $PREFIX/bin/bazel  # [linux]
 
 about:
   home: https://www.bazel.io/
