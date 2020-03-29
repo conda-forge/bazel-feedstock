@@ -12,10 +12,9 @@ source:
    #- 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: True
   binary_relocation: False
-  skip: True  # [win]
   # libstdc++: statically linked
   ignore_run_exports:  # [not osx]
     - libstdcxx-ng  # [not osx]
