@@ -51,7 +51,7 @@ about:
     extensible framework that you can use to develop your own build rules.
   dev_url: https://github.com/bazelbuild/bazel
   doc_url: https://www.bazel.io/versions/master/docs/install.html
-  license: Apache 2.0
+  license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
 
@@ -60,3 +60,4 @@ extra:
     - jjhelmus
     - nehaljwani
     - abhi18av
+    - jschueller

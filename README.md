@@ -3,7 +3,7 @@ About bazel
 
 Home: https://www.bazel.io/
 
-Package license: Apache 2.0
+Package license: Apache-2.0
 
 Feedstock license: BSD 3-Clause
 
@@ -160,5 +160,6 @@ Feedstock Maintainers
 
 * [@abhi18av](https://github.com/abhi18av/)
 * [@jjhelmus](https://github.com/jjhelmus/)
+* [@jschueller](https://github.com/jschueller/)
 * [@nehaljwani](https://github.com/nehaljwani/)
 
