@@ -1,4 +1,4 @@
-{% set version = "2.1.0" %}
+{% set version = "3.3.1" %}
 
 package:
   name: bazel
@@ -6,17 +6,17 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 3371cd9050989173a3b27364668328653a65653a50a85c320adc53953b4d5f46
+  sha256: e0f1f43c65c4e0a38522b37e81f6129d8a1f7cd3d8884847be306544a7492747
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
 
 build:
   number: 0
-  ignore_prefix_files: True
-  binary_relocation: False
-  skip: True  # [win]
+  ignore_prefix_files: true
+  binary_relocation: false
+  skip: true  # [win]
   # libstdc++: statically linked
-  ignore_run_exports:  # [not osx]
+  ignore_run_exports:   # [not osx]
     - libstdcxx-ng  # [not osx]
 
 requirements:
