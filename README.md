@@ -5,7 +5,7 @@ Home: https://www.bazel.io/
 
 Package license: Apache-2.0
 
-Feedstock license: BSD 3-Clause
+Feedstock license: BSD-3-Clause
 
 Summary: build system originally authored by Google
 
