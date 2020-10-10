@@ -25,12 +25,12 @@ requirements:
     - {{ compiler('cxx') }}
   host:
     - openjdk >=8
-    - unzip # [linux]
-    - zip # [linux]
-    - posix # [win]
+    - unzip  # [linux]
+    - zip  # [linux]
+    - posix  # [win]
   run:
     - openjdk >=8
-    - posix # [win]
+    - posix  # [win]
 
 test:
   requires:
