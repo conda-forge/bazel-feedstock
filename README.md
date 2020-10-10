@@ -5,9 +5,13 @@ Home: https://www.bazel.io/
 
 Package license: Apache-2.0
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/bazel-feedstock/blob/master/LICENSE.txt)
 
 Summary: build system originally authored by Google
+
+Development: https://github.com/bazelbuild/bazel
+
+Documentation: https://www.bazel.io/versions/master/docs/install.html
 
 Bazel is Google's own build tool, now publicly available in Beta. Bazel has
 built-in support for building both client and server software, including
@@ -44,6 +48,13 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=osx&configuration=osx_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=win&configuration=win_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -147,6 +158,7 @@ Feedstock Maintainers
 =====================
 
 * [@abhi18av](https://github.com/abhi18av/)
+* [@adrianchia](https://github.com/adrianchia/)
 * [@jjhelmus](https://github.com/jjhelmus/)
 * [@jschueller](https://github.com/jschueller/)
 * [@nehaljwani](https://github.com/nehaljwani/)
