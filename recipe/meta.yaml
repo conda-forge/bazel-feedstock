@@ -11,10 +11,10 @@ source:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: true
   binary_relocation: false
-  skip: true  # [win]
+  skip: true  # [win and vc<14]
   # libstdc++: statically linked
   ignore_run_exports:   # [not osx]
     - libstdcxx-ng  # [not osx]
@@ -25,10 +25,12 @@ requirements:
     - {{ compiler('cxx') }}
   host:
     - openjdk >=8
-    - unzip
-    - zip
+    - unzip # [linux]
+    - zip # [linux]
+    - posix # [win]
   run:
     - openjdk >=8
+    - posix # [win]
 
 test:
   requires:
@@ -60,3 +62,4 @@ extra:
     - nehaljwani
     - abhi18av
     - jschueller
+    - adrianchia
