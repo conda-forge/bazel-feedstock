@@ -5,9 +5,13 @@ Home: https://www.bazel.io/
 
 Package license: Apache-2.0
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/bazel-feedstock/blob/master/LICENSE.txt)
 
 Summary: build system originally authored by Google
+
+Development: https://github.com/bazelbuild/bazel
+
+Documentation: https://www.bazel.io/versions/master/docs/install.html
 
 Bazel is Google's own build tool, now publicly available in Beta. Bazel has
 built-in support for building both client and server software, including
