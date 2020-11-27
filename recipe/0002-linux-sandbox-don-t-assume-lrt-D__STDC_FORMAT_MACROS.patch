@@ -1,0 +1,60 @@
+From 3e1a6d681da6859acb921ba0002e270884ef9060 Mon Sep 17 00:00:00 2001
+From: Ryan Beasley <beasleyr@vmware.com>
+Date: Thu, 26 Nov 2020 22:00:51 -0500
+Subject: [PATCH 2/2] linux-sandbox: don't assume -lrt, -D__STDC_FORMAT_MACROS
+
+---
+ src/main/tools/BUILD     | 14 ++++++++++++--
+ src/main/tools/logging.h |  4 ++++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/tools/BUILD b/src/main/tools/BUILD
+index 91b26df799..22c2912ed3 100644
+--- a/src/main/tools/BUILD
++++ b/src/main/tools/BUILD
+@@ -41,7 +41,8 @@ cc_binary(
+     }),
+     linkopts = select({
+         "//src/conditions:windows": [],
+-        "//conditions:default": ["-lm"],
++        "//src/conditions:darwin": ["-lm"],
++        "//conditions:default": ["-lm", "-lrt"],
+     }),
+     deps = select({
+         "//src/conditions:windows": [],
+@@ -89,7 +90,16 @@ cc_binary(
+             "linux-sandbox-pid1.h",
+         ],
+     }),
+-    linkopts = ["-lm"],
++    linkopts = select({
++        "//src/conditions:darwin": [],
++        "//src/conditions:darwin_x86_64": [],
++        "//src/conditions:darwin_arm64": [],
++        "//src/conditions:darwin_arm64e": [],
++        "//src/conditions:freebsd": [],
++        "//src/conditions:openbsd": [],
++        "//src/conditions:windows": [],
++        "//conditions:default": ["-lm", "-lrt"],
++    }),
+     deps = select({
+         "//src/conditions:darwin": [],
+         "//src/conditions:darwin_x86_64": [],
+diff --git a/src/main/tools/logging.h b/src/main/tools/logging.h
+index c3abe35e23..14b46c9256 100644
+--- a/src/main/tools/logging.h
++++ b/src/main/tools/logging.h
+@@ -15,6 +15,10 @@
+ #ifndef SRC_MAIN_TOOLS_LOGGING_H_
+ #define SRC_MAIN_TOOLS_LOGGING_H_
+ 
++// See https://stackoverflow.com/a/8132440 .
++#ifndef __STDC_FORMAT_MACROS
++#define __STDC_FORMAT_MACROS
++#endif
+ #include <inttypes.h>
+ #include <stdint.h>
+ #include <stdio.h>
+-- 
+2.26.2
+
