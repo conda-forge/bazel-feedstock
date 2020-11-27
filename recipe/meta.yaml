@@ -1,4 +1,4 @@
-{% set version = "3.6.0" %}
+{% set version = "3.7.1" %}
 
 package:
   name: bazel
@@ -6,12 +6,13 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 3a18f24febb5203f11b0985b27e120ac623058d1d5ca79cd6df992e67d57240a
+  sha256: c9244e5905df6b0190113e26082c72d58b56b1b0dec66d076f083ce4089b0307
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
+    - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch
 
 build:
-  number: 1
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
   skip: true  # [win and vc<14]
