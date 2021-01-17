@@ -1,0 +1,12 @@
+Index: work/tools/build_defs/repo/utils.bzl
+===================================================================
+--- work.orig/tools/build_defs/repo/utils.bzl
++++ work/tools/build_defs/repo/utils.bzl
+@@ -269,6 +269,7 @@ def read_netrc(ctx, filename):
+                     "password",
+                     "account",
+                     "macdef",
++		    "protocol",
+                 ]:
+                     # command takes one argument
+                     cmd = token

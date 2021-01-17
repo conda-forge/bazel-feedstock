@@ -1,0 +1,45 @@
+Index: work/src/main/native/unix_jni_darwin.cc
+===================================================================
+--- work.orig/src/main/native/unix_jni_darwin.cc
++++ work/src/main/native/unix_jni_darwin.cc
+@@ -19,7 +19,8 @@
+ #include <fcntl.h>
+ #include <IOKit/IOMessage.h>
+ #include <IOKit/pwr_mgt/IOPMLib.h>
+-#include <os/log.h>
++// #include <os/log.h>
++#define os_log_debug(A, B) do { } while(0)
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/stat.h>
+@@ -141,6 +142,7 @@ static dispatch_queue_t JniDispatchQueue
+   return queue;
+ }
+ 
++#if 0
+ // Log used for all of our anomaly logging.
+ // Logging can be traced using:
+ // `log stream -level debug --predicate '(subsystem == "build.bazel")'`
+@@ -153,6 +155,7 @@ static os_log_t JniOSLog() {
+   });
+   return log;
+ }
++#endif
+ 
+ // Protects all of the g_sleep_state_* statics.
+ // value is "leaked" intentionally because std::mutex is not trivially
+Index: work/src/main/native/BUILD
+===================================================================
+--- work.orig/src/main/native/BUILD
++++ work/src/main/native/BUILD
+@@ -68,8 +68,8 @@ cc_binary(
+     ],
+     includes = ["."],  # For jni headers.
+     linkopts = select({
+-        "//src/conditions:darwin": ["-framework CoreServices"],
+-        "//src/conditions:darwin_x86_64": ["-framework CoreServices"],
++        "//src/conditions:darwin": ["-framework CoreServices -framework IOKit"],
++        "//src/conditions:darwin_x86_64": ["-framework CoreServices -framework IOKit"],
+         "//conditions:default": [],
+     }),
+     linkshared = 1,
