@@ -1,0 +1,26 @@
+From 27833075d25afe0fd121b7e5491813f188262852 Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Thu, 16 Jan 2020 14:18:08 -0600
+Subject: [PATCH 2/2] do not use enable-gold unless supported
+
+see: https://github.com/bazelbuild/bazel/issues/9392
+---
+ tools/cpp/unix_cc_configure.bzl | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/cpp/unix_cc_configure.bzl b/tools/cpp/unix_cc_configure.bzl
+index ccb18a431a..1858574756 100644
+--- a/tools/cpp/unix_cc_configure.bzl
++++ b/tools/cpp/unix_cc_configure.bzl
+@@ -200,6 +200,8 @@ def _find_gold_linker_path(repository_ctx, cc):
+         for flag in line.split(" "):
+             if flag.find("gold") == -1:
+                 continue
++            if flag.find("enable-gold") > -1 or flag.find("with-plugin-ld") > -1:
++                continue
+ 
+             # flag is '-fuse-ld=gold' for GCC or "/usr/lib/ld.gold" for Clang
+             # strip space, single quote, and double quotes
+-- 
+2.20.1
+

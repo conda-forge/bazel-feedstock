@@ -1,4 +1,4 @@
-{% set version = "2.1.0" %}
+{% set version = "3.1.0" %}
 
 package:
   name: bazel
@@ -6,30 +6,42 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 3371cd9050989173a3b27364668328653a65653a50a85c320adc53953b4d5f46
+  sha256: d7f40d0cac95a06cea6cb5b7f7769085257caebc3ee84269dd9298da760d5615
   patches:
-    - 0001-allow-args-to-be-passed-to-bazel_build.patch
-   #- 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch
+    - 0001-allow-args-to-be-passed-to-bazel_build.patch   # [unix]
+    - 0002-do-not-use-enable-gold-unless-supported.patch  # [unix]
+    - 0005-Use-LSFindApplicationForInfo-for-locating-xcode.patch  # [osx]
+    - osx_os_log.patch  # [osx]
+    - fix_netrc_protocol.patch  # [osx]
 
 build:
   number: 0
   ignore_prefix_files: True
-  binary_relocation: False
-  skip: True  # [win]
-  # libstdc++: statically linked
-  ignore_run_exports:  # [not osx]
-    - libstdcxx-ng  # [not osx]
+  binary_relocation: False  # [osx]
+  skip: True  # [linux32]
+  skip: True  # [win and vc<14]
+  skip: True  # [win32 or py<30]
+  # libc++/libstdc++: statically linked
+  ignore_run_exports:
+    - libcxx  # [not osx]
+    - libstdcxx-ng
+  missing_dso_whitelist:
+    - "*/libc++.1.dylib"  # [osx]
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - patch  # [unix]
+    - python >=3
   host:
     - openjdk >=8
-    - unzip
-    - zip
+    - posix  # [win]
+    - unzip  # [linux]
+    - zip    # [linux]
   run:
     - openjdk >=8
+    - posix  # [win]
 
 test:
   requires:
@@ -37,9 +49,11 @@ test:
     - {{ compiler('cxx') }}
   commands:
     - bazel -h
-    - bazel version
-    # libstdc++ should not be included in this listing as it is statically linked
     - readelf -d $PREFIX/bin/bazel  # [linux]
+    - conda inspect linkages -p $PREFIX bazel  # [unix]
+    # manually check that -lstdc++ appears in the bundled unix_cc_configure.bzl
+    # tar xf /path/to/pkgs/bazel-0.5.4-hf484d3e_0.tar.bz2 bin/bazel
+    # unzip -p bin/bazel embedded_tools/tools/cpp/unix_cc_configure.bzl | grep stdc++
 
 about:
   home: https://www.bazel.io/
@@ -51,12 +65,10 @@ about:
     extensible framework that you can use to develop your own build rules.
   dev_url: https://github.com/bazelbuild/bazel
   doc_url: https://www.bazel.io/versions/master/docs/install.html
-  license: Apache 2.0
+  license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
 
 extra:
   recipe-maintainers:
-    - jjhelmus
     - nehaljwani
-    - abhi18av
