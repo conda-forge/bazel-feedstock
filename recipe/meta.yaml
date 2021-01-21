@@ -9,7 +9,7 @@ source:
   sha256: d350f80e70654932db252db380d2ec0144a00e86f8d9f2b4c799ffdb48e9cdd1
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch
+    - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch # [linux]
 
 build:
   number: 0
