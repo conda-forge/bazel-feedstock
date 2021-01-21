@@ -1,4 +1,4 @@
-{% set version = "3.7.2" %}
+{% set version = "4.0.0" %}
 
 package:
   name: bazel
@@ -6,10 +6,10 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: de255bb42163a915312df9f4b86e5b874b46d9e8d4b72604b5123c3a845ed9b1
+  sha256: d350f80e70654932db252db380d2ec0144a00e86f8d9f2b4c799ffdb48e9cdd1
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch
+    - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
 
 build:
   number: 0
