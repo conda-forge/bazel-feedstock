@@ -24,8 +24,9 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - openjdk >=8  # [not win]
   host:
-    - openjdk >=8
+    - openjdk >=8  # [win]
     - unzip  # [linux]
     - zip  # [linux]
     - posix  # [win]
@@ -63,3 +64,4 @@ extra:
     - abhi18av
     - jschueller
     - adrianchia
+    - xhochy

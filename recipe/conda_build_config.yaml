@@ -1,2 +1,2 @@
-MACOSX_DEPLOYMENT_TARGET:  # [osx]
-  - '10.12'                # [osx]
+MACOSX_DEPLOYMENT_TARGET:  # [osx and not arm64]
+  - '10.12'                # [osx and not arm64]
