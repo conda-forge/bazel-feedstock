@@ -196,4 +196,5 @@ Feedstock Maintainers
 * [@adrianchia](https://github.com/adrianchia/)
 * [@jschueller](https://github.com/jschueller/)
 * [@nehaljwani](https://github.com/nehaljwani/)
+* [@xhochy](https://github.com/xhochy/)
 
