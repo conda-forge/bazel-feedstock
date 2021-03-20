@@ -24,8 +24,8 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-  host:
     - openjdk >=8
+  host:
     - unzip  # [linux]
     - zip  # [linux]
     - posix  # [win]
