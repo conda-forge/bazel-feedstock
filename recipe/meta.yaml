@@ -10,9 +10,10 @@ source:
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
+    - 0001-Build-with-native-dependencies.patch  # [osx]
 
 build:
-  number: 0
+  number: 2
   ignore_prefix_files: true
   binary_relocation: false
   skip: true  # [win and vc<14]
@@ -24,8 +25,14 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - openjdk >=8  # [not win]
+    - openjdk >=8       # [unix]
+    - grpc-cpp          # [unix]
+    - grpc_java_plugin  # [osx]
+    - libprotobuf       # [unix]
+    - ijar              # [osx or (build_platform != target_platform)]
   host:
+    - grpc-cpp  # [unix]
+    - libprotobuf  # [unix]
     - openjdk >=8  # [win]
     - unzip  # [linux]
     - zip  # [linux]
