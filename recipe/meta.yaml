@@ -11,6 +11,7 @@ source:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
     - 0001-Build-with-native-dependencies.patch  # [osx]
+    - 0004-zipper-from-conda-package.patch  # [osx]
 
 build:
   number: 2
@@ -40,6 +41,7 @@ requirements:
   run:
     - openjdk >=8
     - posix  # [win]
+    - ijar  # [osx]
 
 test:
   requires:
