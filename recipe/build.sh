@@ -88,18 +88,20 @@ fi
 EOF
   chmod +x $PREFIX/bin/bazel
   mv output/bazel $PREFIX/bin/bazel-real
-  mkdir -p $PREFIX/share/bazel
-  $PREFIX/bin/bazel version
+  mkdir -p $PREFIX/share/bazel/install
+  mkdir -p install-archive
+  pushd install-archive
+    unzip $PREFIX/bin/bazel-real
+    export INSTALL_BASE_KEY=$(cat install_base_key)
+  popd
+  mv install-archive $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+  chmod -R a+w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
   for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"; do
-    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/*/$executable
-    # Set timestamps to untampered
-    touch -mt $(($(date '+%Y') + 10))10101010 $PREFIX/share/bazel/install/*/$executable
+    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
   done
-  for i in $PREFIX/share/bazel; do
-    if [[ "$i" != "install" ]]; then
-	rm -rf "$PREFIX/share/bazel/$i"
-    fi
-  done
+  # Set timestamps to untampered
+  find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
+  chmod -R a-w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
 else
     # The bazel binary is a self extracting zip file which contains binaries
     # and libraries, some of which are linked to libstdc++.
