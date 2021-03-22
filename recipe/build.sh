@@ -64,7 +64,42 @@ if [[ "${target_platform}" == osx-* ]]; then
   popd
   ./compile.sh
   mkdir -p $PREFIX/bin/
-  mv output/bazel $PREFIX/bin
+  cat <<'EOF' > $PREFIX/bin/bazel
+#!/bin/bash
+
+PREFIX_DIR=$(dirname ${BASH_SOURCE})
+# Make PREDIX_DIR absolute
+if [[ $(uname) == 'Linux' ]]; then
+  PREFIX_DIR=$(readlink -f ${PREFIX_DIR})
+else
+  pushd ${PREFIX_DIR}
+  PREFIX_DIR=$(pwd -P)
+  popd
+fi
+
+# Go one level up
+PREFIX_DIR=$(dirname ${PREFIX_DIR})
+
+if [[ "$*" != *"--output_user_root"* ]]; then
+  $PREFIX_DIR/bin/bazel-real --output_user_root ${PREFIX_DIR}/share/bazel $*
+else
+  $PREFIX_DIR/bin/bazel-real $*
+fi
+EOF
+  chmod +x $PREFIX/bin/bazel
+  mv output/bazel $PREFIX/bin/bazel-real
+  mkdir -p $PREFIX/share/bazel
+  $PREFIX/bin/bazel version
+  for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"; do
+    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/*/$executable
+    # Set timestamps to untampered
+    touch -mt $(($(date '+%Y') + 10))10101010 $PREFIX/share/bazel/install/*/$executable
+  done
+  for i in $PREFIX/share/bazel; do
+    if [[ "$i" != "install" ]]; then
+	rm -rf "$PREFIX/share/bazel/$i"
+    fi
+  done
 else
     # The bazel binary is a self extracting zip file which contains binaries
     # and libraries, some of which are linked to libstdc++.
