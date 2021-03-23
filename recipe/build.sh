@@ -25,10 +25,83 @@ if [[ "${target_platform}" == osx-* ]]; then
         exit 1
       fi
     fi
+    export LDFLAGS="${LDFLAGS} -framework IOKit"
+  elif [[ "${target_platform}" == "osx-arm64" ]]; then
+    export LDFLAGS="${LDFLAGS} -framework IOKit -mmacosx-version-min=11.0"
   fi
+  export CONDA_CLANG_VERSION=$($CC -v 2>&1 | head -n1 | cut -d' ' -f3)
+  export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
+  export BAZEL_BUILD_OPTS="--logging=6 --subcommands --verbose_failures --crosstool_top=//custom_clang_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include"
+  export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
+
+  sed -i "" "s:\${PREFIX}:${PREFIX}:" src/BUILD
+  sed -i "" "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL}:" src/BUILD
+  sed -i "" "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD
+  sed -i "" "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf.BUILD
+  sed -i "" "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/ijar/BUILD
+
+  # set up bazel config file for conda provided clang toolchain
+  cp -r ${RECIPE_DIR}/custom_clang_toolchain .
+  pushd custom_clang_toolchain
+    sed -e "s:\${CLANG}:${CLANG}:" \
+        -e "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL}:" \
+        -e "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" \
+        cc_wrapper.sh.template > cc_wrapper.sh
+    chmod +x cc_wrapper.sh
+    sed -i "" "s:\${PREFIX}:${PREFIX}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${CONDA_CLANG_VERSION}:${CONDA_CLANG_VERSION}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${LD}:${LD}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${CFLAGS}:${CFLAGS}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${CPPFLAGS}:${CPPFLAGS}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${CXXFLAGS}:${CXXFLAGS}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${LDFLAGS}:${LDFLAGS}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${NM}:${NM}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${STRIP}:${STRIP}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${AR}:${LIBTOOL}:" cc_toolchain_config.bzl
+    sed -i "" "s:\${LIBTOOL}:${LIBTOOL}:" cc_toolchain_config.bzl
+  popd
   ./compile.sh
   mkdir -p $PREFIX/bin/
-  mv output/bazel $PREFIX/bin
+  cat <<'EOF' > $PREFIX/bin/bazel
+#!/bin/bash
+
+PREFIX_DIR=$(dirname ${BASH_SOURCE})
+# Make PREDIX_DIR absolute
+if [[ $(uname) == 'Linux' ]]; then
+  PREFIX_DIR=$(readlink -f ${PREFIX_DIR})
+else
+  pushd ${PREFIX_DIR}
+  PREFIX_DIR=$(pwd -P)
+  popd
+fi
+
+# Go one level up
+PREFIX_DIR=$(dirname ${PREFIX_DIR})
+
+if [[ "$*" != *"--output_user_root"* ]]; then
+  $PREFIX_DIR/bin/bazel-real --output_user_root ${PREFIX_DIR}/share/bazel $*
+else
+  $PREFIX_DIR/bin/bazel-real $*
+fi
+EOF
+  chmod +x $PREFIX/bin/bazel
+  mv output/bazel $PREFIX/bin/bazel-real
+  mkdir -p $PREFIX/share/bazel/install
+  mkdir -p install-archive
+  pushd install-archive
+    unzip $PREFIX/bin/bazel-real
+    export INSTALL_BASE_KEY=$(cat install_base_key)
+  popd
+  mv install-archive $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+  chmod -R a+w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+  for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"; do
+    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
+  done
+  # Set timestamps to untampered
+  find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
+  chmod -R a-w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
 else
     # The bazel binary is a self extracting zip file which contains binaries
     # and libraries, some of which are linked to libstdc++.

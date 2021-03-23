@@ -1,0 +1,53 @@
+--- third_party/ijar/BUILD
++++ third_party/ijar/BUILD
+@@ -69,21 +69,20 @@ cc_library(
+     ],
+ )
+ 
+-cc_binary(
++genrule(
+     name = "zipper",
+-    srcs = ["zip_main.cc"],
++    outs = ["zipper.bin"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/zipper $@",
++    executable = 1,
+     visibility = ["//visibility:public"],
+-    deps = [":zip"],
+ )
+ 
+-cc_binary(
++genrule(
+     name = "ijar",
+-    srcs = [
+-        "classfile.cc",
+-        "ijar.cc",
+-    ],
++    outs = ["ijar.bin"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/ijar $@",
++    executable = 1,
+     visibility = ["//visibility:public"],
+-    deps = [":zip"],
+ )
+ 
+ filegroup(
+--- tools/zip/BUILD.tools	2021-03-22 20:12:49.000000000 +0100
++++ tools/zip/BUILD.tools	2021-03-22 20:13:03.000000000 +0100
+@@ -1,9 +1,14 @@
+ package(default_visibility = ["//visibility:public"])
+ 
++genrule(
++    name = "zipper-exec",
++    outs = ["zipper.bin"],
++    cmd_bash = "ln -s `which zipper` $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
++)
++
+ filegroup(
+     name = "zipper",
+-    srcs = select({
+-        "//src/conditions:remote": ["//third_party/ijar:zipper"],
+-        "//conditions:default": glob(["zipper/*"]),
+-   }),
++    srcs = [":zipper-exec"],
+ )
