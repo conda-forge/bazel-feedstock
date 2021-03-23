@@ -10,8 +10,8 @@ source:
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
-    - 0001-Build-with-native-dependencies.patch  # [osx]
-    - 0004-zipper-from-conda-package.patch  # [osx]
+    - 0003-Build-with-native-dependencies.patch  # [osx]
+    - 0004-zipper-from-conda-package.patch  # [build_platform != target_platform]
 
 build:
   number: 2
@@ -30,7 +30,7 @@ requirements:
     - grpc-cpp          # [unix]
     - grpc_java_plugin  # [osx]
     - libprotobuf       # [unix]
-    - ijar              # [osx or (build_platform != target_platform)]
+    - ijar              # [build_platform != target_platform]
   host:
     - grpc-cpp  # [unix]
     - libprotobuf  # [unix]
@@ -41,7 +41,7 @@ requirements:
   run:
     - openjdk >=8
     - posix  # [win]
-    - ijar  # [osx]
+    - ijar  # [build_platform != target_platform]
 
 test:
   requires:
