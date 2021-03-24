@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-if [[ "${target_platform}" == osx-64 ]]; then
+if [[ "${target_platform}" == "osx-64" ]]; then
   TARGET_CPU="darwin_x86_64"
 elif [[ "${target_platform}" == "osx-arm64" ]]; then
   TARGET_CPU="darwin_arm64"
@@ -12,6 +12,17 @@ elif [[ "${target_platform}" == "linux-aarch64" ]]; then
   TARGET_CPU="arm64"
 elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
   TARGET_CPU="ppc"
+fi
+if [[ "${build_platform}" == "osx-64" ]]; then
+  BUILD_CPU="darwin"
+elif [[ "${build_platform}" == "osx-arm64" ]]; then
+  BUILD_CPU="darwin"
+elif [[ "${build_platform}" == "linux-64" ]]; then
+  BUILD_CPU="k8"
+elif [[ "${build_platform}" == "linux-aarch64" ]]; then
+  BUILD_CPU="arm64"
+elif [[ "${build_platform}" == "linux-ppc64le" ]]; then
+  BUILD_CPU="ppc"
 fi
 # The current Bazel release cannot distinguish between osx-arm64 and osx-64.
 # This will change with later releases and then we should get rid of this section again.
@@ -30,6 +41,8 @@ sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf.BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/ijar/BUILD
+sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
+sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == "osx-64" ]]; then
