@@ -17,7 +17,7 @@ source:
     - 0007-link-libprotobuf-grpc-java.patch  # [build_platform == target_platform]
 
 build:
-  number: 2
+  number: 3
   ignore_prefix_files: true
   binary_relocation: false
   skip: true  # [win and vc<14]
