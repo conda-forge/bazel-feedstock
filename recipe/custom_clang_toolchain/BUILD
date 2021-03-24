@@ -26,8 +26,8 @@ cc_toolchain_config(
 cc_toolchain_suite(
     name = "toolchain",
     toolchains = {
-        "darwin|compiler": ":cc-compiler-darwin",
-        "darwin": ":cc-compiler-darwin",
+        "TARGET_CPU|compiler": ":cc-compiler-darwin",
+        "TARGET_CPU": ":cc-compiler-darwin",
     },
 )
 

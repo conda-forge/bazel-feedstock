@@ -14,6 +14,10 @@ cxx_compiler_version:
 - '9'
 docker_image:
 - quay.io/condaforge/linux-anvil-ppc64le
+grpc_cpp:
+- '1.36'
+libprotobuf:
+- '3.15'
 target_platform:
 - linux-ppc64le
 zip_keys:

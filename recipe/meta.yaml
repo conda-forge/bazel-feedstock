@@ -10,8 +10,11 @@ source:
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
-    - 0003-Build-with-native-dependencies.patch  # [osx]
+    - 0003-Build-with-native-dependencies.patch  # [unix]
     - 0004-zipper-from-conda-package.patch  # [build_platform != target_platform]
+    - 0005-grpc-java-plugin-build.patch     # [build_platform != target_platform]
+    - 0006-bazel-bin-loader-path.patch      # [osx]
+    - 0007-link-libprotobuf-grpc-java.patch  # [build_platform == target_platform]
 
 build:
   number: 2
@@ -26,6 +29,7 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - sed               # [unix]
     - openjdk >=8       # [unix]
     - grpc-cpp          # [unix]
     - grpc_java_plugin  # [osx]
@@ -50,8 +54,6 @@ test:
   commands:
     - bazel -h
     - bazel version
-    # libstdc++ should not be included in this listing as it is statically linked
-    - readelf -d $PREFIX/bin/bazel  # [linux]
 
 about:
   home: https://www.bazel.io/
