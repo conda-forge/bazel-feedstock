@@ -69,79 +69,14 @@ index 0878e18507..fcbe9c6336 100644
      ],
  )
  
-diff --git a/src/BUILD b/src/BUILD
-index d6713d5a8f..60e667f1f0 100644
---- a/src/BUILD
-+++ b/src/BUILD
-@@ -375,16 +375,41 @@ genrule(
- )
- 
- [genrule(
--    name = "bazel-bin" + suffix,
-+    name = "bazel-bin-install-name" + suffix,
-     srcs = [
-         "//src/main/cpp:client",
-+    ],
-+    outs = ["bazel-install-name" + suffix],
-+    cmd = "rm -f $@; cp $(location //src/main/cpp:client) $@; chmod a+rwx $@; ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../lib/' $@",
-+    executable = 1,
-+    output_to_bindir = 1,
-+    visibility = [
-+        "//scripts:__pkg__",  # For bash completion generation
-+        "//scripts/packages:__pkg__",  # For installer generation
-+        "//src/java:__subpackages__",  # For command line reference generation
-+        "//src/test:__subpackages__",  # For integration tests
-+    ],
-+) for suffix, jdk in [
-+    ("-dev", "_jdk_allmodules"),
-+    ("", "_jdk_minimal"),
-+    ("_jdk_allmodules", "_jdk_allmodules"),
-+    ("_jdk_minimal", "_jdk_minimal"),
-+    ("_dev_jdk", "_dev_jdk"),
-+    ("_notools", "_notools"),
-+    ("_nojdk", "_nojdk"),
-+]]
-+
-+[genrule(
-+    name = "bazel-bin" + suffix,
-+    srcs = [
-+        "bazel-bin-install-name" + suffix,
-         "package-zip" + jdk,
-     ],
-     outs = ["bazel" + suffix],
-     # In msys, a file path without .exe suffix(say foo), refers to a file with .exe
-     # suffix(say foo.exe), if foo.exe exists and foo doesn't. So, on windows, we
-     # need to remove bazel.exe first, so that cat to bazel won't fail.
--    cmd = "rm -f $@; cat $(location //src/main/cpp:client) $(location :package-zip" + jdk + ") > $@ && zip -qA $@",
-+    cmd = "rm -f $@; cat $(location :bazel-bin-install-name" + suffix + ") $(location :package-zip" + jdk + ") > $@ && zip -qA $@",
-     executable = 1,
-     output_to_bindir = 1,
-     visibility = [
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index 3bd85ba6b3..a4775b2a4a 100644
+index 3bd85ba6b3..8c5ba7605e 100644
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
-@@ -58,40 +58,31 @@ distrib_java_import(
-     enable_distributions = ["debian"],
+@@ -70,28 +70,23 @@ distrib_cc_binary(
+     deps = ["//third_party/protobuf:protoc_lib"],
  )
- 
--distrib_cc_binary(
-+genrule(
-     name = "grpc-java-plugin",
--    enable_distributions = ["debian"],
--    srcs = [
--        "compiler/src/java_plugin/cpp/java_generator.cpp",
--        "compiler/src/java_plugin/cpp/java_generator.h",
--        "compiler/src/java_plugin/cpp/java_plugin.cpp",
--    ],
--    copts = ["-w"],
--    deps = ["//third_party/protobuf:protoc_lib"],
-+    outs = ["grpc-java-plugin.out"],
-+    cmd = "ln -s ${BUILD_PREFIX}/bin/grpc_java_plugin $@",
-+    executable = 1,
-+    visibility = ["//visibility:public"],
- )
- 
+
 -alias(
 +genrule(
      name = "cpp_plugin",
@@ -154,7 +89,7 @@ index 3bd85ba6b3..a4775b2a4a 100644
 +    executable = 1,
 +    visibility = ["//visibility:public"],
  )
- 
+
  alias(
      name = "grpc++_codegen_proto",
 -    actual = select({
@@ -163,7 +98,7 @@ index 3bd85ba6b3..a4775b2a4a 100644
 -    }),
 +    actual = "grpc++_unsecure",
  )
- 
+
 -alias(
 +cc_library(
      name = "grpc++_unsecure",
@@ -174,7 +109,7 @@ index 3bd85ba6b3..a4775b2a4a 100644
 +    linkopts = ["-lgrpc++_unsecure", "-lgpr"],
 +    visibility = ["//visibility:public"],
  )
- 
+
  filegroup(
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
 new file mode 100644
