@@ -13,12 +13,18 @@ elif [[ "${target_platform}" == "linux-aarch64" ]]; then
 elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
   TARGET_CPU="ppc"
 fi
+# The current Bazel release cannot distinguish between osx-arm64 and osx-64.
+# This will change with later releases and then we should get rid of this section again.
+if [[ "${target_platform}" == osx-* ]]; then
+  if [[ "${build_platform}" == "${target_platform}" ]]; then
+    TARGET_CPU="darwin"
+    BUILD_CPU="darwin"
+  fi
+fi
 
 export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 export BAZEL_BUILD_OPTS="--logging=6 --subcommands --verbose_failures --crosstool_top=//custom_clang_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU}"
 export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
-
-export
 
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD
@@ -37,7 +43,7 @@ if [[ "${target_platform}" == osx-* ]]; then
 
   ./compile.sh
   mkdir -p $PREFIX/bin/
-  cp ${RECIPE_DIR}/bazel-osx-wrapper.sh $PREFIX/bin/
+  cp ${RECIPE_DIR}/bazel-osx-wrapper.sh $PREFIX/bin/bazel
   chmod +x $PREFIX/bin/bazel
   mv output/bazel $PREFIX/bin/bazel-real
   mkdir -p $PREFIX/share/bazel/install

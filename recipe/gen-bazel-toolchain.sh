@@ -20,23 +20,28 @@ pushd custom_clang_toolchain
   fi
 
   TARGET_SYSTEM="${HOST}"
-  if [[ "${target_platform}" == osx-64 ]]; then
+  if [[ "${target_platform}" == "osx-64" ]]; then
+    TARGET_LIBC="macosx"
     TARGET_CPU="darwin_x86_64"
     TARGET_SYSTEM="x86_64-apple-macosx"
   elif [[ "${target_platform}" == "osx-arm64" ]]; then
+    TARGET_LIBC="macosx"
     TARGET_CPU="darwin_arm64"
-    TARGET_SYSTEM="x86_64-apple-macosx"
+    TARGET_SYSTEM="arm64-apple-macosx"
   elif [[ "${target_platform}" == "linux-64" ]]; then
+    TARGET_LIBC="unknown"
     TARGET_CPU="k8"
   elif [[ "${target_platform}" == "linux-aarch64" ]]; then
+    TARGET_LIBC="unknown"
     TARGET_CPU="arm64"
   elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
+    TARGET_LIBC="unknown"
     TARGET_CPU="ppc"
   fi
-  if [[ "${build_platform}" == osx-64 ]]; then
-    BUILD_CPU="darwin_x86_64"
+  if [[ "${build_platform}" == "osx-64" ]]; then
+    BUILD_CPU="darwin"
   elif [[ "${build_platform}" == "osx-arm64" ]]; then
-    BUILD_CPU="darwin_arm64"
+    BUILD_CPU="darwin"
   elif [[ "${build_platform}" == "linux-64" ]]; then
     BUILD_CPU="k8"
   elif [[ "${build_platform}" == "linux-aarch64" ]]; then
@@ -44,9 +49,18 @@ pushd custom_clang_toolchain
   elif [[ "${build_platform}" == "linux-ppc64le" ]]; then
     BUILD_CPU="ppc"
   fi
+  # The current Bazel release cannot distinguish between osx-arm64 and osx-64.
+  # This will change with later releases and then we should get rid of this section again.
+  if [[ "${target_platform}" == osx-* ]]; then
+    if [[ "${build_platform}" == "${target_platform}" ]]; then
+      TARGET_CPU="darwin"
+      BUILD_CPU="darwin"
+    fi
+  fi
 
   sed -ie "s:TARGET_CPU:${TARGET_CPU}:" BUILD
   sed -ie "s:TARGET_CPU:${TARGET_CPU}:" cc_toolchain_config.bzl
+  sed -ie "s:TARGET_LIBC:${TARGET_LIBC}:" cc_toolchain_config.bzl
   sed -ie "s:TARGET_SYSTEM:${TARGET_SYSTEM}:" cc_toolchain_config.bzl
   sed -ie "s:TARGET_PLATFORM:${target_platform}:" cc_toolchain_config.bzl
   sed -ie "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" cc_toolchain_config.bzl

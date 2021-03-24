@@ -315,7 +315,7 @@ def _impl(ctx):
         host_system_name = "TARGET_CPU",
         target_system_name = "TARGET_SYSTEM",
         target_cpu = "TARGET_CPU",
-        target_libc = "unknown",
+        target_libc = "TARGET_LIBC",
         compiler = "compiler",
         abi_version = "local",
         abi_libc_version = "local",
