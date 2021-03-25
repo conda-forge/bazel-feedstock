@@ -34,7 +34,10 @@ if [[ "${target_platform}" == osx-* ]]; then
 fi
 
 export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
-export BAZEL_BUILD_OPTS="--logging=6 --subcommands --verbose_failures --crosstool_top=//custom_clang_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU}"
+# For debugging purposes, you can add
+# --logging=6 --subcommands --verbose_failures
+# This is though too much log output for Travis CI.
+export BAZEL_BUILD_OPTS="--crosstool_top=//custom_clang_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU}"
 export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
 
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
