@@ -25,8 +25,8 @@ function apply_cc_template() {
 }
 
 # set up bazel config file for conda provided clang toolchain
-cp -r ${RECIPE_DIR}/custom_clang_toolchain .
-pushd custom_clang_toolchain
+cp -r ${RECIPE_DIR}/custom_toolchain .
+pushd custom_toolchain
   if [[ "${target_platform}" == osx-* ]]; then
     export COMPILER_VERSION=$($CC -v 2>&1 | head -n1 | cut -d' ' -f3)
     sed -e "s:\${CLANG}:${CLANG}:" \
