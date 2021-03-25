@@ -9,7 +9,7 @@ elif [[ "${target_platform}" == "osx-arm64" ]]; then
 elif [[ "${target_platform}" == "linux-64" ]]; then
   TARGET_CPU="k8"
 elif [[ "${target_platform}" == "linux-aarch64" ]]; then
-  TARGET_CPU="arm64"
+  TARGET_CPU="aarch64"
 elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
   TARGET_CPU="ppc"
 fi
@@ -20,7 +20,7 @@ elif [[ "${build_platform}" == "osx-arm64" ]]; then
 elif [[ "${build_platform}" == "linux-64" ]]; then
   BUILD_CPU="k8"
 elif [[ "${build_platform}" == "linux-aarch64" ]]; then
-  BUILD_CPU="arm64"
+  BUILD_CPU="aarch64"
 elif [[ "${build_platform}" == "linux-ppc64le" ]]; then
   BUILD_CPU="ppc"
 fi
