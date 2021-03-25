@@ -148,7 +148,7 @@ def _impl(ctx):
             "-isystem",
             "${BUILD_PREFIX}/include/c++/v1",
             "-isystem",
-            "${BUILD_PREFIX}/lib/clang/${CONDA_CLANG_VERSION}/include",
+            "${BUILD_PREFIX}/lib/clang/${COMPILER_VERSION}/include",
             "-isystem",
             "${CONDA_BUILD_SYSROOT}/usr/include",
             "-isystem",
@@ -205,7 +205,7 @@ def _impl(ctx):
                     ACTION_NAMES.lto_backend,
                     ACTION_NAMES.clif_match,
                 ],
-                flag_groups = [flag_group(flags = "-lstdc++ ${LDFLAGS}".split(" "))],
+                flag_groups = [flag_group(flags = "-l${LIBCXX} ${LDFLAGS}".split(" "))],
             ),
         ],
     )
@@ -217,7 +217,7 @@ def _impl(ctx):
             flag_set(
                 actions = all_link_actions +
                           ["objc-executable", "objc++-executable"],
-                flag_groups = [flag_group(flags = "-lstdc++ ${LDFLAGS}".split(" "))],
+                flag_groups = [flag_group(flags = "-l${LIBCXX} ${LDFLAGS}".split(" "))],
             ),
         ],
     )
@@ -297,15 +297,15 @@ def _impl(ctx):
         cxx_builtin_include_directories = [
             "${CONDA_BUILD_SYSROOT}/System/Library/Frameworks",
             "${CONDA_BUILD_SYSROOT}/usr/include",
-            "${BUILD_PREFIX}/lib/clang/${CONDA_CLANG_VERSION}/include",
+            "${BUILD_PREFIX}/lib/clang/${COMPILER_VERSION}/include",
             "${BUILD_PREFIX}/include/c++/v1",
             "${PREFIX}/include",
         ]
     else:
         cxx_builtin_include_directories = [
             "${CONDA_BUILD_SYSROOT}/usr/include",
-	    "${BUILD_PREFIX}/lib/gcc/x86_64-conda-linux-gnu/9.3.0",
-	    "${BUILD_PREFIX}/x86_64-conda-linux-gnu/include/c++/9.3.0",
+	    "${BUILD_PREFIX}/lib/gcc/${HOST}/${COMPILER_VERSION}",
+	    "${BUILD_PREFIX}/${HOST}/include/c++/${COMPILER_VERSION}",
             "${PREFIX}/include",
         ]
 

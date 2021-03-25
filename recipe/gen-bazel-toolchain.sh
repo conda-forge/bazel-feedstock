@@ -8,7 +8,7 @@ function apply_cc_template() {
   sed -ie "s:TARGET_SYSTEM:${TARGET_SYSTEM}:" $1
   sed -ie "s:TARGET_PLATFORM:${target_platform}:" $1
   sed -ie "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" $1
-  sed -ie "s:\${CONDA_CLANG_VERSION}:${CONDA_CLANG_VERSION:-}:" $1
+  sed -ie "s:\${COMPILER_VERSION}:${COMPILER_VERSION:-}:" $1
   sed -ie "s:\${GCC}:${GCC}:" $1
   sed -ie "s:\${PREFIX}:${PREFIX}:" $1
   sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" $1
@@ -20,13 +20,15 @@ function apply_cc_template() {
   sed -ie "s:\${NM}:${NM}:" $1
   sed -ie "s:\${STRIP}:${STRIP}:" $1
   sed -ie "s:\${AR}:${AR}:" $1
+  sed -ie "s:\${HOST}:${HOST}:" $1
+  sed -ie "s:\${LIBCXX}:${LIBCXX}:" $1
 }
 
 # set up bazel config file for conda provided clang toolchain
 cp -r ${RECIPE_DIR}/custom_clang_toolchain .
 pushd custom_clang_toolchain
   if [[ "${target_platform}" == osx-* ]]; then
-    export CONDA_CLANG_VERSION=$($CC -v 2>&1 | head -n1 | cut -d' ' -f3)
+    export COMPILER_VERSION=$($CC -v 2>&1 | head -n1 | cut -d' ' -f3)
     sed -e "s:\${CLANG}:${CLANG}:" \
         -e "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL}:" \
         -e "s:\${CONDA_BUILD_SYSROOT}:${CONDA_BUILD_SYSROOT}:" \
@@ -39,10 +41,13 @@ pushd custom_clang_toolchain
     chmod +x cc_wrapper.sh
     export GCC="cc_wrapper.sh"
     export GCC="cc_wrapper.sh"
+    export LIBCXX="stdc++"
     export AR=${LIBTOOL}
   else
+    export COMPILER_VERSION=$(${CC} -v 2>&1|tail -n1|cut -d' ' -f3)
     export AR=$(basename ${AR})
     touch cc_wrapper.sh
+    export LIBCXX="c++"
   fi
 
   TARGET_SYSTEM="${HOST}"
@@ -59,7 +64,7 @@ pushd custom_clang_toolchain
     TARGET_CPU="k8"
   elif [[ "${target_platform}" == "linux-aarch64" ]]; then
     TARGET_LIBC="unknown"
-    TARGET_CPU="arm64"
+    TARGET_CPU="aarch64"
   elif [[ "${target_platform}" == "linux-ppc64le" ]]; then
     TARGET_LIBC="unknown"
     TARGET_CPU="ppc"
@@ -74,7 +79,7 @@ pushd custom_clang_toolchain
   elif [[ "${build_platform}" == "linux-64" ]]; then
     BUILD_CPU="k8"
   elif [[ "${build_platform}" == "linux-aarch64" ]]; then
-    BUILD_CPU="arm64"
+    BUILD_CPU="aarch64"
   elif [[ "${build_platform}" == "linux-ppc64le" ]]; then
     BUILD_CPU="ppc"
   fi
@@ -92,24 +97,27 @@ pushd custom_clang_toolchain
 
   cp cc_toolchain_config.bzl cc_toolchain_build_config.bzl
   apply_cc_template cc_toolchain_config.bzl
-  if [[ "${build_platform}" != "${target_platform}" ]]; then
-    if [[ "${target_platform}" == osx-* ]]; then
-      GCC=cc_wrapper_build.sh
-    else
-      GCC=${GCC//${HOST}/${BUILD}}
+  (
+    if [[ "${build_platform}" != "${target_platform}" ]]; then
+      if [[ "${target_platform}" == osx-* ]]; then
+        GCC=cc_wrapper_build.sh
+      else
+        GCC=${GCC//${HOST}/${BUILD}}
+      fi
+      TARGET_CPU=${BUILD_CPU}
+      TARGET_SYSTEM=${BUILD_SYSTEM}
+      TARGET_PLATFORM=${build_platform}
+      PREFIX=${BUILD_PREFIX}
+      LD=${LD//${HOST}/${BUILD}}
+      CFLAGS=${CFLAGS//${PREFIX}/${BUILD_PREFIX}}
+      CPPFLAGS=${CPPFLAGS//${PREFIX}/${BUILD_PREFIX}}
+      CXXFLAGS=${CXXFLAGS//${PREFIX}/${BUILD_PREFIX}}
+      LDFLAGS=${LDFLAGS//${PREFIX}/${BUILD_PREFIX}}
+      NM=${NM//${HOST}/${BUILD}}
+      STRIP=${STRIP//${HOST}/${BUILD}}
+      AR=${AR//${HOST}/${BUILD}}
+      HOST=${BUILD}
     fi
-    TARGET_CPU=${BUILD_CPU}
-    TARGET_SYSTEM=${BUILD_SYSTEM}
-    TARGET_PLATFORM=${build_platform}
-    PREFIX=${BUILD_PREFIX}
-    LD=${LD//${HOST}/${BUILD}}
-    CFLAGS=${CFLAGS//${PREFIX}/${BUILD_PREFIX}}
-    CPPFLAGS=${CPPFLAGS//${PREFIX}/${BUILD_PREFIX}}
-    CXXFLAGS=${CXXFLAGS//${PREFIX}/${BUILD_PREFIX}}
-    LDFLAGS=${LDFLAGS//${PREFIX}/${BUILD_PREFIX}}
-    NM=${NM//${HOST}/${BUILD}}
-    STRIP=${STRIP//${HOST}/${BUILD}}
-    AR=${AR//${HOST}/${BUILD}}
-  fi
-  apply_cc_template cc_toolchain_build_config.bzl
+    apply_cc_template cc_toolchain_build_config.bzl
+  )
 popd
