@@ -1,0 +1,11 @@
+diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+index 3bd85ba6b3..8530b26ae7 100644
+--- a/third_party/grpc/BUILD
++++ b/third_party/grpc/BUILD
+@@ -67,7 +67,7 @@ distrib_cc_binary(
+         "compiler/src/java_plugin/cpp/java_plugin.cpp",
+     ],
+     copts = ["-w"],
+-    deps = ["//third_party/protobuf:protoc_lib"],
++    deps = ["//third_party/protobuf:protoc_lib", "//third_party/protobuf:protobuf"],
+ )
