@@ -41,13 +41,13 @@ pushd custom_clang_toolchain
     chmod +x cc_wrapper.sh
     export GCC="cc_wrapper.sh"
     export GCC="cc_wrapper.sh"
-    export LIBCXX="stdc++"
+    export LIBCXX="c++"
     export AR=${LIBTOOL}
   else
     export COMPILER_VERSION=$(${CC} -v 2>&1|tail -n1|cut -d' ' -f3)
     export AR=$(basename ${AR})
     touch cc_wrapper.sh
-    export LIBCXX="c++"
+    export LIBCXX="stdc++"
   fi
 
   TARGET_SYSTEM="${HOST}"
