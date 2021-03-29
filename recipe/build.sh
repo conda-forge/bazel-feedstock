@@ -28,26 +28,33 @@ sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 
 ./compile.sh
 
-if [[ "${target_platform}" == osx-* ]]; then
-  mkdir -p $PREFIX/bin/
-  cp ${RECIPE_DIR}/bazel-osx-wrapper.sh $PREFIX/bin/bazel
-  chmod +x $PREFIX/bin/bazel
-  mv output/bazel $PREFIX/bin/bazel-real
-  mkdir -p $PREFIX/share/bazel/install
-  mkdir -p install-archive
-  pushd install-archive
-    unzip $PREFIX/bin/bazel-real
-    export INSTALL_BASE_KEY=$(cat install_base_key)
-  popd
-  mv install-archive $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
-  chmod -R a+w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
-  for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"; do
-    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
-  done
-  # Set timestamps to untampered
-  find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
-  chmod -R a-w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
-else
-  mkdir -p $PREFIX/bin/
-  mv output/bazel $PREFIX/bin
+mkdir -p $PREFIX/bin/
+cp ${RECIPE_DIR}/bazel-wrapper.sh $PREFIX/bin/bazel
+chmod +x $PREFIX/bin/bazel
+mv output/bazel $PREFIX/bin/bazel-real
+if [[ "${target_platform}" == linux-* ]]; then
+  chrpath -r '$ORIGIN/../lib' $PREFIX/bin/bazel-real
 fi
+mkdir -p $PREFIX/share/bazel/install
+mkdir -p install-archive
+pushd install-archive
+  unzip $PREFIX/bin/bazel-real
+  export INSTALL_BASE_KEY=$(cat install_base_key)
+popd
+mv install-archive $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+chmod -R a+w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"; do
+  if [[ "${target_platform}" == osx-* ]]; then
+    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
+  else
+    chrpath -r '$ORIGIN/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
+  fi
+done
+if [[ "${target_platform}" == osx-* ]]; then
+  ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
+else
+  chrpath -r '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
+fi
+# Set timestamps to untampered
+find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
+chmod -R a-w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
