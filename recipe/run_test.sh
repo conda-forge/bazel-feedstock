@@ -5,5 +5,4 @@ set -exuo pipefail
 
 cp -r ${RECIPE_DIR}/tutorial .
 cd tutorial
-declare -a BAZEL_BUILD_OPTS
-bazel build --logging=6 --subcommands --verbose_failures "${BAZEL_BUILD_OPTS[@]}" //main:hello-world
+bazel build --logging=6 --subcommands --verbose_failures //main:hello-world
