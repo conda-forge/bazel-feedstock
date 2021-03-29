@@ -32,6 +32,15 @@ mkdir -p $PREFIX/bin/
 cp ${RECIPE_DIR}/bazel-wrapper.sh $PREFIX/bin/bazel
 chmod +x $PREFIX/bin/bazel
 mv output/bazel $PREFIX/bin/bazel-real
+
+# Explicitly unpack the contents of the bazel binary. This is normally done
+# on demand during runtime. Then this is extracted to a random location and
+# we cannot fix the RPATHs reliably.
+#
+# conda's binary relocation logic sadly doesn't work otherwise as
+#  * The binaries are zipped into the main executable.
+#  * Modifying the binaries changes their mtime and then bazel rejects them
+#    as corrupted.
 if [[ "${target_platform}" == linux-* ]]; then
   chrpath -r '$ORIGIN/../lib' $PREFIX/bin/bazel-real
 fi
@@ -50,11 +59,16 @@ for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"
     chrpath -r '$ORIGIN/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
   fi
 done
-if [[ "${target_platform}" == osx-* ]]; then
-  ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
-else
-  chrpath -r '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
+
+# Also fix the RPATH for zipper. In the case we are cross-compiling, this is provided by the ijar package.
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == "0" ]]; then
+  if [[ "${target_platform}" == osx-* ]]; then
+    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
+  else
+    chrpath -r '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
+  fi
 fi
-# Set timestamps to untampered
+
+# Set timestamps to untampered, otherwise bazel will reject the modified files as corrupted.
 find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
 chmod -R a-w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
