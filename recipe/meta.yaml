@@ -18,13 +18,9 @@ source:
     - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
 
 build:
-  number: 4
+  number: 5
   ignore_prefix_files: true
   binary_relocation: false
-  skip: true  # [win and vc<14]
-  # libstdc++: statically linked
-  ignore_run_exports:   # [not osx]
-    - libstdcxx-ng  # [not osx]
 
 requirements:
   build:
@@ -35,6 +31,7 @@ requirements:
     - grpc-cpp          # [unix]
     - grpc_java_plugin  # [osx]
     - libprotobuf       # [unix]
+    - chrpath           # [linux]
     - ijar              # [build_platform != target_platform]
   host:
     - grpc-cpp  # [unix]
