@@ -42,7 +42,7 @@ mv output/bazel $PREFIX/bin/bazel-real
 #  * Modifying the binaries changes their mtime and then bazel rejects them
 #    as corrupted.
 if [[ "${target_platform}" == linux-* ]]; then
-  chrpath -r '$ORIGIN/../lib' $PREFIX/bin/bazel-real
+  patchelf --set-rpath '$ORIGIN/../lib' $PREFIX/bin/bazel-real
 fi
 mkdir -p $PREFIX/share/bazel/install
 mkdir -p install-archive
@@ -56,7 +56,7 @@ for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"
   if [[ "${target_platform}" == osx-* ]]; then
     ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
   else
-    chrpath -r '$ORIGIN/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
+    patchelf --set-rpath '$ORIGIN/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
   fi
 done
 
@@ -65,7 +65,7 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == "0" ]]; then
   if [[ "${target_platform}" == osx-* ]]; then
     ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
   else
-    chrpath -r '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
+    patchelf --set-rpath '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
   fi
 fi
 

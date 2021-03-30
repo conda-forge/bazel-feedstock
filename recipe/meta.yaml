@@ -18,7 +18,7 @@ source:
     - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
 
 build:
-  number: 5
+  number: 6
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -31,7 +31,6 @@ requirements:
     - grpc-cpp          # [unix]
     - grpc_java_plugin  # [osx]
     - libprotobuf       # [unix]
-    - chrpath           # [linux]
     - ijar              # [build_platform != target_platform]
   host:
     - grpc-cpp  # [unix]
