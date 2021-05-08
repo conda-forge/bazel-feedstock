@@ -18,7 +18,7 @@ source:
     - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
 
 build:
-  number: 7
+  number: 8
   ignore_prefix_files: true
   binary_relocation: false
 
