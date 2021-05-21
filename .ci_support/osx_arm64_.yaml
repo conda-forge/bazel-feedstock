@@ -13,7 +13,7 @@ cxx_compiler:
 cxx_compiler_version:
 - '11'
 grpc_cpp:
-- '1.37'
+- '1.38'
 libprotobuf:
 - '3.16'
 macos_machine:
