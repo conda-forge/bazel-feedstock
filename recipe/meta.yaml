@@ -1,4 +1,4 @@
-{% set version = "4.0.0" %}
+{% set version = "4.1.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: d350f80e70654932db252db380d2ec0144a00e86f8d9f2b4c799ffdb48e9cdd1
+  sha256: f377d755c96a50f6bd2f423562598d822f43356783330a0b780ad442864d6eeb
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
@@ -18,7 +18,7 @@ source:
     - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
 
 build:
-  number: 8
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
