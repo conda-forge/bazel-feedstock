@@ -9,7 +9,6 @@ source:
   sha256: f377d755c96a50f6bd2f423562598d822f43356783330a0b780ad442864d6eeb
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0002-linux-sandbox-don-t-assume-lrt-D__STDC_FORMAT_MACROS.patch  # [linux]
     - 0003-Build-with-native-dependencies.patch  # [unix]
     - 0004-zipper-from-conda-package.patch  # [build_platform != target_platform]
     - 0005-grpc-java-plugin-build.patch     # [build_platform != target_platform]
