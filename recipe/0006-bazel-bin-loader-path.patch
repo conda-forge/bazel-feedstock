@@ -1,8 +1,8 @@
 diff --git a/src/BUILD b/src/BUILD
-index d6713d5a8f..60e667f1f0 100644
+index 936adcd513..4b9688c0e8 100644
 --- a/src/BUILD
 +++ b/src/BUILD
-@@ -375,16 +375,41 @@ genrule(
+@@ -385,16 +385,41 @@ genrule(
  )
  
  [genrule(
@@ -41,9 +41,8 @@ index d6713d5a8f..60e667f1f0 100644
      # In msys, a file path without .exe suffix(say foo), refers to a file with .exe
      # suffix(say foo.exe), if foo.exe exists and foo doesn't. So, on windows, we
      # need to remove bazel.exe first, so that cat to bazel won't fail.
--    cmd = "rm -f $@; cat $(location //src/main/cpp:client) $(location :package-zip" + jdk + ") > $@ && zip -qA $@",
-+    cmd = "rm -f $@; cat $(location :bazel-bin-install-name" + suffix + ") $(location :package-zip" + jdk + ") > $@ && zip -qA $@",
+-    cmd = "rm -f $@; cat $(location //src/main/cpp:client) $(location :package-zip" + jdk + ") > $@ && zip -qA $@ && chmod a+x $@",
++    cmd = "rm -f $@; cat $(location :bazel-bin-install-name" + suffix + ") $(location :package-zip" + jdk + ") > $@ && zip -qA $@ && chmod a+x $@",
      executable = 1,
      output_to_bindir = 1,
      visibility = [
-
