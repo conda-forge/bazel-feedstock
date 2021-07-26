@@ -11,6 +11,10 @@ fi
 # Generate toolchain and set necessary environment variables
 source gen-bazel-toolchain
 
+if [[ "${target_platform}" == "osx-64" ]]; then
+  export TARGET_CPU="darwin"
+fi
+
 # For debugging purposes, you can add
 # --logging=6 --subcommands --verbose_failures
 # This is though too much log output for Travis CI.
