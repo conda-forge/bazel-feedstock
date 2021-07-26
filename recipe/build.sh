@@ -2,21 +2,19 @@
 
 set -euxo pipefail
 
-if [[ "${target_platform}" == osx-64 ]]; then
+if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -framework IOKit"
-elif [[ "${target_platform}" == "osx-arm64" ]]; then
-  export LDFLAGS="${LDFLAGS} -framework IOKit -mmacosx-version-min=11.0"
 else
   export LDFLAGS="${LDFLAGS} -lpthread"
 fi
 
 # Generate toolchain and set necessary environment variables
-source ${RECIPE_DIR}/gen-bazel-toolchain.sh
+source gen-bazel-toolchain
 
 # For debugging purposes, you can add
 # --logging=6 --subcommands --verbose_failures
 # This is though too much log output for Travis CI.
-export BAZEL_BUILD_OPTS="--crosstool_top=//custom_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU}"
+export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU}"
 export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
 sed -ie "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
