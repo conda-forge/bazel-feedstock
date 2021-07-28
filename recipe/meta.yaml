@@ -28,16 +28,16 @@ requirements:
     - sed               # [unix]
     - openjdk >=8       # [unix]
     - grpc-cpp          # [unix]
-    - grpc_java_plugin  # [osx]
+    - grpc_java_plugin  # [osx or (build_platform != target_platform)]
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
+    - zip  # [linux]
+    - unzip  # [linux]
   host:
     - grpc-cpp  # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8  # [win]
-    - unzip  # [linux]
-    - zip  # [linux]
     - posix  # [win]
   run:
     - openjdk >=8
