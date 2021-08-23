@@ -1,2 +1,4 @@
 MACOSX_DEPLOYMENT_TARGET:  # [osx and not arm64]
   - '10.12'                # [osx and not arm64]
+grpc_java_plugin:
+  - 1.39.0
