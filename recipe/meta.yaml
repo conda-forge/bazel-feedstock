@@ -1,4 +1,4 @@
-{% set version = "4.2.0" %}
+{% set version = "4.2.1" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 74814b63920aaee47dbbbee7082e5c4317e4eebaf07e03c5fb5626e1716f1034
+  sha256: 12ea7aa11e2bdb12de1dceb9939a22e96f5a480437cb17c123379d8e0fdf5e82
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0003-Build-with-native-dependencies.patch  # [unix]
