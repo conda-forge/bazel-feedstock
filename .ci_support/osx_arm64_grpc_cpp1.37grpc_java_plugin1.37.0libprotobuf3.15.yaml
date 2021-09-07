@@ -1,11 +1,11 @@
 MACOSX_DEPLOYMENT_TARGET:
-- '10.12'
+- '11.0'
 c_compiler:
 - clang
 c_compiler_version:
 - '11'
 channel_sources:
-- conda-forge,defaults
+- conda-forge/label/rust_dev,conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:
@@ -13,15 +13,18 @@ cxx_compiler:
 cxx_compiler_version:
 - '11'
 grpc_cpp:
-- '1.39'
+- '1.37'
 grpc_java_plugin:
-- 1.39.0
+- 1.37.0
 libprotobuf:
-- '3.16'
+- '3.15'
 macos_machine:
-- x86_64-apple-darwin13.4.0
+- arm64-apple-darwin20.0.0
 target_platform:
-- osx-64
+- osx-arm64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
+- - grpc_java_plugin
+  - grpc_cpp
+  - libprotobuf
