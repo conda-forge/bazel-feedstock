@@ -51,10 +51,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_64_grpc_cpp1.39libprotobuf3.16</td>
+              <td>linux_64_grpc_cpp1.40libprotobuf3.16</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=linux&configuration=linux_64_grpc_cpp1.39libprotobuf3.16" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=linux&configuration=linux_64_grpc_cpp1.40libprotobuf3.16" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -65,10 +65,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64_grpc_cpp1.39libprotobuf3.16</td>
+              <td>linux_aarch64_grpc_cpp1.40libprotobuf3.16</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=linux&configuration=linux_aarch64_grpc_cpp1.39libprotobuf3.16" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=linux&configuration=linux_aarch64_grpc_cpp1.40libprotobuf3.16" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -79,10 +79,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le_grpc_cpp1.39libprotobuf3.16</td>
+              <td>linux_ppc64le_grpc_cpp1.40libprotobuf3.16</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=linux&configuration=linux_ppc64le_grpc_cpp1.39libprotobuf3.16" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=linux&configuration=linux_ppc64le_grpc_cpp1.40libprotobuf3.16" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -93,10 +93,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>osx_64_grpc_cpp1.39libprotobuf3.16</td>
+              <td>osx_64_grpc_cpp1.40libprotobuf3.16</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=osx&configuration=osx_64_grpc_cpp1.39libprotobuf3.16" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=osx&configuration=osx_64_grpc_cpp1.40libprotobuf3.16" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -107,10 +107,10 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>osx_arm64_grpc_cpp1.39libprotobuf3.16</td>
+              <td>osx_arm64_grpc_cpp1.40libprotobuf3.16</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=osx&configuration=osx_arm64_grpc_cpp1.39libprotobuf3.16" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=master&jobName=osx&configuration=osx_arm64_grpc_cpp1.40libprotobuf3.16" alt="variant">
                 </a>
               </td>
             </tr><tr>
