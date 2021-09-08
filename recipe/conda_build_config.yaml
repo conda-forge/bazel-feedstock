@@ -3,8 +3,8 @@ MACOSX_DEPLOYMENT_TARGET:  # [osx and not arm64]
 # The second version here is to support Tensorflow builds.
 # This can be removed once tensorflow caught up with the global pinnings.
 grpc_java_plugin:
-  - 1.39.0
-  - 1.37.0
+  - 1.39
+  - 1.37
 grpc_cpp:
   - 1.39
   - 1.37

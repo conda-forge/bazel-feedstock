@@ -8,17 +8,17 @@ jobs:
     vmImage: macOS-10.15
   strategy:
     matrix:
-      osx_64_grpc_cpp1.37grpc_java_plugin1.37.0libprotobuf3.15:
-        CONFIG: osx_64_grpc_cpp1.37grpc_java_plugin1.37.0libprotobuf3.15
+      osx_64_grpc_cpp1.37grpc_java_plugin1.37libprotobuf3.15:
+        CONFIG: osx_64_grpc_cpp1.37grpc_java_plugin1.37libprotobuf3.15
         UPLOAD_PACKAGES: 'True'
-      osx_64_grpc_cpp1.39grpc_java_plugin1.39.0libprotobuf3.16:
-        CONFIG: osx_64_grpc_cpp1.39grpc_java_plugin1.39.0libprotobuf3.16
+      osx_64_grpc_cpp1.39grpc_java_plugin1.39libprotobuf3.16:
+        CONFIG: osx_64_grpc_cpp1.39grpc_java_plugin1.39libprotobuf3.16
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_grpc_cpp1.37grpc_java_plugin1.37.0libprotobuf3.15:
-        CONFIG: osx_arm64_grpc_cpp1.37grpc_java_plugin1.37.0libprotobuf3.15
+      osx_arm64_grpc_cpp1.37grpc_java_plugin1.37libprotobuf3.15:
+        CONFIG: osx_arm64_grpc_cpp1.37grpc_java_plugin1.37libprotobuf3.15
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_grpc_cpp1.39grpc_java_plugin1.39.0libprotobuf3.16:
-        CONFIG: osx_arm64_grpc_cpp1.39grpc_java_plugin1.39.0libprotobuf3.16
+      osx_arm64_grpc_cpp1.39grpc_java_plugin1.39libprotobuf3.16:
+        CONFIG: osx_arm64_grpc_cpp1.39grpc_java_plugin1.39libprotobuf3.16
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 

@@ -15,7 +15,7 @@ cxx_compiler_version:
 grpc_cpp:
 - '1.37'
 grpc_java_plugin:
-- 1.37.0
+- '1.37'
 libprotobuf:
 - '3.15'
 macos_machine:
