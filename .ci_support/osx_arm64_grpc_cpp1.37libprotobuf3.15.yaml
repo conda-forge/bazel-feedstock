@@ -14,8 +14,6 @@ cxx_compiler_version:
 - '11'
 grpc_cpp:
 - '1.37'
-grpc_java_plugin:
-- '1.37'
 libprotobuf:
 - '3.15'
 macos_machine:
@@ -25,6 +23,5 @@ target_platform:
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-- - grpc_java_plugin
-  - grpc_cpp
+- - grpc_cpp
   - libprotobuf
