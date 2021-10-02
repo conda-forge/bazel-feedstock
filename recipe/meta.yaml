@@ -28,7 +28,9 @@ requirements:
     - sed               # [unix]
     - openjdk >=8       # [unix]
     - grpc-cpp          # [unix]
-    - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
+    # Remove this pin again once the java parts of bazel can build with a newer gRPC
+    - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
+    # - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
