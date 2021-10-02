@@ -1,11 +1,13 @@
 MACOSX_DEPLOYMENT_TARGET:
 - '10.12'
+abseil_cpp:
+- '20210324.2'
 c_compiler:
 - clang
 c_compiler_version:
 - '11'
 channel_sources:
-- conda-forge,defaults
+- conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:

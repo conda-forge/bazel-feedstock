@@ -35,6 +35,7 @@ requirements:
     - zip  # [linux]
     - unzip  # [linux]
   host:
+    - abseil-cpp  # [unix]
     - grpc-cpp  # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8  # [win]
