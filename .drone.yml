@@ -31,7 +31,7 @@ steps:
 
 ---
 kind: pipeline
-name: linux_aarch64_grpc_cpp1.39libprotobuf3.16
+name: linux_aarch64_grpc_cpp1.40libprotobuf3.16
 
 platform:
   os: linux
@@ -41,7 +41,7 @@ steps:
 - name: Install and build
   image: quay.io/condaforge/linux-anvil-aarch64
   environment:
-    CONFIG: linux_aarch64_grpc_cpp1.39libprotobuf3.16
+    CONFIG: linux_aarch64_grpc_cpp1.40libprotobuf3.16
     UPLOAD_PACKAGES: True
     PLATFORM: linux-aarch64
     BINSTAR_TOKEN:

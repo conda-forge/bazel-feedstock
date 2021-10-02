@@ -1,25 +1,27 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '10.12'
+abseil_cpp:
+- '20210324.2'
 c_compiler:
-- gcc
+- clang
 c_compiler_version:
-- '9'
-cdt_name:
-- cos7
+- '11'
 channel_sources:
-- conda-forge,defaults
+- conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- gxx
+- clangxx
 cxx_compiler_version:
-- '9'
-docker_image:
-- quay.io/condaforge/linux-anvil-comp7
+- '11'
 grpc_cpp:
-- '1.39'
+- '1.40'
 libprotobuf:
 - '3.16'
+macos_machine:
+- x86_64-apple-darwin13.4.0
 target_platform:
-- linux-ppc64le
+- osx-64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version

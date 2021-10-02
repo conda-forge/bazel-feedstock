@@ -17,7 +17,7 @@ source:
     - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
 
 build:
-  number: 1
+  number: 2
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -28,13 +28,16 @@ requirements:
     - sed               # [unix]
     - openjdk >=8       # [unix]
     - grpc-cpp          # [unix]
-    - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
+    # Remove this pin again once the java parts of bazel can build with a newer gRPC
+    - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
+    # - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
     - zip  # [linux]
     - unzip  # [linux]
   host:
+    - abseil-cpp  # [unix]
     - grpc-cpp  # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8  # [win]

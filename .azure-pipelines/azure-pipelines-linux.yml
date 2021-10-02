@@ -12,16 +12,16 @@ jobs:
         CONFIG: linux_64_grpc_cpp1.37libprotobuf3.15
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
-      linux_64_grpc_cpp1.39libprotobuf3.16:
-        CONFIG: linux_64_grpc_cpp1.39libprotobuf3.16
+      linux_64_grpc_cpp1.40libprotobuf3.16:
+        CONFIG: linux_64_grpc_cpp1.40libprotobuf3.16
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
       linux_ppc64le_grpc_cpp1.37libprotobuf3.15:
         CONFIG: linux_ppc64le_grpc_cpp1.37libprotobuf3.15
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
-      linux_ppc64le_grpc_cpp1.39libprotobuf3.16:
-        CONFIG: linux_ppc64le_grpc_cpp1.39libprotobuf3.16
+      linux_ppc64le_grpc_cpp1.40libprotobuf3.16:
+        CONFIG: linux_ppc64le_grpc_cpp1.40libprotobuf3.16
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
   timeoutInMinutes: 360
