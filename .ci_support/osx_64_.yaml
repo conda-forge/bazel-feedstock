@@ -17,7 +17,7 @@ cxx_compiler_version:
 grpc_cpp:
 - '1.40'
 libprotobuf:
-- '3.16'
+- '3.18'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 target_platform:

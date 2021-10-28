@@ -9,15 +9,16 @@ source:
   sha256: 12ea7aa11e2bdb12de1dceb9939a22e96f5a480437cb17c123379d8e0fdf5e82
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0003-Build-with-native-dependencies.patch  # [unix]
-    - 0004-zipper-from-conda-package.patch  # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-build.patch     # [build_platform != target_platform]
-    - 0006-bazel-bin-loader-path.patch      # [osx]
-    - 0007-link-libprotobuf-grpc-java.patch  # [build_platform == target_platform]
-    - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
+    - 0003-Build-with-native-dependencies.patch   # [unix]
+    - 0001-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
+    - 0004-zipper-from-conda-package.patch        # [build_platform != target_platform]
+    - 0005-grpc-java-plugin-build.patch           # [build_platform != target_platform]
+    - 0006-bazel-bin-loader-path.patch            # [osx]
+    - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
+    - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
 
 build:
-  number: 3
+  number: 4
   ignore_prefix_files: true
   binary_relocation: false
 
