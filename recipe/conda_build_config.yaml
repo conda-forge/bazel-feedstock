@@ -1,14 +1,2 @@
 MACOSX_DEPLOYMENT_TARGET:  # [osx and not arm64]
   - '10.12'                # [osx and not arm64]
-# The second version here is to support Tensorflow builds.
-# This can be removed once tensorflow caught up with the global pinnings.
-grpc_cpp:
-  - 1.40
-  - 1.37
-libprotobuf:
-  - 3.16
-  - 3.15
-zip_keys:
-  -
-    - grpc_cpp
-    - libprotobuf

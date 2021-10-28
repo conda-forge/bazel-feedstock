@@ -8,20 +8,12 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      linux_64_grpc_cpp1.37libprotobuf3.15:
-        CONFIG: linux_64_grpc_cpp1.37libprotobuf3.15
+      linux_64_:
+        CONFIG: linux_64_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
-      linux_64_grpc_cpp1.40libprotobuf3.16:
-        CONFIG: linux_64_grpc_cpp1.40libprotobuf3.16
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
-      linux_ppc64le_grpc_cpp1.37libprotobuf3.15:
-        CONFIG: linux_ppc64le_grpc_cpp1.37libprotobuf3.15
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
-      linux_ppc64le_grpc_cpp1.40libprotobuf3.16:
-        CONFIG: linux_ppc64le_grpc_cpp1.40libprotobuf3.16
+      linux_ppc64le_:
+        CONFIG: linux_ppc64le_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-comp7
   timeoutInMinutes: 360
@@ -44,6 +36,11 @@ jobs:
         export CI=azure
         export GIT_BRANCH=$BUILD_SOURCEBRANCHNAME
         export FEEDSTOCK_NAME=$(basename ${BUILD_REPOSITORY_NAME})
+        if [[ "${BUILD_REASON:-}" == "PullRequest" ]]; then
+          export IS_PR_BUILD="True"
+        else
+          export IS_PR_BUILD="False"
+        fi
         .scripts/run_docker_build.sh
     displayName: Run docker build
     env:
