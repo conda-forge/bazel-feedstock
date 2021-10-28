@@ -23,7 +23,7 @@ docker_image:
 grpc_cpp:
 - '1.40'
 libprotobuf:
-- '3.16'
+- '3.18'
 target_platform:
 - linux-aarch64
 zip_keys:
