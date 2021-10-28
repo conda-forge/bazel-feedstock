@@ -10,6 +10,7 @@ source:
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0003-Build-with-native-dependencies.patch  # [unix]
+    - 0001-Parametrize-LIBPROTOBUF_VERSION.patch # [unix]
     - 0004-zipper-from-conda-package.patch  # [build_platform != target_platform]
     - 0005-grpc-java-plugin-build.patch     # [build_platform != target_platform]
     - 0006-bazel-bin-loader-path.patch      # [osx]
@@ -17,7 +18,7 @@ source:
     - 0008-adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
 
 build:
-  number: 3
+  number: 4
   ignore_prefix_files: true
   binary_relocation: false
 
