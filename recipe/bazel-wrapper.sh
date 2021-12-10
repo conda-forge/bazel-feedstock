@@ -5,15 +5,17 @@ PREFIX_DIR=$(dirname ${BASH_SOURCE})
 if [[ $(uname) == 'Linux' ]]; then
   PREFIX_DIR=$(readlink -f ${PREFIX_DIR})
 else
-  pushd ${PREFIX_DIR}
+  cd ${PREFIX_DIR}
   PREFIX_DIR=$(pwd -P)
-  popd
+  cd - &>/dev/null
 fi
 
 # Go one level up
 PREFIX_DIR=$(dirname ${PREFIX_DIR})
 
-if [[ "$*" != *"--output_user_root"* ]]; then
+if [[ "$*" = *"--version"* ]]; then
+  $PREFIX_DIR/bin/bazel-real $*
+elif [[ "$*" != *"--output_user_root"* ]]; then
   $PREFIX_DIR/bin/bazel-real --output_user_root ${PREFIX_DIR}/share/bazel $*
 else
   $PREFIX_DIR/bin/bazel-real $*
