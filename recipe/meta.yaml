@@ -40,7 +40,7 @@ requirements:
     - grpc-cpp  # [unix]
     - grpc_java_plugin {{ grpc_cpp }}  # [unix]
     - libprotobuf  # [unix]
-    - openjdk >=8  # [win]
+    - openjdk >=8
     - posix  # [win]
   run:
     - openjdk >=8
