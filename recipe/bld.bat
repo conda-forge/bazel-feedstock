@@ -31,7 +31,7 @@ set "BAZEL_VS=%VSINSTALLDIR%"
 set "EXTRA_BAZEL_ARGS=--host_javabase=@local_jdk//:jdk"
 
 
-bash -lc ./compile.sh
+bash -lx ./compile.sh
 if errorlevel 1 exit 1
 
 copy output\bazel.exe %LIBRARY_BIN%\
