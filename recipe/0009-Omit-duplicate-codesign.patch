@@ -1,0 +1,25 @@
+From c85ac6bad76e24c73230c933c304db5893b5496e Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Mon, 7 Feb 2022 17:27:53 +0100
+Subject: [PATCH] Omit duplicate codesign
+
+---
+ src/tools/xcode/stdredirect/BUILD | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/tools/xcode/stdredirect/BUILD b/src/tools/xcode/stdredirect/BUILD
+index 1bffb6c..bbdd3d1 100755
+--- a/src/tools/xcode/stdredirect/BUILD
++++ b/src/tools/xcode/stdredirect/BUILD
+@@ -9,7 +9,7 @@ genrule(
+     outs = ["StdRedirect.dylib"],
+     cmd = "/usr/bin/xcrun clang -arch i386 -arch x86_64 -mios-simulator-version-min=7.0 -dynamiclib " +
+           "  -isysroot \"$$(/usr/bin/xcrun --sdk iphonesimulator --show-sdk-path)\" " +
+-          "  -o $@ $<; /usr/bin/xcrun codesign -s - $@",
++          "  -o $@ $<",
+     output_to_bindir = 1,
+     visibility = ["//visibility:public"],
+ )
+-- 
+2.35.0
+

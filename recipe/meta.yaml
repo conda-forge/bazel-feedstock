@@ -16,6 +16,7 @@ source:
     - 0006-bazel-bin-loader-path.patch            # [osx]
     - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
     - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
+    - 0009-Omit-duplicate-codesign.patch          # [osx and arm64]
 
 build:
   number: 3
