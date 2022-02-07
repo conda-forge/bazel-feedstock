@@ -30,6 +30,11 @@ set "BAZEL_VC=%VSINSTALLDIR%VC"
 set "BAZEL_VS=%VSINSTALLDIR%"
 set "EXTRA_BAZEL_ARGS=--host_javabase=@local_jdk//:jdk"
 
+# We need to unset some environment variables to make the java command line short enough
+set
+set AGENT_OS=
+set AGENT_MACHINENAME=
+set PROCESSOR_IDENTIFIER=
 
 bash -lx ./compile.sh
 if errorlevel 1 exit 1
