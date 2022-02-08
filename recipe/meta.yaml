@@ -9,7 +9,7 @@ source:
   sha256: 9981d0d53a356c4e87962847750a97c9e8054e460854748006c80f0d7e2b2d33
   patches:
     # TODO: remove again
-    - 0001-Debug-on-win.patch
+    #- 0001-Debug-on-win.patch
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
     - 0003-Build-with-native-dependencies.patch   # [unix]
     - 0001-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
