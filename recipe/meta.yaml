@@ -16,9 +16,11 @@ source:
     - 0006-bazel-bin-loader-path.patch            # [osx]
     - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
     - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
+    - 0009-Omit-duplicate-codesign.patch          # [osx]
+    - 0010-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 2
+  number: 3
   ignore_prefix_files: true
   binary_relocation: false
 
