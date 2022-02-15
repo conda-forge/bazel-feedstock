@@ -1,8 +1,17 @@
+From 507b29863d101722bd2c66eb71ed01aa9c3c066f Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Sat, 12 Feb 2022 22:08:16 +0100
+Subject: [PATCH 6/8] bazel bin loader path
+
+---
+ src/BUILD | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
 diff --git a/src/BUILD b/src/BUILD
-index 936adcd513..4b9688c0e8 100644
+index 8fdcf5b..b4d745e 100755
 --- a/src/BUILD
 +++ b/src/BUILD
-@@ -385,16 +385,41 @@ genrule(
+@@ -356,16 +356,41 @@ genrule(
  )
  
  [genrule(
@@ -46,3 +55,6 @@ index 936adcd513..4b9688c0e8 100644
      executable = 1,
      output_to_bindir = 1,
      visibility = [
+-- 
+2.35.0
+

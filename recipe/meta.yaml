@@ -1,4 +1,4 @@
-{% set version = "4.2.2" %}
+{% set version = "5.0.0" %}
 
 package:
   name: bazel
@@ -6,21 +6,19 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 9981d0d53a356c4e87962847750a97c9e8054e460854748006c80f0d7e2b2d33
+  sha256: 072dd62d237dbc11e0bac02e118d8c2db4d0ba3ba09f1a0eb1e2a460fb8419db
   patches:
     - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0003-Build-with-native-dependencies.patch   # [unix]
-    - 0001-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
-    - 0004-zipper-from-conda-package.patch        # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-build.patch           # [build_platform != target_platform]
-    - 0006-bazel-bin-loader-path.patch            # [osx]
-    - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
-    - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
-    - 0009-Omit-duplicate-codesign.patch          # [osx]
-    - 0010-win-Disable-VS-activation-and-make-build-verbose.patch
+    - 0002-Build-with-native-dependencies.patch  # [unix]
+    - 0003-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
+    - 0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
+    - 0005-grpc-java-plugin-from-build.patch  # [unix]
+    - 0006-bazel-bin-loader-path.patch  # [osx]
+    - 0007-Adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
+    - 0008-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 3
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -28,17 +26,18 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - sed               # [unix]
-    - openjdk >=8       # [unix]
-    - grpc-cpp          # [unix]
+    - sed                      # [unix]
+    - openjdk >=8              # [unix]
+    - grpc-cpp                 # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
-    - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
-    # - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
-    - libprotobuf       # [unix]
-    - ijar              # [build_platform != target_platform]
-    - bazel-toolchain   # [unix]
-    - zip  # [linux]
-    - unzip  # [linux]
+    - grpc_java_plugin 1.37    # [unix]
+    # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
+    - libprotobuf              # [unix]
+    - ijar {{ version }}       # [build_platform != target_platform]
+    - singlejar {{ version }}  # [build_platform != target_platform]
+    - bazel-toolchain          # [unix]
+    - zip                      # [linux]
+    - unzip                    # [linux]
   host:
     - abseil-cpp  # [unix]
     - grpc-cpp  # [unix]
@@ -48,7 +47,8 @@ requirements:
   run:
     - openjdk >=8
     - posix  # [win]
-    - ijar  # [build_platform != target_platform]
+    - ijar {{ version }}   # [build_platform != target_platform]
+    - singlejar {{ version }}   # [build_platform != target_platform]
 
 test:
   requires:
