@@ -12,7 +12,7 @@ source:
     - 0002-Build-with-native-dependencies.patch  # [unix]
     - 0003-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
     - 0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-from-build.patch  # [build_platform != target_platform]
+    - 0005-grpc-java-plugin-from-build.patch  # [unix]
     - 0006-bazel-bin-loader-path.patch  # [osx]
     - 0007-Adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
     - 0008-win-Disable-VS-activation-and-make-build-verbose.patch
