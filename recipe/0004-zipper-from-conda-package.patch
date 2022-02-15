@@ -1,5 +1,17 @@
---- third_party/ijar/BUILD
-+++ third_party/ijar/BUILD
+From 5cfa4645904ca458460c80f0ecbce113aef17d1e Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Sat, 12 Feb 2022 22:04:35 +0100
+Subject: [PATCH 4/9] zipper from conda package
+
+---
+ third_party/ijar/BUILD | 17 ++++++++---------
+ tools/zip/BUILD.tools  | 17 +++++++++++------
+ 2 files changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
+index 28f05bf..412b538 100755
+--- a/third_party/ijar/BUILD
++++ b/third_party/ijar/BUILD
 @@ -69,21 +69,20 @@ cc_library(
      ],
  )
@@ -30,24 +42,31 @@
  )
  
  filegroup(
---- tools/zip/BUILD.tools	2021-03-22 20:12:49.000000000 +0100
-+++ tools/zip/BUILD.tools	2021-03-22 20:13:03.000000000 +0100
+diff --git a/tools/zip/BUILD.tools b/tools/zip/BUILD.tools
+index c2dd86e..0afd4f7 100755
+--- a/tools/zip/BUILD.tools
++++ b/tools/zip/BUILD.tools
 @@ -1,9 +1,14 @@
  package(default_visibility = ["//visibility:public"])
  
+-filegroup(
+-    name = "zipper",
+-    srcs = select({
+-        "//src/conditions:remote": ["//third_party/ijar:zipper"],
+-        "//conditions:default": glob(["zipper/*"]),
+-    }),
 +genrule(
 +    name = "zipper-exec",
 +    outs = ["zipper.bin"],
 +    cmd_bash = "ln -s `which zipper` $@",
 +    executable = 1,
 +    visibility = ["//visibility:public"],
-+)
-+
- filegroup(
-     name = "zipper",
--    srcs = select({
--        "//src/conditions:remote": ["//third_party/ijar:zipper"],
--        "//conditions:default": glob(["zipper/*"]),
--   }),
-+    srcs = [":zipper-exec"],
  )
++
++ filegroup(
++     name = "zipper",
++    srcs = [":zipper-exec"],
++ )
+-- 
+2.35.0
+
