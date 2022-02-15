@@ -47,8 +47,8 @@ requirements:
   run:
     - openjdk >=8
     - posix  # [win]
-    - ijar {{ version }}  # [build_platform != target_platform]
-    - singlejar {{ version }}  # [build_platform != target_platform]
+    - ijar {{ version }}   # [build_platform != target_platform]
+    - singlejar {{ version }}   # [build_platform != target_platform]
 
 test:
   requires:
