@@ -17,6 +17,7 @@ source:
     - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
     - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
     - 0009-Omit-duplicate-codesign.patch
+    - 0010-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
   number: 7

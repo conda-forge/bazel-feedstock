@@ -26,7 +26,7 @@ FOR /F "delims=" %%i IN ('cygpath.exe -u "%SYSTEMDRIVE%\t"') DO set "TEMP=%%i"
 set MSYSTEM=MINGW%ARCH%
 set MSYS2_PATH_TYPE=inherit
 set CHERE_INVOKING=1
-:: set "BAZEL_VC=%VSINSTALLDIR%VC"
+set "BAZEL_VC=%VSINSTALLDIR%VC"
 set "BAZEL_VS=%VSINSTALLDIR%"
 set "EXTRA_BAZEL_ARGS=--host_javabase=@local_jdk//:jdk"
 
