@@ -1,7 +1,7 @@
 MACOSX_DEPLOYMENT_TARGET:
 - '10.12'
 abseil_cpp:
-- '20210324.2'
+- '20211102.0'
 c_compiler:
 - clang
 c_compiler_version:
