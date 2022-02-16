@@ -1,6 +1,7 @@
 bot:
   abi_migration_branches:
   - 4.2.x
+  - 4.2.1
   check_solvable: true
 build_platform:
   linux_aarch64: linux_64
