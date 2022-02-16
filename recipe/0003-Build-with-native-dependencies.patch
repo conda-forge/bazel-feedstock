@@ -106,7 +106,7 @@ index 3bd85ba6b3..8c5ba7605e 100644
 -        "//src/conditions:debian_build": "@debian_cc_deps//:grpc++_unsecure",
 -        "//conditions:default": "@com_github_grpc_grpc//:grpc++_unsecure",
 -    }),
-+    linkopts = ["-lgrpc++_unsecure", "-lgpr"],
++    linkopts = ["-lgrpc++_unsecure", "-lgrpc_unsecure","-lgpr"],
 +    visibility = ["//visibility:public"],
  )
 
