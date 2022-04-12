@@ -8,11 +8,17 @@ jobs:
     vmImage: macOS-10.15
   strategy:
     matrix:
-      osx_64_:
-        CONFIG: osx_64_
+      osx_64_feature_setjdk:
+        CONFIG: osx_64_feature_setjdk
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_:
-        CONFIG: osx_arm64_
+      osx_64_feature_setnojdk:
+        CONFIG: osx_64_feature_setnojdk
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_feature_setjdk:
+        CONFIG: osx_arm64_feature_setjdk
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_feature_setnojdk:
+        CONFIG: osx_arm64_feature_setnojdk
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 
