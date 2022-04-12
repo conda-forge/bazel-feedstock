@@ -21,6 +21,7 @@ build:
   number: 4
   ignore_prefix_files: true
   binary_relocation: false
+  string: h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ feature_set }}
 
 requirements:
   build:
@@ -30,7 +31,7 @@ requirements:
     - openjdk >=8              # [unix]
     - grpc-cpp                 # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
-    - grpc_java_plugin 1.37    # [unix]
+    - grpc_java_plugin 1.37    # [unix and feature_set == "jdk"]
     # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
