@@ -30,8 +30,8 @@ requirements:
     - openjdk >=8              # [unix]
     - grpc-cpp                 # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
-    - grpc_java_plugin 1.37    # [build_platform != target_platform]
-    - grpc_java_plugin         # [build_platform == target_platform]
+    - grpc_java_plugin 1.37    # [unix and build_platform != target_platform]
+    - grpc_java_plugin         # [unix and build_platform == target_platform]
     # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
