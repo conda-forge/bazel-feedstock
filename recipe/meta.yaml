@@ -28,6 +28,10 @@ requirements:
     - {{ compiler('cxx') }}
     - sed                      # [unix]
     - openjdk >=8              # [unix]
+    # 2022/05/14
+    # Keep abseil here so that the pinning is maintained between
+    # build and host
+    - abseil-cpp               # [unix]
     - grpc-cpp                 # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
     - grpc_java_plugin 1.37    # [unix]
