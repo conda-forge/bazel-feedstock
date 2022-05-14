@@ -33,8 +33,7 @@ requirements:
     # build and host
     - abseil-cpp               # [unix]
     - grpc-cpp                 # [unix]
-    # Remove this pin again once the java parts of bazel can build with a newer gRPC
-    - grpc_java_plugin 1.37    # [unix]
+    - grpc_java_plugin         # [unix]
     # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
