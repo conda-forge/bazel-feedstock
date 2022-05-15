@@ -8,28 +8,28 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      linux_64_abseil_cpp20210324.2:
-        CONFIG: linux_64_abseil_cpp20210324.2
+      linux_64_abseil_cpp20210324.2grpc_cpp1.45:
+        CONFIG: linux_64_abseil_cpp20210324.2grpc_cpp1.45
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_abseil_cpp20211102.0:
-        CONFIG: linux_64_abseil_cpp20211102.0
+      linux_64_abseil_cpp20211102.0grpc_cpp1.46:
+        CONFIG: linux_64_abseil_cpp20211102.0grpc_cpp1.46
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_abseil_cpp20210324.2:
-        CONFIG: linux_aarch64_abseil_cpp20210324.2
+      linux_aarch64_abseil_cpp20210324.2grpc_cpp1.45:
+        CONFIG: linux_aarch64_abseil_cpp20210324.2grpc_cpp1.45
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_abseil_cpp20211102.0:
-        CONFIG: linux_aarch64_abseil_cpp20211102.0
+      linux_aarch64_abseil_cpp20211102.0grpc_cpp1.46:
+        CONFIG: linux_aarch64_abseil_cpp20211102.0grpc_cpp1.46
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_abseil_cpp20210324.2:
-        CONFIG: linux_ppc64le_abseil_cpp20210324.2
+      linux_ppc64le_abseil_cpp20210324.2grpc_cpp1.45:
+        CONFIG: linux_ppc64le_abseil_cpp20210324.2grpc_cpp1.45
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_abseil_cpp20211102.0:
-        CONFIG: linux_ppc64le_abseil_cpp20211102.0
+      linux_ppc64le_abseil_cpp20211102.0grpc_cpp1.46:
+        CONFIG: linux_ppc64le_abseil_cpp20211102.0grpc_cpp1.46
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
   timeoutInMinutes: 360
