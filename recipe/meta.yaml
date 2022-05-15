@@ -30,6 +30,7 @@ requirements:
     - {{ compiler('cxx') }}
     - sed               # [unix]
     - openjdk >=8       # [unix]
+    - abseil-cpp  # [unix]
     - grpc-cpp          # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
     - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
