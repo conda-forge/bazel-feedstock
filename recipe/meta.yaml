@@ -30,7 +30,8 @@ requirements:
     - {{ compiler('cxx') }}
     - sed               # [unix]
     - openjdk >=8       # [unix]
-    - grpc-cpp 1.43         # [unix]
+    - abseil-cpp        # [unix]
+    - grpc-cpp          # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
     - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
     # - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
@@ -40,8 +41,8 @@ requirements:
     - zip  # [linux]
     - unzip  # [linux]
   host:
-    - abseil-cpp  # [unix]
-    - grpc-cpp 1.43  # [unix]
+    - abseil-cpp   # [unix]
+    - grpc-cpp     # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8  # [win]
     - posix  # [win]
