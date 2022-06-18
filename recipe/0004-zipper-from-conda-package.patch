@@ -63,10 +63,10 @@ index c2dd86e..0afd4f7 100755
 +    visibility = ["//visibility:public"],
  )
 +
-+ filegroup(
-+     name = "zipper",
++filegroup(
++    name = "zipper",
 +    srcs = [":zipper-exec"],
-+ )
++)
 -- 
 2.35.0
 
