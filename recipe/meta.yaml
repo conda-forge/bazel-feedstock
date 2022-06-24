@@ -41,6 +41,7 @@ requirements:
     - bazel-toolchain          # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
+    - python *                 # [win]
   host:
     - abseil-cpp  # [unix]
     - grpc-cpp  # [unix]
