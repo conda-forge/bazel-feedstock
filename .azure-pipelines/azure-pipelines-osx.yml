@@ -8,14 +8,14 @@ jobs:
     vmImage: macOS-10.15
   strategy:
     matrix:
-      osx_64_abseil_cpp20210324.2grpc_cpp1.45:
-        CONFIG: osx_64_abseil_cpp20210324.2grpc_cpp1.45
+      osx_64_abseil_cpp20210324.2grpc_cpp1.47:
+        CONFIG: osx_64_abseil_cpp20210324.2grpc_cpp1.47
         UPLOAD_PACKAGES: 'True'
       osx_64_abseil_cpp20211102.0grpc_cpp1.46:
         CONFIG: osx_64_abseil_cpp20211102.0grpc_cpp1.46
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_abseil_cpp20210324.2grpc_cpp1.45:
-        CONFIG: osx_arm64_abseil_cpp20210324.2grpc_cpp1.45
+      osx_arm64_abseil_cpp20210324.2grpc_cpp1.47:
+        CONFIG: osx_arm64_abseil_cpp20210324.2grpc_cpp1.47
         UPLOAD_PACKAGES: 'True'
       osx_arm64_abseil_cpp20211102.0grpc_cpp1.46:
         CONFIG: osx_arm64_abseil_cpp20211102.0grpc_cpp1.46
