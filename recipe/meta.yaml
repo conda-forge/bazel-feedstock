@@ -27,7 +27,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed                      # [unix]
-    - openjdk >=8              # [unix]
+    - openjdk >=8,<17          # [unix]
     # 2022/05/14
     # Keep abseil here so that the pinning is maintained between
     # build and host
@@ -46,10 +46,10 @@ requirements:
     - abseil-cpp  # [unix]
     - grpc-cpp  # [unix]
     - libprotobuf  # [unix]
-    - openjdk >=8  # [win]
+    - openjdk >=8,<17  # [win]
     - posix  # [win]
   run:
-    - openjdk >=8
+    - openjdk >=8,<17
     - posix  # [win]
     - ijar {{ version }}   # [build_platform != target_platform]
     - singlejar {{ version }}   # [build_platform != target_platform]
