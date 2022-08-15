@@ -29,7 +29,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed               # [unix]
-    - openjdk >=8       # [unix]
+    - openjdk >=8,<17   # [unix]
     - libabseil         # [unix]
     - grpc-cpp          # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
@@ -44,10 +44,10 @@ requirements:
     - libabseil    # [unix]
     - grpc-cpp     # [unix]
     - libprotobuf  # [unix]
-    - openjdk >=8  # [win]
+    - openjdk >=8,<17  # [win]
     - posix  # [win]
   run:
-    - openjdk >=8
+    - openjdk >=8,<17
     - posix  # [win]
     - ijar  # [build_platform != target_platform]
 
