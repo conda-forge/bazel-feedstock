@@ -38,8 +38,9 @@ requirements:
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
-    - zip  # [linux]
-    - unzip  # [linux]
+    - zip               # [linux]
+    - unzip             # [linux]
+    - python *          # [win]
   host:
     - libabseil  # [unix]
     - grpc-cpp  # [unix]
