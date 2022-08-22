@@ -63,15 +63,9 @@ test:
     - bazel version
 
 about:
-  home: https://www.bazel.io/
-  summary: build system originally authored by Google
-  description: |
-    Bazel is Google's own build tool, now publicly available in Beta. Bazel has
-    built-in support for building both client and server software, including
-    client applications for both Android and iOS platforms. It also provides an
-    extensible framework that you can use to develop your own build rules.
+  home: https://bazel.build/
+  summary: a fast, scalable, multi-language and extensible build system
   dev_url: https://github.com/bazelbuild/bazel
-  doc_url: https://www.bazel.io/versions/master/docs/install.html
   license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
