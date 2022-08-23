@@ -8,14 +8,14 @@ source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
   sha256: 820a94dbb14071ed6d8c266cf0c080ecb265a5eea65307579489c4662c2d582a
   patches:
-    - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0002-Build-with-native-dependencies.patch  # [unix]
-    - 0003-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
-    - 0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-from-build.patch  # [unix]
-    - 0006-bazel-bin-loader-path.patch  # [osx]
-    - 0007-Adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
-    - 0008-win-Disable-VS-activation-and-make-build-verbose.patch
+    - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
+    - patches/0002-Build-with-native-dependencies.patch  # [unix]
+    - patches/0003-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
+    - patches/0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
+    - patches/0005-grpc-java-plugin-from-build.patch  # [unix]
+    - patches/0006-bazel-bin-loader-path.patch  # [osx]
+    - patches/0007-Adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
+    - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
   number: 2
