@@ -20,7 +20,7 @@ source:
     - 0010-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 14
+  number: 15
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -29,8 +29,8 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed               # [unix]
-    - openjdk >=8       # [unix]
-    - abseil-cpp        # [unix]
+    - openjdk >=8,<17   # [unix]
+    - libabseil         # [unix]
     - grpc-cpp          # [unix]
     # Remove this pin again once the java parts of bazel can build with a newer gRPC
     - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
@@ -38,16 +38,17 @@ requirements:
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
-    - zip  # [linux]
-    - unzip  # [linux]
+    - zip               # [linux]
+    - unzip             # [linux]
+    - python *          # [win]
   host:
-    - abseil-cpp   # [unix]
+    - libabseil    # [unix]
     - grpc-cpp     # [unix]
     - libprotobuf  # [unix]
-    - openjdk >=8  # [win]
+    - openjdk >=8,<17  # [win]
     - posix  # [win]
   run:
-    - openjdk >=8
+    - openjdk >=8,<17
     - posix  # [win]
     - ijar  # [build_platform != target_platform]
 
