@@ -47,15 +47,15 @@ requirements:
     #       and must match the version used to compil bazel; the shared
     #       libabseil builds currently (20220623.0) use C++17
     - libabseil    # [unix]
-    - grpc-cpp  # [unix]
+    - grpc-cpp     # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8,<17  # [win]
-    - posix  # [win]
+    - posix            # [win]
   run:
     - openjdk >=8,<17
-    - posix  # [win]
-    - ijar {{ version }}   # [build_platform != target_platform]
-    - singlejar {{ version }}   # [build_platform != target_platform]
+    - posix                    # [win]
+    - ijar {{ version }}       # [build_platform != target_platform]
+    - singlejar {{ version }}  # [build_platform != target_platform]
 
 test:
   requires:
