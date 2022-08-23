@@ -1,23 +1,15 @@
 About bazel
 ===========
 
-Home: https://www.bazel.io/
+Home: https://bazel.build/
 
 Package license: Apache-2.0
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/bazel-feedstock/blob/main/LICENSE.txt)
 
-Summary: build system originally authored by Google
+Summary: a fast, scalable, multi-language and extensible build system
 
 Development: https://github.com/bazelbuild/bazel
-
-Documentation: https://www.bazel.io/versions/master/docs/install.html
-
-Bazel is Google's own build tool, now publicly available in Beta. Bazel has
-built-in support for building both client and server software, including
-client applications for both Android and iOS platforms. It also provides an
-extensible framework that you can use to develop your own build rules.
-
 
 Current build status
 ====================
@@ -37,73 +29,73 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64_abseil_cpp20210324.2grpc_cpp1.45</td>
+              <td>linux_64_abseil_cpp20211102.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_64_abseil_cpp20210324.2grpc_cpp1.45" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_64_abseil_cpp20211102.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_64_abseil_cpp20211102.0grpc_cpp1.46</td>
+              <td>linux_64_abseil_cpp20220623.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_64_abseil_cpp20211102.0grpc_cpp1.46" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_64_abseil_cpp20220623.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64_abseil_cpp20210324.2grpc_cpp1.45</td>
+              <td>linux_aarch64_abseil_cpp20211102.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_abseil_cpp20210324.2grpc_cpp1.45" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_abseil_cpp20211102.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64_abseil_cpp20211102.0grpc_cpp1.46</td>
+              <td>linux_aarch64_abseil_cpp20220623.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_abseil_cpp20211102.0grpc_cpp1.46" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_abseil_cpp20220623.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le_abseil_cpp20210324.2grpc_cpp1.45</td>
+              <td>linux_ppc64le_abseil_cpp20211102.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_abseil_cpp20210324.2grpc_cpp1.45" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_abseil_cpp20211102.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le_abseil_cpp20211102.0grpc_cpp1.46</td>
+              <td>linux_ppc64le_abseil_cpp20220623.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_abseil_cpp20211102.0grpc_cpp1.46" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_abseil_cpp20220623.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_64_abseil_cpp20210324.2grpc_cpp1.45</td>
+              <td>osx_64_abseil_cpp20211102.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_64_abseil_cpp20210324.2grpc_cpp1.45" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_64_abseil_cpp20211102.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_64_abseil_cpp20211102.0grpc_cpp1.46</td>
+              <td>osx_64_abseil_cpp20220623.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_64_abseil_cpp20211102.0grpc_cpp1.46" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_64_abseil_cpp20220623.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_arm64_abseil_cpp20210324.2grpc_cpp1.45</td>
+              <td>osx_arm64_abseil_cpp20211102.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_abseil_cpp20210324.2grpc_cpp1.45" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_abseil_cpp20211102.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_arm64_abseil_cpp20211102.0grpc_cpp1.46</td>
+              <td>osx_arm64_abseil_cpp20220623.0</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=3673&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_abseil_cpp20211102.0grpc_cpp1.46" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/bazel-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_abseil_cpp20220623.0" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -244,6 +236,7 @@ Feedstock Maintainers
 
 * [@abhi18av](https://github.com/abhi18av/)
 * [@adrianchia](https://github.com/adrianchia/)
+* [@h-vetinari](https://github.com/h-vetinari/)
 * [@jschueller](https://github.com/jschueller/)
 * [@nehaljwani](https://github.com/nehaljwani/)
 * [@xhochy](https://github.com/xhochy/)
