@@ -8,17 +8,17 @@ jobs:
     vmImage: macOS-11
   strategy:
     matrix:
-      osx_64_abseil_cpp20211102.0:
-        CONFIG: osx_64_abseil_cpp20211102.0
+      osx_64_abseil_cpp20211102.0grpc_cpp1.46:
+        CONFIG: osx_64_abseil_cpp20211102.0grpc_cpp1.46
         UPLOAD_PACKAGES: 'True'
-      osx_64_abseil_cpp20220623.0:
-        CONFIG: osx_64_abseil_cpp20220623.0
+      osx_64_abseil_cpp20220623.0grpc_cpp1.47:
+        CONFIG: osx_64_abseil_cpp20220623.0grpc_cpp1.47
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_abseil_cpp20211102.0:
-        CONFIG: osx_arm64_abseil_cpp20211102.0
+      osx_arm64_abseil_cpp20211102.0grpc_cpp1.46:
+        CONFIG: osx_arm64_abseil_cpp20211102.0grpc_cpp1.46
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_abseil_cpp20220623.0:
-        CONFIG: osx_arm64_abseil_cpp20220623.0
+      osx_arm64_abseil_cpp20220623.0grpc_cpp1.47:
+        CONFIG: osx_arm64_abseil_cpp20220623.0grpc_cpp1.47
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 
