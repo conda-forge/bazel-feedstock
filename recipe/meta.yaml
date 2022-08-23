@@ -8,17 +8,17 @@ source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
   sha256: 820a94dbb14071ed6d8c266cf0c080ecb265a5eea65307579489c4662c2d582a
   patches:
-    - 0001-allow-args-to-be-passed-to-bazel_build.patch
-    - 0002-Build-with-native-dependencies.patch  # [unix]
-    - 0003-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
-    - 0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-from-build.patch  # [unix]
-    - 0006-bazel-bin-loader-path.patch  # [osx]
-    - 0007-Adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
-    - 0008-win-Disable-VS-activation-and-make-build-verbose.patch
+    - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
+    - patches/0002-Build-with-native-dependencies.patch  # [unix]
+    - patches/0003-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
+    - patches/0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
+    - patches/0005-grpc-java-plugin-from-build.patch  # [unix]
+    - patches/0006-bazel-bin-loader-path.patch  # [osx]
+    - patches/0007-Adjust-cross-bazel-resultpath.patch  # [build_platform != target_platform]
+    - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 2
+  number: 3
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -29,9 +29,9 @@ requirements:
     - sed                      # [unix]
     - openjdk >=8,<17          # [unix]
     # 2022/05/14
-    # Keep abseil here so that the pinning is maintained between
+    # Keep libabseil here so that the pinning is maintained between
     # build and host
-    - abseil-cpp               # [unix]
+    - libabseil                # [unix]
     - grpc-cpp                 # [unix]
     - grpc_java_plugin         # [unix]
     # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
@@ -43,16 +43,19 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    - abseil-cpp  # [unix]
-    - grpc-cpp  # [unix]
+    # note: libabseil's ABI depends on C++ version used to compile
+    #       and must match the version used to compil bazel; the shared
+    #       libabseil builds currently (20220623.0) use C++17
+    - libabseil    # [unix]
+    - grpc-cpp     # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8,<17  # [win]
-    - posix  # [win]
+    - posix            # [win]
   run:
     - openjdk >=8,<17
-    - posix  # [win]
-    - ijar {{ version }}   # [build_platform != target_platform]
-    - singlejar {{ version }}   # [build_platform != target_platform]
+    - posix                    # [win]
+    - ijar {{ version }}       # [build_platform != target_platform]
+    - singlejar {{ version }}  # [build_platform != target_platform]
 
 test:
   requires:
