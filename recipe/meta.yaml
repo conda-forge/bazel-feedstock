@@ -18,7 +18,7 @@ source:
     - 0008-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -27,7 +27,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed                      # [unix]
-    - openjdk >=8              # [unix]
+    - openjdk >=8,<17          # [unix]
     # 2022/05/14
     # Keep abseil here so that the pinning is maintained between
     # build and host
@@ -46,10 +46,10 @@ requirements:
     - abseil-cpp  # [unix]
     - grpc-cpp  # [unix]
     - libprotobuf  # [unix]
-    - openjdk >=8  # [win]
+    - openjdk >=8,<17  # [win]
     - posix  # [win]
   run:
-    - openjdk >=8
+    - openjdk >=8,<17
     - posix  # [win]
     - ijar {{ version }}   # [build_platform != target_platform]
     - singlejar {{ version }}   # [build_platform != target_platform]
@@ -63,15 +63,9 @@ test:
     - bazel version
 
 about:
-  home: https://www.bazel.io/
-  summary: build system originally authored by Google
-  description: |
-    Bazel is Google's own build tool, now publicly available in Beta. Bazel has
-    built-in support for building both client and server software, including
-    client applications for both Android and iOS platforms. It also provides an
-    extensible framework that you can use to develop your own build rules.
+  home: https://bazel.build/
+  summary: a fast, scalable, multi-language and extensible build system
   dev_url: https://github.com/bazelbuild/bazel
-  doc_url: https://www.bazel.io/versions/master/docs/install.html
   license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
