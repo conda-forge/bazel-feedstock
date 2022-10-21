@@ -31,8 +31,12 @@ requirements:
     - sed               # [unix]
     - openjdk >=8,<17   # [unix]
     - libabseil         # [unix]
-    - grpc-cpp          # [unix]
-    - grpc_java_plugin 1.46  # [unix]
+    # 2022/10/21 h-vetinari:
+    # no idea why this isn't picking up the grpc from the global pinning
+    - grpc-cpp 1.47     # [unix]
+    - grpc_java_plugin 1.47  # [unix]
+    # - grpc-cpp          # [unix]
+    # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
