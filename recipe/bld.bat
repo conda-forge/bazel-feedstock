@@ -15,9 +15,7 @@ FOR /F "delims=" %%i IN ('cygpath.exe -u "%RECIPE_DIR%"') DO set "RECIPE_DIR=%%i
 FOR /F "delims=" %%i IN ('cygpath.exe -u "%SP_DIR%"') DO set "SP_DIR=%%i"
 FOR /F "delims=" %%i IN ('cygpath.exe -u "%SRC_DIR%"') DO set "SRC_DIR=%%i"
 FOR /F "delims=" %%i IN ('cygpath.exe -u "%STDLIB_DIR%"') DO set "STDLIB_DIR=%%i"
-
-:: LIBRARY_PREFIX gets translated to '/' instead of the absolute path
-FOR /F "delims=" %%i IN ('cygpath.exe -u "%PREFIX%"') DO set "JAVA_HOME=%%i/Library"
+FOR /F "delims=" %%i IN ('cygpath.exe -u "%JAVA_HOME%"') DO set "JAVA_HOME=%%i"
 
 :: Need a very short TMPDIR otherwise we hit the max path limit while compiling bazel
 FOR /F "delims=" %%i IN ('cygpath.exe -u "%SYSTEMDRIVE%\t"') DO set "TMPDIR=%%i"
