@@ -43,8 +43,8 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    # note: libabseil's ABI depends on C++ version used to compile
-    #       and must match the version used to compil bazel; the shared
+    # note: libabseil's ABI depends on C++ version used to compile it,
+    #       and we must match that C++ version to compile bazel; the shared
     #       libabseil builds currently (20220623.0) use C++17
     - libabseil    # [unix]
     - libgrpc      # [unix]
