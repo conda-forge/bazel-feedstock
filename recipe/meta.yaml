@@ -18,7 +18,7 @@ source:
     - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 1
+  number: 2
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -32,9 +32,9 @@ requirements:
     # Keep libabseil here so that the pinning is maintained between
     # build and host
     - libabseil                # [unix]
-    - grpc-cpp                 # [unix]
+    - libgrpc                  # [unix]
     - grpc_java_plugin         # [unix]
-    # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
+    # - grpc_java_plugin {{ libgrpc }}  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
@@ -43,11 +43,11 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    # note: libabseil's ABI depends on C++ version used to compile
-    #       and must match the version used to compil bazel; the shared
+    # note: libabseil's ABI depends on C++ version used to compile it,
+    #       and we must match that C++ version to compile bazel; the shared
     #       libabseil builds currently (20220623.0) use C++17
     - libabseil    # [unix]
-    - grpc-cpp     # [unix]
+    - libgrpc      # [unix]
     - libprotobuf  # [unix]
     - openjdk >=8,<17  # [win]
     - posix            # [win]
