@@ -12,9 +12,8 @@ source:
     - 0003-Build-with-native-dependencies.patch   # [unix]
     - 0001-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
     - 0004-zipper-from-conda-package.patch        # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-build.patch           # [build_platform != target_platform]
+    - 0005-grpc-java-plugin-build.patch           # [unix]
     - 0006-bazel-bin-loader-path.patch            # [osx]
-    - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
     - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
     - 0009-Omit-duplicate-codesign.patch          # [osx]
     - 0010-win-Disable-VS-activation-and-make-build-verbose.patch
@@ -30,13 +29,8 @@ requirements:
     - {{ compiler('cxx') }}
     - sed               # [unix]
     - openjdk >=8,<17   # [unix]
-    - libabseil         # [unix]
-    # 2022/10/21 h-vetinari:
-    # no idea why this isn't picking up the grpc from the global pinning
-    - grpc-cpp 1.47     # [unix]
-    - grpc_java_plugin 1.47  # [unix]
-    # - grpc-cpp          # [unix]
-    # - grpc_java_plugin {{ grpc_cpp }}  # [unix]
+    - grpc-cpp {{ grpc_cpp }}  # [unix]
+    - grpc_java_plugin 1.37    # [unix]
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
