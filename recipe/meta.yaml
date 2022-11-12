@@ -12,15 +12,14 @@ source:
     - 0003-Build-with-native-dependencies.patch   # [unix]
     - 0001-Parametrize-LIBPROTOBUF_VERSION.patch  # [unix]
     - 0004-zipper-from-conda-package.patch        # [build_platform != target_platform]
-    - 0005-grpc-java-plugin-build.patch           # [build_platform != target_platform]
+    - 0005-grpc-java-plugin-build.patch           # [unix]
     - 0006-bazel-bin-loader-path.patch            # [osx]
-    - 0007-link-libprotobuf-grpc-java.patch       # [build_platform == target_platform]
     - 0008-adjust-cross-bazel-resultpath.patch    # [build_platform != target_platform]
     - 0009-Omit-duplicate-codesign.patch          # [osx]
     - 0010-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 10
+  number: 11
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -30,11 +29,8 @@ requirements:
     - {{ compiler('cxx') }}
     - sed               # [unix]
     - openjdk >=8,<17   # [unix]
-    - libabseil         # [unix]
-    - grpc-cpp          # [unix]
-    # Remove this pin again once the java parts of bazel can build with a newer gRPC
-    - grpc_java_plugin 1.37  # [osx or (build_platform != target_platform)]
-    # - grpc_java_plugin {{ grpc_cpp }}  # [osx or (build_platform != target_platform)]
+    - grpc-cpp {{ grpc_cpp }}  # [unix]
+    - grpc_java_plugin 1.37    # [unix]
     - libprotobuf       # [unix]
     - ijar              # [build_platform != target_platform]
     - bazel-toolchain   # [unix]
