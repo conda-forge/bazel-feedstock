@@ -1,4 +1,4 @@
-{% set version = "5.3.2" %}
+{% set version = "5.4.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 3880ad919592d1e3e40c506f13b32cd0a2e26f129d87cb6ba170f1801d7d7b82
+  sha256: a1c62d9bcb4e03106ddf0b7bd96196ba246e1c9b7a935daf8d9beda8bbdcb8a1
   patches:
     - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
     - patches/0002-Build-with-native-dependencies.patch  # [unix]
@@ -18,7 +18,7 @@ source:
     - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 3
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
