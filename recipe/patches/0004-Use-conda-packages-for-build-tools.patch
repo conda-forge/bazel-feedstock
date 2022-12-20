@@ -1,4 +1,4 @@
-From 741055ee5a322b5bb347ab567dcacef62b0fd14c Mon Sep 17 00:00:00 2001
+From 134179022bd7e204499a2dadc4183890e477c1fd Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
 Subject: [PATCH 4/8] Use conda packages for build tools
@@ -6,11 +6,11 @@ Subject: [PATCH 4/8] Use conda packages for build tools
 ---
  src/tools/singlejar/BUILD | 44 +++++++++------------------------------
  third_party/ijar/BUILD    | 17 +++++++--------
- tools/zip/BUILD.tools     | 17 +++++++++------
- 3 files changed, 29 insertions(+), 49 deletions(-)
+ tools/zip/BUILD.tools     | 13 ++++++++----
+ 3 files changed, 27 insertions(+), 47 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 625f006..62d2c0e 100755
+index 625f006ce6..62d2c0ed4f 100644
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
 @@ -69,44 +69,20 @@ release_archive(
@@ -69,7 +69,7 @@ index 625f006..62d2c0e 100755
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index 28f05bf..412b538 100755
+index 28f05bf443..412b538dd3 100644
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
 @@ -69,21 +69,20 @@ cc_library(
@@ -103,30 +103,30 @@ index 28f05bf..412b538 100755
  
  filegroup(
 diff --git a/tools/zip/BUILD.tools b/tools/zip/BUILD.tools
-index c2dd86e..0afd4f7 100755
+index 0b8ce85dab..3fc4fee98b 100644
 --- a/tools/zip/BUILD.tools
 +++ b/tools/zip/BUILD.tools
-@@ -1,9 +1,14 @@
+@@ -1,11 +1,16 @@
  package(default_visibility = ["//visibility:public"])
  
--filegroup(
--    name = "zipper",
--    srcs = select({
--        "//src/conditions:remote": ["//third_party/ijar:zipper"],
--        "//conditions:default": glob(["zipper/*"]),
--    }),
 +genrule(
 +    name = "zipper-exec",
 +    outs = ["zipper.bin"],
 +    cmd_bash = "ln -s `which zipper` $@",
 +    executable = 1,
 +    visibility = ["//visibility:public"],
- )
++)
 +
-+ filegroup(
-+     name = "zipper",
+ filegroup(
+     name = "zipper",
+-    srcs = select({
+-        "//src/conditions:remote": ["//third_party/ijar:zipper"],
+-        "//conditions:default": glob(["zipper/*"]),
+-    }),
 +    srcs = [":zipper-exec"],
-+ )
+ )
+ 
+ alias(
 -- 
-2.35.0
+2.38.1.windows.1
 

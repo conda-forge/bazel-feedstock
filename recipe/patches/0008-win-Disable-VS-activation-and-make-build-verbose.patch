@@ -1,4 +1,4 @@
-From b0bd49e0fa49aac75b98bf6b2718a6050d8fe12d Mon Sep 17 00:00:00 2001
+From 92f01bd7255ab157453b812f681ff80e6a24cd10 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Mon, 7 Feb 2022 21:43:56 +0100
 Subject: [PATCH 8/8] win: Disable VS activation and make build verbose
@@ -8,7 +8,7 @@ Subject: [PATCH 8/8] win: Disable VS activation and make build verbose
  1 file changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/src/main/native/windows/build_windows_jni.sh b/src/main/native/windows/build_windows_jni.sh
-index 5d38ffd..5850fc0 100755
+index 5d38ffd2a7..5850fc0b11 100644
 --- a/src/main/native/windows/build_windows_jni.sh
 +++ b/src/main/native/windows/build_windows_jni.sh
 @@ -19,6 +19,8 @@
@@ -39,5 +39,5 @@ index 5d38ffd..5850fc0 100755
  
  # Invoke the file and hopefully generate the .DLL .
 -- 
-2.35.0
+2.38.1.windows.1
 
