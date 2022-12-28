@@ -1,4 +1,4 @@
-From df0a242c62d96c64ae9dd7aece0cfc68cc08f4a2 Mon Sep 17 00:00:00 2001
+From 9632391cc472987525d28264c12910e4780d7f9b Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:10:21 +0100
 Subject: [PATCH 7/8] Adjust cross bazel resultpath
@@ -8,7 +8,7 @@ Subject: [PATCH 7/8] Adjust cross bazel resultpath
  1 file changed, 1 insertion(+)
 
 diff --git a/compile.sh b/compile.sh
-index ce49a12..e830fc1 100755
+index ce49a1266e..e830fc13b7 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -69,6 +69,7 @@ bazel_build ${BAZEL_BUILD_OPTS} "src:bazel_nojdk${EXE_EXT}" \
@@ -20,5 +20,5 @@ index ce49a12..e830fc1 100755
    || fail "Could not find freshly built Bazel binary at '$bazel_bin_path'"
  cp -f "$bazel_bin_path" "output/bazel${EXE_EXT}" \
 -- 
-2.35.0
+2.38.1.windows.1
 

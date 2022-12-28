@@ -1,17 +1,17 @@
-From 43260127c0c7c10f914e34b7c9a5b393dccdcafd Mon Sep 17 00:00:00 2001
+From 919747b3c859f096e8d6298010bcad8069ca6baf Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:05:55 +0100
 Subject: [PATCH 5/8] grpc-java-plugin from build
 
 ---
- third_party/grpc/BUILD | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ third_party/grpc-java/BUILD | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index ce1e971..9b39885 100755
---- a/third_party/grpc/BUILD
-+++ b/third_party/grpc/BUILD
-@@ -61,18 +61,15 @@ distrib_java_import(
+diff --git a/third_party/grpc-java/BUILD b/third_party/grpc-java/BUILD
+index 34cb26c0d1..37b3b077f5 100644
+--- a/third_party/grpc-java/BUILD
++++ b/third_party/grpc-java/BUILD
+@@ -76,14 +76,10 @@ distrib_java_import(
      ],
  )
  
@@ -31,11 +31,6 @@ index ce1e971..9b39885 100755
 +    executable = 1,
 +    visibility = ["//visibility:public"],
  )
- 
-+
- genrule(
-     name = "cpp_plugin",
-     outs = ["grpc-cpp-plugin.out"],
 -- 
-2.35.0
+2.38.1.windows.1
 
