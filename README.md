@@ -1,11 +1,11 @@
-About bazel
-===========
+About bazel-feedstock
+=====================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/bazel-feedstock/blob/main/LICENSE.txt)
 
 Home: https://bazel.build/
 
 Package license: Apache-2.0
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/bazel-feedstock/blob/main/LICENSE.txt)
 
 Summary: a fast, scalable, multi-language and extensible build system
 
