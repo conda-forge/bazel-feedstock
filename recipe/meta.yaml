@@ -20,7 +20,7 @@ source:
     - patches/0009-Update-windows-VS-detection-code-to-account-for-new-.patch
 
 build:
-  number: 5
+  number: 6
   ignore_prefix_files: true
   binary_relocation: false
 
