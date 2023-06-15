@@ -30,13 +30,9 @@ requirements:
     - {{ compiler('cxx') }}
     - sed                      # [unix]
     - openjdk >=8,<17          # [unix]
-    # 2022/05/14
-    # Keep libabseil here so that the pinning is maintained between
-    # build and host
-    - libabseil                # [unix]
-    - libgrpc                  # [unix]
+    # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
     - grpc_java_plugin         # [unix]
-    # - grpc_java_plugin {{ libgrpc }}  # [unix]
+    - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
@@ -45,12 +41,9 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    # note: libabseil's ABI depends on C++ version used to compile it,
-    #       and we must match that C++ version to compile bazel; the shared
-    #       libabseil builds currently (20220623.0) use C++17
-    - libabseil    # [unix]
-    - libgrpc      # [unix]
-    - libprotobuf  # [unix]
+    - libabseil        # [unix]
+    - libgrpc          # [unix]
+    - libprotobuf      # [unix]
     - openjdk >=8,<17  # [win]
     - posix            # [win]
   run:
