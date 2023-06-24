@@ -21,7 +21,8 @@ source:
     - patches/0006-bazel-bin-loader-path.patch               # [osx]
     - patches/0007-Adjust-cross-bazel-resultpath.patch       # [build_platform != target_platform]
     - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
-    - patches/0009-backport-pr-18608-fix-vs-activation.patch
+    # backport https://github.com/bazelbuild/bazel/pull/18608 (squashed; as of 2023-06-24)
+    - patches/0009-Update-windows-VS-detection-code-to-account-for-new-.patch
 
 build:
   number: 1
