@@ -1,7 +1,7 @@
-From 919747b3c859f096e8d6298010bcad8069ca6baf Mon Sep 17 00:00:00 2001
+From 26f301459417fa0a809c78a49a58493e4184153d Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:05:55 +0100
-Subject: [PATCH 5/8] grpc-java-plugin from build
+Subject: [PATCH 5/9] grpc-java-plugin from build
 
 ---
  third_party/grpc-java/BUILD | 14 +++++---------
@@ -31,6 +31,3 @@ index 34cb26c0d1..37b3b077f5 100644
 +    executable = 1,
 +    visibility = ["//visibility:public"],
  )
--- 
-2.38.1.windows.1
-

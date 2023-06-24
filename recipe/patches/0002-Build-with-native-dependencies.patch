@@ -1,7 +1,7 @@
-From b2da2beb3f1cf00a57fe2c2d0299209bb13c1d21 Mon Sep 17 00:00:00 2001
+From 46256ac9ad1d615e0cb8d98819028873456eeab1 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 2/8] Build with native dependencies
+Subject: [PATCH 2/9] Build with native dependencies
 
 ---
  WORKSPACE                                     |  37 +-
@@ -16,7 +16,7 @@ Subject: [PATCH 2/8] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/WORKSPACE b/WORKSPACE
-index 0d78fcf027..2cf3d945e0 100644
+index ff47163e72..97e0b73b16 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -90,12 +90,43 @@ bind(
@@ -123,7 +123,7 @@ index 397089d9a5..e6662acc9f 100644
  filegroup(
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
 new file mode 100644
-index 0000000000..3e42a1bf31
+index 0000000000..b9caa879db
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf.BUILD
 @@ -0,0 +1,141 @@
@@ -718,6 +718,3 @@ index 0000000000..aafd89b0aa
 @@ -0,0 +1,2 @@
 +def protobuf_deps():
 +    pass
--- 
-2.38.1.windows.1
-

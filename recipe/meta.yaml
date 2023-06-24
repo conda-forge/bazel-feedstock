@@ -10,12 +10,12 @@ source:
   patches:
     - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
     - patches/0002-Build-with-native-dependencies.patch      # [unix]
-    # This patch ensures that a protobuf-java version compatible with the libprotobuf version is used
-    # As the protobuf-java major version is not related with the libprotobuf major version, only
-    # the protoc version (i.e. minor.patch) is automatically substituted, while if a new protobuf-java
-    # major version is released, the major version needs to be bumped manually
-    # See https://protobuf.dev/support/version-support/
-    - patches/0003-Parametrize-PROTOC_VERSION.patch          # [unix]
+    # This patch ensures that the relevant version of protobuf-java matches libprotobuf.
+    # Note that "relevant" here means minor.patch, where minor is based on the last two
+    # digits of the calendar year. The major version may be different per language, see
+    # https://protobuf.dev/support/version-support/
+    # If the java major version changes, it needs to be bumped manually in build.sh.
+    - patches/0003-Match-version-of-protobuf-java-with-libprotobuf.patch       # [unix]
     - patches/0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
     - patches/0005-grpc-java-plugin-from-build.patch         # [unix]
     - patches/0006-bazel-bin-loader-path.patch               # [osx]
