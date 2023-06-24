@@ -1,0 +1,21 @@
+From ad6b89c196d277a0d24b56fc29a0f976b3f3d9ee Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Thu, 25 May 2023 20:35:02 +1100
+Subject: [PATCH 04/11] use C++17
+
+---
+ .bazelrc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/.bazelrc b/.bazelrc
+index 0fb596e356..97ddc44d62 100644
+--- a/.bazelrc
++++ b/.bazelrc
+@@ -29,5 +29,7 @@ build:remote --config=ubuntu1804_java11
+ 
+ build:macos --macos_minimum_os=10.10
+ 
++build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
++
+ # User-specific .bazelrc
+ try-import user.bazelrc

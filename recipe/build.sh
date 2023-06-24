@@ -18,10 +18,15 @@ fi
 # For debugging purposes, you can add
 # --logging=6 --subcommands --verbose_failures
 # This is though too much log output for Travis CI.
-export LIBPROTOBUF_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ')
-export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU}"
+# Extract minor.patch from libprotobuf version, that is the protoc version
+# The protobuf-java needs to be manually bumped if necessary
+# See https://protobuf.dev/support/version-support/
+export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
+export PROTOBUF_JAVA_MAJOR_VERSION="3"
+export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
 export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
-sed -ie "s:LIBPROTOBUF_VERSION:${LIBPROTOBUF_VERSION}:" WORKSPACE
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" WORKSPACE
+sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" WORKSPACE
 sed -ie "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD

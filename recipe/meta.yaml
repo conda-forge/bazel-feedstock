@@ -9,15 +9,24 @@ source:
   sha256: a1c62d9bcb4e03106ddf0b7bd96196ba246e1c9b7a935daf8d9beda8bbdcb8a1
   patches:
     - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
-    - patches/0002-Build-with-native-dependencies.patch      # [unix]
-    - patches/0003-Parametrize-LIBPROTOBUF_VERSION.patch     # [unix]
-    - patches/0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
-    - patches/0005-grpc-java-plugin-from-build.patch         # [unix]
-    - patches/0006-bazel-bin-loader-path.patch               # [osx]
-    - patches/0007-Adjust-cross-bazel-resultpath.patch       # [build_platform != target_platform]
-    - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
+    - patches/0002-Build-with-native-dependencies.patch                        # [unix]
+    # This patch ensures that the relevant version of protobuf-java matches libprotobuf.
+    # Note that "relevant" here means minor.patch, where minor is based on the last two
+    # digits of the calendar year. The major version may be different per language, see
+    # https://protobuf.dev/support/version-support/
+    # If the java major version changes, it needs to be bumped manually in build.sh.
+    - patches/0003-Match-version-of-protobuf-java-with-libprotobuf.patch       # [unix]
+    # synced from singlejar, but unused on this feedstock
+    # - patches/0004-use-C-17.patch                                            # [unix]
+    # add abseil linkage for protobuf 4.x; depends on patch 0002
+    - patches/0005-Link-to-abseil-libraries.patch                              # [unix and libprotobuf != "3.21"]
+    - patches/0006-Use-conda-packages-for-build-tools.patch                    # [build_platform != target_platform]
+    - patches/0007-grpc-java-plugin-from-build.patch                           # [unix]
+    - patches/0008-bazel-bin-loader-path.patch                                 # [osx]
+    - patches/0009-Adjust-cross-bazel-resultpath.patch                         # [build_platform != target_platform]
+    - patches/0010-win-Disable-VS-activation-and-make-build-verbose.patch
     # backport https://github.com/bazelbuild/bazel/pull/18608 (squashed; as of 2023-06-24)
-    - patches/0009-Update-windows-VS-detection-code-to-account-for-new-.patch
+    - patches/0011-Update-windows-VS-detection-code-to-account-for-new-.patch
 
 build:
   number: 6
