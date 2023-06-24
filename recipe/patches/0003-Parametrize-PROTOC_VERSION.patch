@@ -1,0 +1,27 @@
+From ebdf5276ca7a53ba79a754dc451a29c58634169b Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Thu, 28 Oct 2021 11:28:13 +0200
+Subject: [PATCH 3/8] Parametrize PROTOC_VERSION
+
+---
+ WORKSPACE | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index 2cf3d945e0..0720d49d99 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -119,8 +119,8 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
+ # TODO: Use installed protobuf version
+ maven_install(
+     artifacts = [
+-        "com.google.protobuf:protobuf-java:3.15.6",
+-        "com.google.protobuf:protobuf-java-util:3.15.6",
++        "com.google.protobuf:protobuf-java:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
++        "com.google.protobuf:protobuf-java-util:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
+     ],
+     repositories = [
+         "https://repo1.maven.org/maven2",
+-- 
+2.38.1.windows.1
+
