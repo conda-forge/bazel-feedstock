@@ -10,15 +10,22 @@ source:
   patches:
     - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
     - patches/0002-Build-with-native-dependencies.patch      # [unix]
-    - patches/0003-Parametrize-LIBPROTOBUF_VERSION.patch     # [unix]
+    # This patch ensures that the relevant version of protobuf-java matches libprotobuf.
+    # Note that "relevant" here means minor.patch, where minor is based on the last two
+    # digits of the calendar year. The major version may be different per language, see
+    # https://protobuf.dev/support/version-support/
+    # If the java major version changes, it needs to be bumped manually in build.sh.
+    - patches/0003-Match-version-of-protobuf-java-with-libprotobuf.patch       # [unix]
     - patches/0004-Use-conda-packages-for-build-tools.patch  # [build_platform != target_platform]
     - patches/0005-grpc-java-plugin-from-build.patch         # [unix]
     - patches/0006-bazel-bin-loader-path.patch               # [osx]
     - patches/0007-Adjust-cross-bazel-resultpath.patch       # [build_platform != target_platform]
     - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
+    # backport https://github.com/bazelbuild/bazel/pull/18608 (squashed; as of 2023-06-24)
+    - patches/0009-Update-windows-VS-detection-code-to-account-for-new-.patch
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -28,13 +35,9 @@ requirements:
     - {{ compiler('cxx') }}
     - sed                      # [unix]
     - openjdk >=8,<17          # [unix]
-    # 2022/05/14
-    # Keep libabseil here so that the pinning is maintained between
-    # build and host
-    - libabseil                # [unix]
-    - libgrpc                  # [unix]
+    # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
     - grpc_java_plugin         # [unix]
-    # - grpc_java_plugin {{ libgrpc }}  # [unix]
+    - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
@@ -43,12 +46,9 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    # note: libabseil's ABI depends on C++ version used to compile it,
-    #       and we must match that C++ version to compile bazel; the shared
-    #       libabseil builds currently (20220623.0) use C++17
-    - libabseil    # [unix]
-    - libgrpc      # [unix]
-    - libprotobuf  # [unix]
+    - libabseil        # [unix]
+    - libgrpc          # [unix]
+    - libprotobuf      # [unix]
     - openjdk >=8,<17  # [win]
     - posix            # [win]
   run:
