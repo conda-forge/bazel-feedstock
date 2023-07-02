@@ -26,9 +26,14 @@ export PROTOBUF_JAVA_MAJOR_VERSION="3"
 # export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
 cat >> .bazelrc <<EOF
 build --crosstool_top=//bazel_toolchain:toolchain
+build --define=PREFIX=${PREFIX}
 build --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include
 build --cpu=${TARGET_CPU}
 build --cxxopt=-std=c++17
+build --local_cpu_resources=${CPU_COUNT}"
+build --logging=6
+build --verbose_failures
+build --toolchain_resolution_debug
 EOF
 
 export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
