@@ -63,6 +63,8 @@ set ANT_HOME=
 set AZURE_EXTENSION_DIR=
 set AZURE_HTTP_USER_AGENT=
 
+set "BAZEL_BUILD_OPTS=--cxxopt=/std:c++17"
+
 bash -lx ./compile.sh
 if errorlevel 1 exit 1
 

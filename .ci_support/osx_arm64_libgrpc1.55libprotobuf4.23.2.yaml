@@ -1,0 +1,29 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '11.0'
+c_compiler:
+- clang
+c_compiler_version:
+- '15'
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- clangxx
+cxx_compiler_version:
+- '15'
+libabseil:
+- '20230125'
+libgrpc:
+- '1.55'
+libprotobuf:
+- 4.23.2
+macos_machine:
+- arm64-apple-darwin20.0.0
+target_platform:
+- osx-arm64
+zip_keys:
+- - c_compiler_version
+  - cxx_compiler_version
+- - libgrpc
+  - libprotobuf
