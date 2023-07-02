@@ -1,7 +1,11 @@
+BUILD:
+- aarch64-conda_cos7-linux-gnu
 c_compiler:
 - gcc
 c_compiler_version:
 - '12'
+cdt_arch:
+- aarch64
 cdt_name:
 - cos7
 channel_sources:
@@ -17,11 +21,11 @@ docker_image:
 libabseil:
 - '20230125'
 libgrpc:
-- '1.55'
+- '1.56'
 libprotobuf:
-- 4.23.2
+- 4.23.3
 target_platform:
-- linux-ppc64le
+- linux-aarch64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
