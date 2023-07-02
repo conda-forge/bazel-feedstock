@@ -1,7 +1,7 @@
-From 46256ac9ad1d615e0cb8d98819028873456eeab1 Mon Sep 17 00:00:00 2001
+From 880539457fb014fd7462684ae407054f2123a285 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 2/9] Build with native dependencies
+Subject: [PATCH 02/11] Build with native dependencies
 
 ---
  WORKSPACE                                     |  37 +-
@@ -123,7 +123,7 @@ index 397089d9a5..e6662acc9f 100644
  filegroup(
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
 new file mode 100644
-index 0000000000..b9caa879db
+index 0000000000..3e42a1bf31
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf.BUILD
 @@ -0,0 +1,141 @@
@@ -191,13 +191,13 @@ index 0000000000..b9caa879db
 +
 +cc_library(
 +    name = "protobuf",
-+    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_entry", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
++    linkopts = ["-lprotobuf"],
 +    visibility = ["//visibility:public"],
 +)
 +
 +cc_library(
 +    name = "protobuf_headers",
-+    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_entry", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
++    linkopts = ["-lprotobuf"],
 +    visibility = ["//visibility:public"],
 +)
 +
