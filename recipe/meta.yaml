@@ -19,7 +19,7 @@ source:
     # synced from singlejar, but unused on this feedstock
     # - patches/0004-use-C-17.patch                                            # [unix]
     # add abseil linkage for protobuf 4.x; depends on patch 0002
-    - patches/0005-Link-to-abseil-libraries.patch                              # [unix and libprotobuf != "3.21"]
+    - patches/0005-Link-to-abseil-libraries.patch                              # [unix]
     - patches/0006-Use-conda-packages-for-build-tools.patch                    # [build_platform != target_platform]
     - patches/0007-grpc-java-plugin-from-build.patch                           # [unix]
     - patches/0008-bazel-bin-loader-path.patch                                 # [osx]
