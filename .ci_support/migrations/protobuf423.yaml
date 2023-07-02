@@ -2,7 +2,6 @@ __migrator:
   build_number: 1
   kind: version
   migration_number: 2
-  use_local: true
 libgrpc:
 - '1.54'
 - '1.55'
