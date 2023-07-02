@@ -12,24 +12,24 @@ jobs:
         CONFIG: linux_64_libgrpc1.54libprotobuf3.21
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: linux_64_libgrpc1.55libprotobuf4.23.2
+      linux_64_libgrpc1.56libprotobuf4.23.3:
+        CONFIG: linux_64_libgrpc1.56libprotobuf4.23.3
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_aarch64_libgrpc1.54libprotobuf3.21:
         CONFIG: linux_aarch64_libgrpc1.54libprotobuf3.21
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: linux_aarch64_libgrpc1.55libprotobuf4.23.2
+      linux_aarch64_libgrpc1.56libprotobuf4.23.3:
+        CONFIG: linux_aarch64_libgrpc1.56libprotobuf4.23.3
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_ppc64le_libgrpc1.54libprotobuf3.21:
         CONFIG: linux_ppc64le_libgrpc1.54libprotobuf3.21
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: linux_ppc64le_libgrpc1.55libprotobuf4.23.2
+      linux_ppc64le_libgrpc1.56libprotobuf4.23.3:
+        CONFIG: linux_ppc64le_libgrpc1.56libprotobuf4.23.3
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
   timeoutInMinutes: 360

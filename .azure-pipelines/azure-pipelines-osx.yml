@@ -11,14 +11,14 @@ jobs:
       osx_64_libgrpc1.54libprotobuf3.21:
         CONFIG: osx_64_libgrpc1.54libprotobuf3.21
         UPLOAD_PACKAGES: 'True'
-      osx_64_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: osx_64_libgrpc1.55libprotobuf4.23.2
+      osx_64_libgrpc1.56libprotobuf4.23.3:
+        CONFIG: osx_64_libgrpc1.56libprotobuf4.23.3
         UPLOAD_PACKAGES: 'True'
       osx_arm64_libgrpc1.54libprotobuf3.21:
         CONFIG: osx_arm64_libgrpc1.54libprotobuf3.21
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: osx_arm64_libgrpc1.55libprotobuf4.23.2
+      osx_arm64_libgrpc1.56libprotobuf4.23.3:
+        CONFIG: osx_arm64_libgrpc1.56libprotobuf4.23.3
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 
