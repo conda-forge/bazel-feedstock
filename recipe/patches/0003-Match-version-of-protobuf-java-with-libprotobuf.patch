@@ -1,7 +1,7 @@
-From 76025bc65b87b316c1f46ec87747449981392657 Mon Sep 17 00:00:00 2001
+From 125418e9a40eb58723c81c110712f5c1dcada4d8 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 28 Oct 2021 11:28:13 +0200
-Subject: [PATCH 3/9] Match version of protobuf-java with libprotobuf
+Subject: [PATCH 03/11] Match version of protobuf-java with libprotobuf
 
 ---
  WORKSPACE | 4 ++--
