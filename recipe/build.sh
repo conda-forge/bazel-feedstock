@@ -23,7 +23,8 @@ fi
 # See https://protobuf.dev/support/version-support/
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="3"
-# export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
+export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PREFIX=${PREFIX} --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
+
 cat >> .bazelrc <<EOF
 build --crosstool_top=//bazel_toolchain:toolchain
 build --define=PREFIX=${PREFIX}
