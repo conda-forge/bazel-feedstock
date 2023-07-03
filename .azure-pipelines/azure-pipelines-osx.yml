@@ -8,17 +8,11 @@ jobs:
     vmImage: macOS-11
   strategy:
     matrix:
-      osx_64_libgrpc1.54libprotobuf3.21:
-        CONFIG: osx_64_libgrpc1.54libprotobuf3.21
+      osx_64_:
+        CONFIG: osx_64_
         UPLOAD_PACKAGES: 'True'
-      osx_64_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: osx_64_libgrpc1.55libprotobuf4.23.2
-        UPLOAD_PACKAGES: 'True'
-      osx_arm64_libgrpc1.54libprotobuf3.21:
-        CONFIG: osx_arm64_libgrpc1.54libprotobuf3.21
-        UPLOAD_PACKAGES: 'True'
-      osx_arm64_libgrpc1.55libprotobuf4.23.2:
-        CONFIG: osx_arm64_libgrpc1.55libprotobuf4.23.2
+      osx_arm64_:
+        CONFIG: osx_arm64_
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 
