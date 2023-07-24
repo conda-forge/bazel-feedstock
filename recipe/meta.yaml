@@ -1,4 +1,4 @@
-{% set version = "6.2.1" %}
+{% set version = "6.3.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 4cf4d264bff388ee0012735728630d23832d3c9d021383b2fadceadb0775dd6b
+  sha256: 902198981b1d26112fc05913e79f1b3e9772c3f95594caf85619d041ba06ede0
   patches:
     # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
     # which patches the same sources; the patches from singlejar should either be
@@ -32,7 +32,7 @@ source:
     - patches/0011-Update-windows-VS-detection-code-to-account-for-new-.patch
 
 build:
-  number: 3
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
