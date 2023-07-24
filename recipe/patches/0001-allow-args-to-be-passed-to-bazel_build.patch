@@ -1,7 +1,7 @@
-From a748e3755fd61edbaa916c75699ef94add0b4862 Mon Sep 17 00:00:00 2001
+From 5ed4ac99cf5487a697600451c80b7b9b21b62bfb Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Fri, 16 Mar 2018 12:10:51 -0500
-Subject: [PATCH 01/11] allow args to be passed to bazel_build
+Subject: [PATCH 01/10] allow args to be passed to bazel_build
 
 Allow arguments to be passed to bazel_build via the BAZEL_BUILD_OPTS
 environment variable.
