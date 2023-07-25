@@ -1,14 +1,14 @@
-From 125418e9a40eb58723c81c110712f5c1dcada4d8 Mon Sep 17 00:00:00 2001
+From 58b3eef336256dd9508a55a25e9f5d2b6af478d2 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 28 Oct 2021 11:28:13 +0200
-Subject: [PATCH 03/11] Match version of protobuf-java with libprotobuf
+Subject: [PATCH 03/10] Match version of protobuf-java with libprotobuf
 
 ---
  WORKSPACE | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/WORKSPACE b/WORKSPACE
-index 97e0b73b16..5ac6d6710d 100644
+index 4a53dc34e0..edd318376e 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -119,8 +119,8 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
