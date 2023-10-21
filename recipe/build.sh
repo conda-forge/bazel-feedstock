@@ -2,6 +2,8 @@
 
 set -euxo pipefail
 
+sed -i '/incompatible_enable_cc_toolchain_resolution/d' .bazelrc
+
 if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -framework IOKit"
 else
