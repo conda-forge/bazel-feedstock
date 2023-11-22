@@ -22,6 +22,7 @@ source:
     - patches/0007-Adjust-cross-bazel-resultpath.patch       # [build_platform != target_platform]
     - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
     - patches/0005-Link-to-abseil-libraries.patch            # [unix]
+    - patches/cd33d148ad31a23ba87aa59c745e3ce826dcd967.patch
 
 build:
   number: 2
