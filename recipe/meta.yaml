@@ -1,4 +1,4 @@
-{% set version = "6.3.2" %}
+{% set version = "7.0.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 8cd7feac58193be2bcba451ba6688a46824d37ca6359ff58e0d44eb98f042948
+  sha256: 477e54f6374001f439a9471ba1de9d7824daf129db95510849ecc5e19ce88170
   patches:
     # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
     # which patches the same sources; the patches from singlejar should either be
@@ -30,7 +30,7 @@ source:
     - patches/0010-win-Disable-VS-activation-and-make-build-verbose.patch
 
 build:
-  number: 3
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
