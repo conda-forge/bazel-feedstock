@@ -1,5 +1,5 @@
 MACOSX_DEPLOYMENT_TARGET:
-- '10.12'
+- '10.13'
 c_compiler:
 - clang
 c_compiler_version:
@@ -15,9 +15,9 @@ cxx_compiler_version:
 libabseil:
 - '20230802'
 libgrpc:
-- '1.58'
+- '1.59'
 libprotobuf:
-- 4.24.3
+- 4.24.4
 macos_machine:
 - x86_64-apple-darwin13.4.0
 target_platform:
