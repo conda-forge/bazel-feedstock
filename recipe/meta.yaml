@@ -28,6 +28,7 @@ source:
     - patches/0008-bazel-bin-loader-path.patch                                 # [osx]
     - patches/0009-Adjust-cross-bazel-resultpath.patch                         # [build_platform != target_platform]
     - patches/0010-win-Disable-VS-activation-and-make-build-verbose.patch
+    - patches/0011-Use-old-style-conditions.patch
 
 build:
   number: 0
