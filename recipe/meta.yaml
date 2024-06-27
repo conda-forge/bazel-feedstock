@@ -1,4 +1,4 @@
-{% set version = "6.3.2" %}
+{% set version = "6.5.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: 8cd7feac58193be2bcba451ba6688a46824d37ca6359ff58e0d44eb98f042948
+  sha256: fc89da919415289f29e4ff18a5e01270ece9a6fe83cb60967218bac4a3bb3ed2
   patches:
     # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
     # which patches the same sources; the patches from singlejar should either be
@@ -28,14 +28,17 @@ source:
     - patches/0008-bazel-bin-loader-path.patch                                 # [osx]
     - patches/0009-Adjust-cross-bazel-resultpath.patch                         # [build_platform != target_platform]
     - patches/0010-win-Disable-VS-activation-and-make-build-verbose.patch
+    - patches/0011-Use-old-style-conditions.patch
+    - patches/0012-Use-old-sytle-condition-for-linux64.patch
 
 build:
-  number: 6
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed                      # [unix]
@@ -46,7 +49,8 @@ requirements:
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
-    - bazel-toolchain          # [unix]
+    - bazel-toolchain <0.2     # [ppc64le]
+    - bazel-toolchain >=0.2.0  # [unix and not ppc64le]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
