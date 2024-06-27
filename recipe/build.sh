@@ -2,6 +2,8 @@
 
 set -euxo pipefail
 
+chmod +x bazel
+
 if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -framework IOKit"
 else
@@ -31,17 +33,22 @@ fi
 export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" WORKSPACE
 sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" WORKSPACE
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" MODULE.bazel
+sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" MODULE.bazel
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
+sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc-java/BUILD
-sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf.BUILD
+sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/ijar/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" src/tools/singlejar/BUILD
 sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
 sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 
-./compile.sh
+# Try to bootstrap, if not, use pre-built bazel
+./compile.sh || (export BAZEL=$(pwd)/bazel; ./compile.sh)
 
 mkdir -p $PREFIX/bin/
 cp ${RECIPE_DIR}/bazel-wrapper.sh $PREFIX/bin/bazel
@@ -74,15 +81,6 @@ for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"
     patchelf --set-rpath '$ORIGIN/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
   fi
 done
-
-# Also fix the RPATH for zipper. In the case we are cross-compiling, this is provided by the ijar package.
-if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == "0" ]]; then
-  if [[ "${target_platform}" == osx-* ]]; then
-    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
-  else
-    patchelf --set-rpath '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
-  fi
-fi
 
 # Set timestamps to untampered, otherwise bazel will reject the modified files as corrupted.
 find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
