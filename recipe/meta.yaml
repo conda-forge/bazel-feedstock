@@ -47,7 +47,7 @@ requirements:
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
-    - bazel-toolchain          # [unix]
+    - bazel-toolchain >=0.2.0  # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
