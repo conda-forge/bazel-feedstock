@@ -48,7 +48,7 @@ sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
 sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 
 # Try to bootstrap, if not, use pre-built bazel
-./compile.sh || (export BAZEL=$(pwd)/bazel; ./compile.sh)
+./compile.sh || (export BAZEL=$(pwd)/bazel; ./compile.sh) || (ls -l bazel-out/; exit 1)
 
 mkdir -p $PREFIX/bin/
 cp ${RECIPE_DIR}/bazel-wrapper.sh $PREFIX/bin/bazel
