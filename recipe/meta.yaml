@@ -13,11 +13,11 @@ source:
       ## which patches the same sources; the patches from singlejar should either be
       ## taken over here, or synced back if change is necessary
       - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
-      - patches/0002-Build-with-native-dependencies.patch
+      - patches/0002-Build-with-native-dependencies.patch         # [unix]
       - patches/0003-use-C-17.patch
       - patches/0004-Use-conda-packages-for-build-tools.patch
-      - patches/0005-grpc-java-plugin-from-build.patch
-      - patches/0006-bazel-bin-loader-path.patch  # [osx]
+      - patches/0005-grpc-java-plugin-from-build.patch            # [unix]
+      - patches/0006-bazel-bin-loader-path.patch                  # [osx]
       - patches/0007-Adjust-cross-bazel-resultpath.patch
       - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
       - patches/0009-Install-protobuf-via-maven.patch
