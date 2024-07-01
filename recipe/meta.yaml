@@ -21,8 +21,8 @@ source:
       - patches/0007-Adjust-cross-bazel-resultpath.patch
       - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
       - patches/0009-Install-protobuf-via-maven.patch             # [unix]
-      - patches/0010-Adopt-system-libprotobuf.patch
-      - patches/0011-Update-maven_install.json.patch
+      - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
+      - patches/0011-Update-maven_install.json.patch              # [unix]
   - url: {{ base_url }}/{{ version }}/bazel_nojdk-{{ version }}-darwin-x86_64  # [build_platform == "osx-64"]
     sha256: ba0a10ecbdaa70bf348bfdbad2fbcf0ba926a5ee07b613f6656046a1d3f60e07  # [build_platform == "osx-64"]
     fn: bazel  # [build_platform == "osx-64"]
