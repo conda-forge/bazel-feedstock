@@ -1,4 +1,4 @@
-From 051094b9933256071508cecf0a3f16787ef39f36 Mon Sep 17 00:00:00 2001
+From 3d5bcdb4252c99e51b99099fde6280808674e815 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Mon, 7 Feb 2022 21:43:56 +0100
 Subject: [PATCH 08/11] win: Disable VS activation and make build verbose

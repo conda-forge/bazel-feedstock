@@ -1,21 +1,25 @@
-From 622a930939e63e8590d9f9d8d5fd0bbb8332fa39 Mon Sep 17 00:00:00 2001
+From 4b513c10635b2e86a9c35b16693d5d0dd56b6ad5 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:10:21 +0100
 Subject: [PATCH 07/11] Adjust cross bazel resultpath
 
 ---
- compile.sh | 1 +
- 1 file changed, 1 insertion(+)
+ compile.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/compile.sh b/compile.sh
-index 3b75f6e..61d60c3 100755
+index 3b75f6e..f237efa 100755
 --- a/compile.sh
 +++ b/compile.sh
-@@ -69,6 +69,7 @@ bazel_build ${BAZEL_BUILD_OPTS} "src:bazel_nojdk${EXE_EXT}" \
+@@ -69,6 +69,11 @@ bazel_build ${BAZEL_BUILD_OPTS} "src:bazel_nojdk${EXE_EXT}" \
    --platforms=@platforms//host \
    || fail "Could not build Bazel"
  bazel_bin_path="$(get_bazel_bin_path)/src/bazel_nojdk${EXE_EXT}"
-+bazel_bin_path="${bazel_bin_path//BUILD_CPU/TARGET_CPU}"
++if [[ "${target_platform}" == "osx-64" ]]; then
++  bazel_bin_path="${bazel_bin_path//darwin_x86_64/darwin}"
++elif [[ "${target_platform}" != "${build_platform}" ]]; then
++  bazel_bin_path="${bazel_bin_path//BUILD_CPU/TARGET_CPU}"
++fi
  [ -e "$bazel_bin_path" ] \
    || fail "Could not find freshly built Bazel binary at '$bazel_bin_path'"
  cp -f "$bazel_bin_path" "output/bazel${EXE_EXT}" \
