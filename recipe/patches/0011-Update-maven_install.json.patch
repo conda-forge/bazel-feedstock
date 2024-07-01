@@ -1,4 +1,4 @@
-From dafb95f1b7eb4ef4bce9858a5c2bc33e85908237 Mon Sep 17 00:00:00 2001
+From bec29cce189d51347a1eb1e2ad539d69a9860060 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 17:13:36 +0200
 Subject: [PATCH 11/11] Update maven_install.json
