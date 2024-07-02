@@ -59,7 +59,7 @@ requirements:
     - libabseil        # [unix]
     - libgrpc          # [unix]
     - libprotobuf      # [unix]
-    - openjdk >=21     # [win]
+    - openjdk 21     # [win]
     - posix            # [win]
   run:
     - openjdk >=21
