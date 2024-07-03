@@ -130,7 +130,10 @@ set SBT_HOME=
 set
 
 set "BAZEL_BUILD_OPTS=--cxxopt=/std:c++17"
-
+bash -lx ./compile.sh
+@rem Clear the error level and continue with a pre-built bazel
+if errorlevel 1 cd .
+set "BAZEL=%CD%\bazel.exe"
 bash -lx ./compile.sh
 if errorlevel 1 exit 1
 
