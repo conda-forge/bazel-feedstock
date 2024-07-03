@@ -47,7 +47,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed                      # [unix]
-    - openjdk >=21             # [unix]
+    - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
     - grpc_java_plugin         # [unix]
     - libgrpc                  # [unix]
@@ -62,7 +62,7 @@ requirements:
     - libabseil        # [unix]
     - libgrpc          # [unix]
     - libprotobuf      # [unix]
-    - openjdk 21     # [win]
+    - openjdk 21.*     # [win]
     - posix            # [win]
   run:
     - openjdk >=21
