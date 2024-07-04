@@ -40,6 +40,9 @@ build:
   number: 0
   ignore_prefix_files: true
   binary_relocation: false
+  # We are currently unable to select a JDK toolchain for the build.
+  # This can be re-enabled once someone finds the correct option.
+  skip: true  # [ppc64le]
 
 requirements:
   build:
