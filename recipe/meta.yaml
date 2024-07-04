@@ -22,19 +22,6 @@ source:
       - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
       - patches/0009-Install-protobuf-via-maven.patch             # [unix]
       - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
-      - patches/0011-Update-maven_install.json.patch              # [unix]
-  - url: {{ base_url }}/{{ version }}/bazel_nojdk-{{ version }}-darwin-x86_64  # [build_platform == "osx-64"]
-    sha256: ba0a10ecbdaa70bf348bfdbad2fbcf0ba926a5ee07b613f6656046a1d3f60e07  # [build_platform == "osx-64"]
-    fn: bazel  # [build_platform == "osx-64"]
-  - url: {{ base_url }}/{{ version }}/bazel_nojdk-{{ version }}-darwin-arm64    # [build_platform == "osx-arm64"]
-    sha256: ef15ff2c9ca3cbf2b09dcc88ea6d7d89575cfd6904e560d7691831a1d7daaf82    # [build_platform == "osx-arm64"]
-    fn: bazel                                                                   # [build_platform == "osx-arm64"]
-  - url: {{ base_url }}/{{ version }}/bazel_nojdk-{{ version }}-linux-x86_64  # [build_platform == "linux-64"]
-    sha256: 1c7a167ad2c45374afb19f60093465f58f9209a5142d53d63bc4aadb567323fa  # [build_platform == "linux-64"]
-    fn: bazel  # [build_platform == "linux-64"]
-  - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [build_platform == "win-64"]
-    sha256: 4926bd3bf580b8b3323e0d09bde5dc6120fdd262d99f753eb61fedfb9a2cfc49  # [build_platform == "win-64"]
-    fn: bazel.exe                                                             # [build_platform == "win-64"]
 
 build:
   number: 0
