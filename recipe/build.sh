@@ -26,8 +26,9 @@ fi
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="3"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
-export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain"
-export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
+export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain --toolchain_resolution_debug='.*'"
+# export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=local_jdk --extra_toolchains=@local_jdk//:all --java_runtime_version=local_jdk"
+export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=21"
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" WORKSPACE
 sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" WORKSPACE
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" MODULE.bazel
@@ -45,7 +46,8 @@ sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
 sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 
 # Try to bootstrap, if not, use pre-built bazel
-./compile.sh || (export BAZEL=$(pwd)/bazel; ./compile.sh) || (ls -l bazel-out/; exit 1)
+# ./compile.sh || (export BAZEL=$(pwd)/bazel; ./compile.sh) || (ls -l bazel-out/; exit 1)
+./compile.sh
 
 mkdir -p $PREFIX/bin/
 cp ${RECIPE_DIR}/bazel-wrapper.sh $PREFIX/bin/bazel
