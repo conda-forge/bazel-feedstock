@@ -1,0 +1,33 @@
+From 8d4c3c13b6821983dc2fec599650d1e430ccf738 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Sat, 12 Feb 2022 22:05:55 +0100
+Subject: [PATCH 05/10] grpc-java-plugin from build
+
+---
+ third_party/grpc-java/BUILD | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/third_party/grpc-java/BUILD b/third_party/grpc-java/BUILD
+index 5d2fd75..d06dfd7 100755
+--- a/third_party/grpc-java/BUILD
++++ b/third_party/grpc-java/BUILD
+@@ -68,14 +68,10 @@ java_library(
+     ],
+ )
+ 
+-distrib_cc_binary(
++genrule(
+     name = "grpc-java-plugin",
+-    srcs = [
+-        "compiler/src/java_plugin/cpp/java_generator.cpp",
+-        "compiler/src/java_plugin/cpp/java_generator.h",
+-        "compiler/src/java_plugin/cpp/java_plugin.cpp",
+-    ],
+-    copts = ["-w"],
+-    enable_distributions = ["debian"],
+-    deps = ["//third_party/protobuf:protoc_lib"],
++    outs = ["grpc-java-plugin.out"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/grpc_java_plugin $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
+ )

@@ -24,18 +24,19 @@ fi
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="3"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
-if [[ "${target_platform}" != "linux-ppc64le" ]]; then
-  # linux-ppc64le is only correctly supported in newer bazel versions
-  export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain"
-fi
-export EXTRA_BAZEL_ARGS="--host_javabase=@local_jdk//:jdk"
+export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain --toolchain_resolution_debug='.*'"
+export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=21"
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" WORKSPACE
 sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" WORKSPACE
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" MODULE.bazel
+sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" MODULE.bazel
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
+sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc-java/BUILD
-sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf.BUILD
+sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/ijar/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" src/tools/singlejar/BUILD
 sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
@@ -74,15 +75,6 @@ for executable in "build-runfiles" "daemonize" "linux-sandbox" "process-wrapper"
     patchelf --set-rpath '$ORIGIN/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
   fi
 done
-
-# Also fix the RPATH for zipper. In the case we are cross-compiling, this is provided by the ijar package.
-if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == "0" ]]; then
-  if [[ "${target_platform}" == osx-* ]]; then
-    ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
-  else
-    patchelf --set-rpath '$ORIGIN/../../../../../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/embedded_tools/tools/zip/zipper/zipper
-  fi
-fi
 
 # Set timestamps to untampered, otherwise bazel will reject the modified files as corrupted.
 find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
