@@ -2,8 +2,6 @@
 
 set -euxo pipefail
 
-chmod +x bazel
-
 if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -framework IOKit"
 else
