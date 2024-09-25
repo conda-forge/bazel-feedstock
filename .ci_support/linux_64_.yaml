@@ -1,9 +1,9 @@
 c_compiler:
 - gcc
 c_compiler_version:
-- '12'
+- '13'
 cdt_name:
-- cos6
+- cos7
 channel_sources:
 - conda-forge
 channel_targets:
@@ -11,19 +11,17 @@ channel_targets:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '12'
+- '13'
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
 libabseil:
-- '20240116'
+- '20240722'
 libgrpc:
-- '1.62'
+- '1.65'
 libprotobuf:
-- 4.25.3
+- 5.27.5
 target_platform:
 - linux-64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-- - libgrpc
-  - libprotobuf
