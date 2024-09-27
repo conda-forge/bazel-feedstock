@@ -1,0 +1,24 @@
+From 5821dd6f21d9b066e558a420ca139aa56bb112bd Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Fri, 27 Sep 2024 14:21:34 +0200
+Subject: [PATCH] Patch protobuf compatibility during bootstrap
+
+---
+ compile.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/compile.sh b/compile.sh
+index ce49a12..d66247e 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -58,6 +58,10 @@ fi
+ 
+ source scripts/bootstrap/bootstrap.sh
+ 
++# Make Java code compatible with newer protobuf release now as the bootstrap builds with the old release
++sed -i 's/includingDefaultValueFields/alwaysPrintFieldsWithNoPresence/g' src/main/java/com/google/devtools/build/lib/util/io/MessageOutputStreamWrapper.java
++sed -i 's/includingDefaultValueFields/alwaysPrintFieldsWithNoPresence/g' src/main/java/com/google/devtools/build/lib/worker/JsonWorkerMessageProcessor.java
++
+ new_step 'Building Bazel with Bazel'
+ display "."
+ log "Building output/bazel"
