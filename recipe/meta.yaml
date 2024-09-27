@@ -30,6 +30,7 @@ source:
     - patches/0010-win-Disable-VS-activation-and-make-build-verbose.patch
     - patches/0011-Use-old-style-conditions.patch
     - patches/0012-Use-old-sytle-condition-for-linux64.patch
+    - patches/0013-Patch-protobuf-compatibility-during-bootstrap.patch
 
 build:
   number: 1
