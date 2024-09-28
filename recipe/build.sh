@@ -21,6 +21,8 @@ fi
 # Extract minor.patch from libprotobuf version, that is the protoc version
 # The protobuf-java needs to be manually bumped if necessary
 # See https://protobuf.dev/support/version-support/
+export PROTOC=$BUILD_PREFIX/bin/protoc
+export GRPC_JAVA_PLUGIN=$BUILD_PREFIX/bin/grpc_java_plugin
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
