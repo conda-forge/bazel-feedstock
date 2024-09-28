@@ -1,4 +1,4 @@
-{% set version = "7.2.1" %}
+{% set version = "7.3.1" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: dfd823f52fe31328e9e63c27684168b1ab855212b84034c9cd8ccfc7b9af5e0d
+    sha256: f0501f90c9fc74cd6933dbdc59e17b8d6272d6c09f8b8e3c428985c5897147c7
     patches:
       ## bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       ## which patches the same sources; the patches from singlejar should either be
@@ -22,9 +22,10 @@ source:
       - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
       - patches/0009-Install-protobuf-via-maven.patch             # [unix]
       - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
+      - patches/0011-Enable-new-protobuf-major-release.patch      # [unix]
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
