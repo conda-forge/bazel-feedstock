@@ -21,9 +21,9 @@ docker_image:
 libabseil:
 - '20240722'
 libgrpc:
-- '1.65'
+- '1.67'
 libprotobuf:
-- 5.27.5
+- 5.28.2
 target_platform:
 - linux-ppc64le
 zip_keys:
