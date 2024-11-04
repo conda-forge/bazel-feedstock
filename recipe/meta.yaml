@@ -23,6 +23,10 @@ source:
       - patches/0009-Install-protobuf-via-maven.patch             # [unix]
       - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
       - patches/0011-Enable-new-protobuf-major-release.patch      # [unix]
+      # backport https://github.com/bazelbuild/bazel/commit/aa480481726efb5def0c1ce2a3e07584bf11b507
+      - patches/0012-Disable-absl-debug-logging-when-client_debug-false-t.patch
+      # backport https://github.com/bazelbuild/bazel/commit/b817aeef1a55f8e470f91e11f7df58d4e655bbba
+      - patches/0013-Removing-redundant-function-null_grpc_log_function.patch
 
 build:
   number: 1

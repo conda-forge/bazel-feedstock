@@ -1,0 +1,133 @@
+From 5a3148653cfae6cee4360382ac41ad743e75f0aa Mon Sep 17 00:00:00 2001
+From: Googler <nharmata@google.com>
+Date: Mon, 20 May 2024 10:02:40 -0700
+Subject: [PATCH 12/13] Disable absl debug logging when `--client_debug=false`
+ (the default).
+
+The Bazel client codebase doesn't use absl, but one of the library we use (e.g. gRPC) might. We wouldn't want that to spam the Bazel's user's stderr. Thus, this CL attempts to insulate the client program from that risk.
+
+We do this by disabling absl debug logging at the point in the life of the client program where we consider `--client_debug`. This is therefore a non-foolproof approach; consider a library we use that makes debug statements before that point in the life of our program. But we also add an integration test that would catch regressions like this!
+
+I noted future improvements in code comments.
+
+PiperOrigin-RevId: 635488965
+Change-Id: I26d01f9aeda3a237aa68438586f958ae01d5448d
+---
+ MODULE.bazel                              |  2 +-
+ src/main/cpp/BUILD                        |  3 +++
+ src/main/cpp/blaze_util.cc                | 19 ++++++++++++++
+ src/test/shell/integration/client_test.sh | 30 +++++++++++++++++++++++
+ 4 files changed, 53 insertions(+), 1 deletion(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 8acbdaf9e9..de8473b039 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -36,6 +36,7 @@ bazel_dep(name = "rules_python", version = "0.33.2")
+ bazel_dep(name = "rules_testing", version = "0.6.0")
+ bazel_dep(name = "googletest", version = "1.14.0", repo_name = "com_google_googletest")
+ bazel_dep(name = "with_cfg.bzl", version = "0.2.4")
++bazel_dep(name = "abseil-cpp", version = "20230125.1")
+ 
+ # TODO(pcloudy): Add remoteapis and googleapis as Bazel modules in the BCR.
+ bazel_dep(name = "remoteapis", version = "")
+@@ -68,7 +69,6 @@ single_version_override(
+ # The following Bazel modules are not direct dependencies for building Bazel,
+ # but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
+ bazel_dep(name = "apple_support", version = "1.8.1")
+-bazel_dep(name = "abseil-cpp", version = "20230125.1")
+ bazel_dep(name = "c-ares", version = "1.15.0")
+ bazel_dep(name = "rules_go", version = "0.39.1")
+ bazel_dep(name = "rules_kotlin", version = "1.9.0")
+diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
+index 3a5c0ba196..efedce5da9 100644
+--- a/src/main/cpp/BUILD
++++ b/src/main/cpp/BUILD
+@@ -60,6 +60,9 @@ cc_library(
+         "//src/main/cpp/util",
+         "//src/main/cpp/util:blaze_exit_code",
+         "//src/main/cpp/util:logging",
++        "@abseil-cpp//absl/base:log_severity",
++        "@abseil-cpp//absl/log:globals",
++        "@abseil-cpp//absl/log:initialize",
+     ] + select({
+         "//src/conditions:windows": [
+             "//src/main/native/windows:lib-file",
+diff --git a/src/main/cpp/blaze_util.cc b/src/main/cpp/blaze_util.cc
+index 673ab33894..81c12fee88 100644
+--- a/src/main/cpp/blaze_util.cc
++++ b/src/main/cpp/blaze_util.cc
+@@ -34,6 +34,10 @@
+ #include "src/main/cpp/util/port.h"
+ #include "src/main/cpp/util/strings.h"
+ 
++#include "absl/base/log_severity.h"
++#include "absl/log/globals.h"
++#include "absl/log/initialize.h"
++
+ namespace blaze {
+ 
+ using std::map;
+@@ -256,8 +260,23 @@ bool AwaitServerProcessTermination(int pid, const blaze_util::Path& output_base,
+ void SetDebugLog(bool enabled) {
+   if (enabled) {
+     blaze_util::SetLoggingOutputStreamToStderr();
++    absl::SetStderrThreshold(absl::LogSeverityAtLeast::kInfo);
+   } else {
+     blaze_util::SetLoggingOutputStream(nullptr);
++
++    // Disable absl debug logging, since that gets printed to stderr due to us
++    // not setting up a log file. We don't use absl but one of our dependencies
++    // might (as of 2024Q2, gRPC does).
++    //
++    // Future improvements to this approach:
++    // * Disable absl logging ASAP, not just here after handling
++    //   --client_debug=false.
++    // * Use the same approach for handling --client_debug=true that we do for
++    //   BAZEL_LOG of first redirecting all messages to an inmemory string, and
++    //   then writing that string to stderr. We could use a absl::LogSink to
++    //   achieve this.
++    absl::InitializeLog();
++    absl::SetStderrThreshold(absl::LogSeverityAtLeast::kInfinity);
+   }
+ }
+ 
+diff --git a/src/test/shell/integration/client_test.sh b/src/test/shell/integration/client_test.sh
+index 19f23a7b7c..e6c0d382a9 100755
+--- a/src/test/shell/integration/client_test.sh
++++ b/src/test/shell/integration/client_test.sh
+@@ -409,4 +409,34 @@ function test_ignores_jdk_option_environment_variables() {
+   expect_log ".*ignoring JAVA_TOOL_OPTIONS"
+ }
+ 
++# Demonstrates that the client program prints exactly what we expect to stderr
++# and stdout. Notably by default (--client_debug=false) there should be no debug
++# log statements from our own codebase (or even from libraries we use!) printed
++# to stderr.
++function test_client_is_quiet_by_default() {
++  local capitalized_product_name="$(echo "$PRODUCT_NAME" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')"
++  # Ensure we don't have a server running. Also ensure we've already extracted
++  # the installation (that way we don't expect an informational message about
++  # that).
++  bazel shutdown &> /dev/null
++
++  bazel info server_pid > stdout 2> stderr || fail "bazel info failed"
++  cp stderr $TEST_log || fail "cp failed"
++  assert_equals 2 $(cat $TEST_log | wc -l)
++  expect_log "^\$TEST_TMPDIR defined: output root default"
++  expect_log "^Starting local $capitalized_product_name server and connecting to it...$"
++  cp stdout $TEST_log || fail "cp failed"
++  assert_equals 1 $(cat $TEST_log | wc -l)
++  expect_log "^[0-9]\+$"
++
++  rm stderr stdout || fail "rm failed"
++  bazel info server_pid > stdout 2> stderr || fail "bazel info failed"
++  cp stderr $TEST_log || fail "cp failed"
++  assert_equals 1 $(cat $TEST_log | wc -l)
++  expect_log "^\$TEST_TMPDIR defined: output root default"
++  cp stdout $TEST_log || fail "cp failed"
++  assert_equals 1 $(cat $TEST_log | wc -l)
++  expect_log "^[0-9]\+$"
++}
++
+ run_suite "Tests of the bazel client."

@@ -1,14 +1,14 @@
-From bd02c4c470fe0275521c9cf42a05a7d21e39460c Mon Sep 17 00:00:00 2001
+From fb640fe34425799c75637e7e5fa9ffef87c836dc Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Mon, 7 Feb 2022 21:43:56 +0100
-Subject: [PATCH 08/10] win: Disable VS activation and make build verbose
+Subject: [PATCH 08/13] win: Disable VS activation and make build verbose
 
 ---
  src/main/native/windows/build_windows_jni.sh | 13 +++++++------
  1 file changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/src/main/native/windows/build_windows_jni.sh b/src/main/native/windows/build_windows_jni.sh
-index 5d38ffd..5850fc0 100755
+index 5d38ffd2a7..5850fc0b11 100644
 --- a/src/main/native/windows/build_windows_jni.sh
 +++ b/src/main/native/windows/build_windows_jni.sh
 @@ -19,6 +19,8 @@
