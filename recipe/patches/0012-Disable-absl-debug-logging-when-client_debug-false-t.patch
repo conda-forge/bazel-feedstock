@@ -1,4 +1,4 @@
-From 415aa70710cccd2bea2c69de49a99af0d19c5308 Mon Sep 17 00:00:00 2001
+From 2d6430532574bb5c8f5905e87fcea55f4c1df367 Mon Sep 17 00:00:00 2001
 From: Googler <nharmata@google.com>
 Date: Mon, 20 May 2024 10:02:40 -0700
 Subject: [PATCH 12/13] Disable absl debug logging when `--client_debug=false`
@@ -15,7 +15,11 @@ Change-Id: I26d01f9aeda3a237aa68438586f958ae01d5448d
 
 [cherry-pick note:
 - dropped changes to `MODULE.bazel.lock`
-- bumped abseil from 20230125.1 to 20230125.3]
+- bumped abseil from 20230125.1 to 20240722.0
+  - protobuf we want to use requires >=20230125.3,
+  - but bazel registry doesn't have have newer patch versions of 20230125;
+    see https://registry.bazel.build/modules/abseil-cpp
+  - once we need to bump CalVer anyway match the one from our pinning]
 ---
  MODULE.bazel                              |  2 +-
  src/main/cpp/BUILD                        |  3 +++
@@ -24,14 +28,14 @@ Change-Id: I26d01f9aeda3a237aa68438586f958ae01d5448d
  4 files changed, 53 insertions(+), 1 deletion(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 8acbdaf9e9..4ab7ba09a0 100644
+index 8acbdaf9e9..942dbe1a37 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -36,6 +36,7 @@ bazel_dep(name = "rules_python", version = "0.33.2")
  bazel_dep(name = "rules_testing", version = "0.6.0")
  bazel_dep(name = "googletest", version = "1.14.0", repo_name = "com_google_googletest")
  bazel_dep(name = "with_cfg.bzl", version = "0.2.4")
-+bazel_dep(name = "abseil-cpp", version = "20230125.3")
++bazel_dep(name = "abseil-cpp", version = "20240722.0")
  
  # TODO(pcloudy): Add remoteapis and googleapis as Bazel modules in the BCR.
  bazel_dep(name = "remoteapis", version = "")
