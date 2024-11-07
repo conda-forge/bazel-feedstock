@@ -1,4 +1,4 @@
-From 2d6430532574bb5c8f5905e87fcea55f4c1df367 Mon Sep 17 00:00:00 2001
+From 862ea0423750caed86eb812ced04b9128f39660d Mon Sep 17 00:00:00 2001
 From: Googler <nharmata@google.com>
 Date: Mon, 20 May 2024 10:02:40 -0700
 Subject: [PATCH 12/13] Disable absl debug logging when `--client_debug=false`
@@ -19,31 +19,39 @@ Change-Id: I26d01f9aeda3a237aa68438586f958ae01d5448d
   - protobuf we want to use requires >=20230125.3,
   - but bazel registry doesn't have have newer patch versions of 20230125;
     see https://registry.bazel.build/modules/abseil-cpp
-  - once we need to bump CalVer anyway match the one from our pinning]
+  - once we need to bump CalVer anyway match the one from our pinning
+  - also bump googletest & apple_support due to dependency hell]
+
+l
 ---
- MODULE.bazel                              |  2 +-
+ MODULE.bazel                              |  6 ++---
  src/main/cpp/BUILD                        |  3 +++
  src/main/cpp/blaze_util.cc                | 19 ++++++++++++++
  src/test/shell/integration/client_test.sh | 30 +++++++++++++++++++++++
- 4 files changed, 53 insertions(+), 1 deletion(-)
+ 4 files changed, 55 insertions(+), 3 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 8acbdaf9e9..942dbe1a37 100644
+index 8acbdaf9e9..df9da69b52 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -36,6 +36,7 @@ bazel_dep(name = "rules_python", version = "0.33.2")
+@@ -34,8 +34,9 @@ bazel_dep(name = "rules_proto", version = "6.0.0")
+ bazel_dep(name = "rules_jvm_external", version = "6.0")
+ bazel_dep(name = "rules_python", version = "0.33.2")
  bazel_dep(name = "rules_testing", version = "0.6.0")
- bazel_dep(name = "googletest", version = "1.14.0", repo_name = "com_google_googletest")
+-bazel_dep(name = "googletest", version = "1.14.0", repo_name = "com_google_googletest")
++bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
  bazel_dep(name = "with_cfg.bzl", version = "0.2.4")
 +bazel_dep(name = "abseil-cpp", version = "20240722.0")
  
  # TODO(pcloudy): Add remoteapis and googleapis as Bazel modules in the BCR.
  bazel_dep(name = "remoteapis", version = "")
-@@ -68,7 +69,6 @@ single_version_override(
+@@ -67,8 +68,7 @@ single_version_override(
+ 
  # The following Bazel modules are not direct dependencies for building Bazel,
  # but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
- bazel_dep(name = "apple_support", version = "1.8.1")
+-bazel_dep(name = "apple_support", version = "1.8.1")
 -bazel_dep(name = "abseil-cpp", version = "20230125.1")
++bazel_dep(name = "apple_support", version = "1.15.1")
  bazel_dep(name = "c-ares", version = "1.15.0")
  bazel_dep(name = "rules_go", version = "0.39.1")
  bazel_dep(name = "rules_kotlin", version = "1.9.0")
