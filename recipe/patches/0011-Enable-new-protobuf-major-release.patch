@@ -1,7 +1,7 @@
-From df2465328881e6642fa9c8cc5b6b02350c3b78e2 Mon Sep 17 00:00:00 2001
+From 49ae3538d56d0c566ff25544fd3dd0a8d282c298 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
-Subject: [PATCH] Enable new protobuf major release
+Subject: [PATCH 11/13] Enable new protobuf major release
 
 ---
  MODULE.bazel                                 | 2 +-
@@ -10,7 +10,7 @@ Subject: [PATCH] Enable new protobuf major release
  3 files changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index bb8bc84..8acbdaf 100755
+index bb8bc84631..8acbdaf9e9 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -14,7 +14,7 @@ module(
@@ -23,7 +23,7 @@ index bb8bc84..8acbdaf 100755
      module_name = "protobuf",
      path = "./third_party/systemlibs/protobuf",
 diff --git a/compile.sh b/compile.sh
-index 7590068..d867758 100755
+index 7590068b5f..d867758dcb 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -58,6 +58,10 @@ fi
@@ -38,7 +38,7 @@ index 7590068..d867758 100755
  display "."
  log "Building output/bazel"
 diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
-index 820e74d..7e608cd 100644
+index 820e74d87b..7e608cd78d 100644
 --- a/third_party/systemlibs/protobuf/MODULE.bazel
 +++ b/third_party/systemlibs/protobuf/MODULE.bazel
 @@ -2,7 +2,7 @@

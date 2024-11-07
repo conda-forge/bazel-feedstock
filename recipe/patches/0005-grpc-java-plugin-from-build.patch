@@ -1,14 +1,14 @@
-From 8d4c3c13b6821983dc2fec599650d1e430ccf738 Mon Sep 17 00:00:00 2001
+From bf10dc67df14470f24560406c0f79ac6111dbab5 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:05:55 +0100
-Subject: [PATCH 05/10] grpc-java-plugin from build
+Subject: [PATCH 05/13] grpc-java-plugin from build
 
 ---
  third_party/grpc-java/BUILD | 14 +++++---------
  1 file changed, 5 insertions(+), 9 deletions(-)
 
 diff --git a/third_party/grpc-java/BUILD b/third_party/grpc-java/BUILD
-index 5d2fd75..d06dfd7 100755
+index 5d2fd7539d..d06dfd7e68 100644
 --- a/third_party/grpc-java/BUILD
 +++ b/third_party/grpc-java/BUILD
 @@ -68,14 +68,10 @@ java_library(
