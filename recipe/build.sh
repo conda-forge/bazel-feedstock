@@ -5,7 +5,7 @@ set -euxo pipefail
 if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -framework IOKit"
 else
-  export LDFLAGS="${LDFLAGS} -lpthread -labsl_synchronization"
+  export LDFLAGS="${LDFLAGS} -lpthread -labsl_synchronization -lm"
 fi
 
 # Generate toolchain and set necessary environment variables
