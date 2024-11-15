@@ -1,14 +1,14 @@
-From 47ad67a76213609ad26472e63874ab3769322ae1 Mon Sep 17 00:00:00 2001
+From 0b261265528076ea66e5c4385991425fd9f1b9b9 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Thu, 25 May 2023 20:35:02 +1100
-Subject: [PATCH 03/13] use C++17
+Subject: [PATCH 03/14] use C++17
 
 ---
  .bazelrc | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/.bazelrc b/.bazelrc
-index 89de37ca21..7a95af5f28 100644
+index 89de37c..7a95af5 100755
 --- a/.bazelrc
 +++ b/.bazelrc
 @@ -92,3 +92,5 @@ test:ci-windows --test_env=JAVA_HOME

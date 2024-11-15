@@ -1,7 +1,7 @@
-From ea9892aa5baa38072e7df02578c6172e50dbef6e Mon Sep 17 00:00:00 2001
+From 76ad2d1926c4a31b4ed6d08654b36199a9bd7c47 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 17:08:56 +0200
-Subject: [PATCH 10/13] Adopt system libprotobuf
+Subject: [PATCH 10/14] Adopt system libprotobuf
 
 ---
  third_party/systemlibs/protobuf/BUILD           |  4 ++--
@@ -12,7 +12,7 @@ Subject: [PATCH 10/13] Adopt system libprotobuf
  create mode 100644 third_party/systemlibs/protobuf/java/core/BUILD
 
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
-index 18c8a8fb02..60f7ccf2f5 100644
+index 18c8a8f..60f7ccf 100644
 --- a/third_party/systemlibs/protobuf/BUILD
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -108,13 +108,13 @@ py_library(
@@ -32,7 +32,7 @@ index 18c8a8fb02..60f7ccf2f5 100644
  )
  
 diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
-index 13123ff91e..820e74d87b 100644
+index 13123ff..820e74d 100644
 --- a/third_party/systemlibs/protobuf/MODULE.bazel
 +++ b/third_party/systemlibs/protobuf/MODULE.bazel
 @@ -25,18 +25,19 @@ bazel_dep(name = "zlib", version = "1.2.11")
@@ -63,7 +63,7 @@ index 13123ff91e..820e74d87b 100644
 +
 +use_repo(maven_protobuf, "maven_protobuf")
 diff --git a/third_party/systemlibs/protobuf/WORKSPACE b/third_party/systemlibs/protobuf/WORKSPACE
-index 45c689c3bd..2db7a0ce74 100644
+index 45c689c..2db7a0c 100644
 --- a/third_party/systemlibs/protobuf/WORKSPACE
 +++ b/third_party/systemlibs/protobuf/WORKSPACE
 @@ -1,2 +1,2 @@
@@ -72,7 +72,7 @@ index 45c689c3bd..2db7a0ce74 100644
  
 diff --git a/third_party/systemlibs/protobuf/java/core/BUILD b/third_party/systemlibs/protobuf/java/core/BUILD
 new file mode 100644
-index 0000000000..162a240b9a
+index 0000000..162a240
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/java/core/BUILD
 @@ -0,0 +1,6 @@

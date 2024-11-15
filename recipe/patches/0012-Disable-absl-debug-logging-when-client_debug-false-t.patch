@@ -1,7 +1,7 @@
-From 862ea0423750caed86eb812ced04b9128f39660d Mon Sep 17 00:00:00 2001
+From 2966f3c9d8f2de520db47ceca3fba92d92e289b8 Mon Sep 17 00:00:00 2001
 From: Googler <nharmata@google.com>
 Date: Mon, 20 May 2024 10:02:40 -0700
-Subject: [PATCH 12/13] Disable absl debug logging when `--client_debug=false`
+Subject: [PATCH 12/14] Disable absl debug logging when `--client_debug=false`
  (the default).
 
 The Bazel client codebase doesn't use absl, but one of the library we use (e.g. gRPC) might. We wouldn't want that to spam the Bazel's user's stderr. Thus, this CL attempts to insulate the client program from that risk.
@@ -31,7 +31,7 @@ l
  4 files changed, 55 insertions(+), 3 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 8acbdaf9e9..df9da69b52 100644
+index 8acbdaf..df9da69 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -34,8 +34,9 @@ bazel_dep(name = "rules_proto", version = "6.0.0")
@@ -56,7 +56,7 @@ index 8acbdaf9e9..df9da69b52 100644
  bazel_dep(name = "rules_go", version = "0.39.1")
  bazel_dep(name = "rules_kotlin", version = "1.9.0")
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index 3a5c0ba196..efedce5da9 100644
+index 3a5c0ba..efedce5 100755
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -60,6 +60,9 @@ cc_library(
@@ -70,7 +70,7 @@ index 3a5c0ba196..efedce5da9 100644
          "//src/conditions:windows": [
              "//src/main/native/windows:lib-file",
 diff --git a/src/main/cpp/blaze_util.cc b/src/main/cpp/blaze_util.cc
-index 673ab33894..81c12fee88 100644
+index 673ab33..81c12fe 100755
 --- a/src/main/cpp/blaze_util.cc
 +++ b/src/main/cpp/blaze_util.cc
 @@ -34,6 +34,10 @@
@@ -109,7 +109,7 @@ index 673ab33894..81c12fee88 100644
  }
  
 diff --git a/src/test/shell/integration/client_test.sh b/src/test/shell/integration/client_test.sh
-index 19f23a7b7c..e6c0d382a9 100755
+index 19f23a7..e6c0d38 100755
 --- a/src/test/shell/integration/client_test.sh
 +++ b/src/test/shell/integration/client_test.sh
 @@ -409,4 +409,34 @@ function test_ignores_jdk_option_environment_variables() {

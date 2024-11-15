@@ -1,7 +1,7 @@
-From 865d940ce11bfc3075751342f35972e39a885372 Mon Sep 17 00:00:00 2001
+From e27944f3dedf560b94165174b1f2dee0153edf13 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
-Subject: [PATCH 04/13] Use conda packages for build tools
+Subject: [PATCH 04/14] Use conda packages for build tools
 
 ---
  src/tools/singlejar/BUILD | 44 +++++++++------------------------------
@@ -10,7 +10,7 @@ Subject: [PATCH 04/13] Use conda packages for build tools
  3 files changed, 27 insertions(+), 47 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 9d176220ba..a951e7fdbe 100644
+index 9d17622..a951e7f 100755
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
 @@ -69,44 +69,20 @@ release_archive(
@@ -69,7 +69,7 @@ index 9d176220ba..a951e7fdbe 100644
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index fbe07892db..d6e99594e1 100644
+index fbe0789..d6e9959 100755
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
 @@ -69,21 +69,20 @@ cc_library(
@@ -103,7 +103,7 @@ index fbe07892db..d6e99594e1 100644
  
  filegroup(
 diff --git a/tools/zip/BUILD.tools b/tools/zip/BUILD.tools
-index 0b8ce85dab..3fc4fee98b 100644
+index 0b8ce85..3fc4fee 100755
 --- a/tools/zip/BUILD.tools
 +++ b/tools/zip/BUILD.tools
 @@ -1,11 +1,16 @@
