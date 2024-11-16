@@ -73,6 +73,7 @@ test:
   requires:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - bazel-toolchain
   commands:
     - bazel -h
     - bazel version
