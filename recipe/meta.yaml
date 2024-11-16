@@ -71,9 +71,10 @@ requirements:
 
 test:
   requires:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain
+    - bazel-toolchain  # [unix]
   commands:
     - bazel -h
     - bazel version
