@@ -1,7 +1,7 @@
-From f215e042c9b7af69c56634fdf2a3c69c130ec07a Mon Sep 17 00:00:00 2001
+From 76ad2d1926c4a31b4ed6d08654b36199a9bd7c47 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 17:08:56 +0200
-Subject: [PATCH 10/10] Adopt system libprotobuf
+Subject: [PATCH 10/14] Adopt system libprotobuf
 
 ---
  third_party/systemlibs/protobuf/BUILD           |  4 ++--

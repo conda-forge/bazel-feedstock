@@ -1,7 +1,7 @@
-From 7d7039a2013a8d44f2e5c2da9dc0328e0756f077 Mon Sep 17 00:00:00 2001
+From e27944f3dedf560b94165174b1f2dee0153edf13 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
-Subject: [PATCH 04/10] Use conda packages for build tools
+Subject: [PATCH 04/14] Use conda packages for build tools
 
 ---
  src/tools/singlejar/BUILD | 44 +++++++++------------------------------

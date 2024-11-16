@@ -1,7 +1,7 @@
-From df2465328881e6642fa9c8cc5b6b02350c3b78e2 Mon Sep 17 00:00:00 2001
+From 4b703b37d1a548731972dc2e3949a8acc775f202 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
-Subject: [PATCH] Enable new protobuf major release
+Subject: [PATCH 11/14] Enable new protobuf major release
 
 ---
  MODULE.bazel                                 | 2 +-

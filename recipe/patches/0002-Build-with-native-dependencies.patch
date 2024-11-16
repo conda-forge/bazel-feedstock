@@ -1,7 +1,7 @@
-From 192b030d84185dfd44a105c8cbe6c95cb49faa0d Mon Sep 17 00:00:00 2001
+From 2f19765c4452097cd0d43134f27e4d6316dff9fc Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/10] Build with native dependencies
+Subject: [PATCH 02/14] Build with native dependencies
 
 ---
  MODULE.bazel                                  |   9 +-
@@ -20,7 +20,7 @@ Subject: [PATCH 02/10] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 49be7bd..476d824 100755
+index db00e23..bb8bc84 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -15,6 +15,10 @@ module(
@@ -32,9 +32,9 @@ index 49be7bd..476d824 100755
 +    path = "./third_party/systemlibs/protobuf",
 +)
  bazel_dep(name = "grpc", version = "1.48.1.bcr.1", repo_name = "com_github_grpc_grpc")
- bazel_dep(name = "platforms", version = "0.0.9")
+ bazel_dep(name = "platforms", version = "0.0.10")
  bazel_dep(name = "rules_pkg", version = "0.9.1")
-@@ -111,6 +115,8 @@ maven.install(
+@@ -108,6 +112,8 @@ maven.install(
          "com.google.http-client:google-http-client-gson:1.42.0",
          "com.google.j2objc:j2objc-annotations:1.3",
          "com.google.turbine:turbine:0.6.0",
@@ -43,7 +43,7 @@ index 49be7bd..476d824 100755
          "com.ryanharter.auto.value:auto-value-gson-extension:1.3.1",
          "com.ryanharter.auto.value:auto-value-gson-factory:1.3.1",
          "com.ryanharter.auto.value:auto-value-gson-runtime:1.3.1",
-@@ -189,9 +195,6 @@ maven.install(
+@@ -186,9 +192,6 @@ maven.install(
          "org.apache.httpcomponents:httpclient",
          "org.apache.httpcomponents:httpcore",
          "org.eclipse.jgit:org.eclipse.jgit",

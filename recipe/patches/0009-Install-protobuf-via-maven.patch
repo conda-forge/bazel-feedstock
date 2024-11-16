@@ -1,7 +1,7 @@
-From a022782159835cd7019f19ccee2df9ac0c4e79ec Mon Sep 17 00:00:00 2001
+From f42fc7b3c8a0e8edfa866320dd5ad61f42bfd1e1 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 16:11:42 +0200
-Subject: [PATCH 09/10] Install protobuf via maven
+Subject: [PATCH 09/14] Install protobuf via maven
 
 ---
  third_party/systemlibs/protobuf/MODULE.bazel | 15 +++++++++++++++
