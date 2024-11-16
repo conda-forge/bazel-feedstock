@@ -1,7 +1,7 @@
-From 8aae4c88aef2ebfc8f3a74ee153cd84a978f5dc5 Mon Sep 17 00:00:00 2001
+From 2b4e617e3d9fed16630a35868c24352feb295335 Mon Sep 17 00:00:00 2001
 From: Uwe Korn <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 12:36:53 +0000
-Subject: [PATCH] Use old-sytle condition for linux64
+Subject: [PATCH 12/14] Use old-sytle condition for linux64
 
 ---
  third_party/blake3/blake3.BUILD | 8 +++++++-
