@@ -1,14 +1,14 @@
-From 5821dd6f21d9b066e558a420ca139aa56bb112bd Mon Sep 17 00:00:00 2001
+From 8effd203ba04eead476c92c7cab5c42ba81a97a1 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 27 Sep 2024 14:21:34 +0200
-Subject: [PATCH] Patch protobuf compatibility during bootstrap
+Subject: [PATCH 13/14] Patch protobuf compatibility during bootstrap
 
 ---
  compile.sh | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/compile.sh b/compile.sh
-index ce49a12..d66247e 100755
+index e830fc1..8cd8508 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -58,6 +58,10 @@ fi

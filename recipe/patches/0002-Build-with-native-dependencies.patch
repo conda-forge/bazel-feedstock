@@ -1,7 +1,7 @@
-From 9393179141b086e44bea40f053d3366894362a53 Mon Sep 17 00:00:00 2001
+From 14cbbcde44e73686996f8db1fdfd773861dcb2bb Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/10] Build with native dependencies
+Subject: [PATCH 02/14] Build with native dependencies
 
 ---
  WORKSPACE                                     |  37 +-
@@ -16,7 +16,7 @@ Subject: [PATCH 02/10] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/WORKSPACE b/WORKSPACE
-index f6e0a3352d..4a53dc34e0 100644
+index b7f17ad..c015de0 100755
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -90,12 +90,43 @@ bind(
@@ -67,10 +67,10 @@ index f6e0a3352d..4a53dc34e0 100644
  # @rules_python//python:defs.bzl. It is used by protobuf.
  # TODO(#9029): We could potentially replace this with the real @rules_python.
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index 9b52063095..88a18fa876 100644
+index eb051d0..cb6ccf0 100755
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
-@@ -428,7 +428,7 @@ java_library(
+@@ -430,7 +430,7 @@ java_library(
          "//third_party:guava",
          "//third_party:jsr305",
          "@com_google_protobuf//:protobuf_java",
@@ -80,7 +80,7 @@ index 9b52063095..88a18fa876 100644
      ],
  )
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index 397089d9a5..e6662acc9f 100644
+index 397089d..e6662ac 100755
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -44,28 +44,23 @@ filegroup(
@@ -123,7 +123,7 @@ index 397089d9a5..e6662acc9f 100644
  filegroup(
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
 new file mode 100644
-index 0000000000..3e42a1bf31
+index 0000000..3e42a1b
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf.BUILD
 @@ -0,0 +1,141 @@
@@ -270,7 +270,7 @@ index 0000000000..3e42a1bf31
 +) for proto in WELL_KNOWN_PROTO_MAP.items()]
 diff --git a/third_party/systemlibs/protobuf.bzl b/third_party/systemlibs/protobuf.bzl
 new file mode 100644
-index 0000000000..8b3a16e7cf
+index 0000000..8b3a16e
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf.bzl
 @@ -0,0 +1,436 @@
@@ -712,7 +712,7 @@ index 0000000000..8b3a16e7cf
 +        fail("Bazel must be newer than 0.5.4")
 diff --git a/third_party/systemlibs/protobuf_deps.bzl b/third_party/systemlibs/protobuf_deps.bzl
 new file mode 100644
-index 0000000000..aafd89b0aa
+index 0000000..aafd89b
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf_deps.bzl
 @@ -0,0 +1,2 @@

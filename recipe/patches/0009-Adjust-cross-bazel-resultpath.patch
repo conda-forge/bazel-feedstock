@@ -1,14 +1,14 @@
-From e58d825d6e45e52041706d8c8ca9b945abbb5200 Mon Sep 17 00:00:00 2001
+From 6c27dcfee45d23a551d0ffefa47b21a13bd62ebf Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:10:21 +0100
-Subject: [PATCH 09/10] Adjust cross bazel resultpath
+Subject: [PATCH 09/14] Adjust cross bazel resultpath
 
 ---
  compile.sh | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/compile.sh b/compile.sh
-index ce49a1266e..e830fc13b7 100755
+index ce49a12..e830fc1 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -69,6 +69,7 @@ bazel_build ${BAZEL_BUILD_OPTS} "src:bazel_nojdk${EXE_EXT}" \

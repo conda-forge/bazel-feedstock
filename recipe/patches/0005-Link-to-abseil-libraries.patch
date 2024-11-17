@@ -1,7 +1,7 @@
-From 75eb132b0e93ddae176650d4dd58d511d8676a4e Mon Sep 17 00:00:00 2001
+From 98a2965a31355291e2202c6ba822570ba4f58ea5 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Tue, 13 Jun 2023 15:55:49 +0200
-Subject: [PATCH 05/10] Link to abseil libraries
+Subject: [PATCH 05/14] Link to abseil libraries
 
 Co-Authored-By: Silvio Traversaro <silvio@traversaro.it>
 ---
@@ -9,7 +9,7 @@ Co-Authored-By: Silvio Traversaro <silvio@traversaro.it>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
-index 3e42a1bf31..18c8a8fb02 100644
+index 3e42a1b..18c8a8f 100644
 --- a/third_party/systemlibs/protobuf.BUILD
 +++ b/third_party/systemlibs/protobuf.BUILD
 @@ -62,19 +62,19 @@ genrule(

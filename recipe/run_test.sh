@@ -5,4 +5,5 @@ set -exuo pipefail
 
 cp -r ${RECIPE_DIR}/tutorial .
 cd tutorial
-bazel build --logging=6 --subcommands --verbose_failures //main:hello-world
+source gen-bazel-toolchain
+bazel build --logging=6 --subcommands --verbose_failures //main:hello-world --crosstool_top=//bazel_toolchain:toolchain
