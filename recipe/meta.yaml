@@ -1,4 +1,4 @@
-{% set version = "7.4.1" %}
+{% set version = "8.0.1" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: 83386618bc489f4da36266ef2620ec64a526c686cf07041332caff7c953afaf5
+    sha256: 399fd28a370012cbf9324cd21de5eef3aec3f278ad58d1e608edee6fb909a04e
     patches:
       ## bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       ## which patches the same sources; the patches from singlejar should either be
