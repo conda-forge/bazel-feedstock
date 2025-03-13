@@ -35,7 +35,7 @@ source:
     - patches/0014-Removing-redundant-function-null_grpc_log_function.patch
 
 build:
-  number: 3
+  number: 4
   ignore_prefix_files: true
   binary_relocation: false
 
