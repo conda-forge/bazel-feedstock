@@ -1,4 +1,4 @@
-From 367d3886e3adc79f76e695153f13d98a1bc13945 Mon Sep 17 00:00:00 2001
+From 5221612b7f1ebcf870fd651a56f561d281d967b6 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 11/14] Enable new protobuf major release
@@ -10,7 +10,7 @@ Subject: [PATCH 11/14] Enable new protobuf major release
  3 files changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 95b04b45c8..41a2b2df4d 100644
+index c505a78987..f0c325af10 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -14,7 +14,7 @@ module(

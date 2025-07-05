@@ -1,4 +1,4 @@
-From a13ec5fa16b096b84890ed39355f74653e6e03b4 Mon Sep 17 00:00:00 2001
+From 3e9ec6efe270b2947b43766c2638e95878883471 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 02/14] Build with native dependencies
@@ -20,7 +20,7 @@ Subject: [PATCH 02/14] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index d9ce1fb15b..95b04b45c8 100644
+index 84e08db938..c505a78987 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -15,6 +15,10 @@ module(
@@ -54,10 +54,10 @@ index d9ce1fb15b..95b04b45c8 100644
      # Don't forget to change this to back to True before submitting your change.
      fail_if_repin_required = True,
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index 953a48f78e..4c9069371f 100644
+index b247593d57..7ba466ea57 100644
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
-@@ -473,7 +473,7 @@ java_library(
+@@ -474,7 +474,7 @@ java_library(
          "//third_party:guava",
          "//third_party:jsr305",
          "@com_google_protobuf//:protobuf_java",
@@ -110,7 +110,7 @@ index d8f64ef471..e622c42aac 100644
  filegroup(
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
 new file mode 100644
-index 0000000000..18c8a8fb02
+index 0000000000..47fbb7375d
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -0,0 +1,141 @@
@@ -178,13 +178,13 @@ index 0000000000..18c8a8fb02
 +
 +cc_library(
 +    name = "protobuf",
-+    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_entry", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
++    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
 +    visibility = ["//visibility:public"],
 +)
 +
 +cc_library(
 +    name = "protobuf_headers",
-+    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_entry", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
++    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
 +    visibility = ["//visibility:public"],
 +)
 +

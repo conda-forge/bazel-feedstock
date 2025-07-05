@@ -1,4 +1,4 @@
-From 496bdfc867cb9d0a0c370027dcb661a46205f667 Mon Sep 17 00:00:00 2001
+From 685dbf5da371d2ea70eab604ad43191f0cd4d890 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 17:08:56 +0200
 Subject: [PATCH 10/14] Adopt system libprotobuf
@@ -12,7 +12,7 @@ Subject: [PATCH 10/14] Adopt system libprotobuf
  create mode 100644 third_party/systemlibs/protobuf/java/core/BUILD
 
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
-index 18c8a8fb02..60f7ccf2f5 100644
+index 47fbb7375d..d1be0831a5 100644
 --- a/third_party/systemlibs/protobuf/BUILD
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -108,13 +108,13 @@ py_library(
