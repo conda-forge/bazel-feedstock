@@ -30,7 +30,7 @@ source:
       - patches/0014-Add-missing-absl-dependency.patch
 
 build:
-  number: 2
+  number: 3
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
@@ -45,7 +45,9 @@ requirements:
     - sed                      # [unix]
     - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
-    - grpc_java_plugin         # [unix]
+    # bazel vendors & expects quite an old grpc-java-plugin; avoid pulling in versions with
+    # https://github.com/grpc/grpc-java/commit/ea8c31c305eac5a6ac9a09de5ea2edb9ed719a31
+    - grpc_java_plugin <1.70   # [unix]
     - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
