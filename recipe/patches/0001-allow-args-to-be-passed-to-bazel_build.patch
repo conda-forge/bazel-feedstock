@@ -1,4 +1,4 @@
-From 9793400cdb73314999f2493405a17fa4953e03dd Mon Sep 17 00:00:00 2001
+From f04afc00365ea581ad7713729aee2e5d537e4960 Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Fri, 16 Mar 2018 12:10:51 -0500
 Subject: [PATCH 01/14] allow args to be passed to bazel_build
@@ -10,7 +10,7 @@ environment variable.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/compile.sh b/compile.sh
-index d91583d..ce49a12 100755
+index d91583d277..ce49a1266e 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -63,7 +63,7 @@ display "."

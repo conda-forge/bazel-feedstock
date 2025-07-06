@@ -1,4 +1,4 @@
-From 98a2965a31355291e2202c6ba822570ba4f58ea5 Mon Sep 17 00:00:00 2001
+From ee7cd231a084f68df271886618c5d432aeb0d327 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Tue, 13 Jun 2023 15:55:49 +0200
 Subject: [PATCH 05/14] Link to abseil libraries
@@ -9,7 +9,7 @@ Co-Authored-By: Silvio Traversaro <silvio@traversaro.it>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
-index 3e42a1b..18c8a8f 100644
+index 3e42a1bf31..47fbb7375d 100644
 --- a/third_party/systemlibs/protobuf.BUILD
 +++ b/third_party/systemlibs/protobuf.BUILD
 @@ -62,19 +62,19 @@ genrule(
@@ -17,14 +17,14 @@ index 3e42a1b..18c8a8f 100644
  cc_library(
      name = "protobuf",
 -    linkopts = ["-lprotobuf"],
-+    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_entry", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
++    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
      visibility = ["//visibility:public"],
  )
  
  cc_library(
      name = "protobuf_headers",
 -    linkopts = ["-lprotobuf"],
-+    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_entry", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
++    linkopts = ["-lprotobuf", "-labsl_cord", "-labsl_cord_internal", "-labsl_cordz_functions", "-labsl_cordz_handle", "-labsl_cordz_info", "-labsl_cordz_sample_token", "-labsl_log_flags", "-labsl_log_globals", "-labsl_log_initialize", "-labsl_log_internal_check_op", "-labsl_log_internal_conditions", "-labsl_log_internal_format", "-labsl_log_internal_globals", "-labsl_log_internal_log_sink_set", "-labsl_log_internal_message", "-labsl_log_internal_nullguard", "-labsl_log_internal_proto", "-labsl_log_severity", "-labsl_log_sink"],
      visibility = ["//visibility:public"],
  )
  
