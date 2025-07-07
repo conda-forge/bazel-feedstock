@@ -1,14 +1,14 @@
-From 2b4e617e3d9fed16630a35868c24352feb295335 Mon Sep 17 00:00:00 2001
+From fc34741cc69e5dc864897d308c9b4a64ac574b54 Mon Sep 17 00:00:00 2001
 From: Uwe Korn <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 12:36:53 +0000
-Subject: [PATCH 12/14] Use old-sytle condition for linux64
+Subject: [PATCH 12/15] Use old-sytle condition for linux64
 
 ---
  third_party/blake3/blake3.BUILD | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/third_party/blake3/blake3.BUILD b/third_party/blake3/blake3.BUILD
-index a7b6843..d237ebb 100755
+index a7b6843ef4..d237ebb4bf 100644
 --- a/third_party/blake3/blake3.BUILD
 +++ b/third_party/blake3/blake3.BUILD
 @@ -21,6 +21,12 @@ filegroup(

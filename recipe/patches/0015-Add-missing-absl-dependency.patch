@@ -1,0 +1,48 @@
+From c7ca4aae881dd29237c540ea116b714e25c3e363 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Fri, 8 Nov 2024 22:04:59 +0100
+Subject: [PATCH 15/15] Add missing absl dependency
+
+Co-Authored-By: H. Vetinari <h.vetinari@gmx.com>
+---
+ src/main/cpp/BUILD | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
+index ffe7caf6bb..19a6370ba7 100644
+--- a/src/main/cpp/BUILD
++++ b/src/main/cpp/BUILD
+@@ -87,6 +87,15 @@ cc_library(
+     ],
+ )
+ 
++# cannot do `[...] + select(...)` in starlark, so factor out common libraries into
++# a variable; note that this is likely not the full list, because we're inheriting
++# the linkopts from protobuf (see third_party/systemlibs/protobuf/BUILD), so several
++# abseil libraries will already be present
++_CLIENT_LINKOPTS = [
++    "-labsl_log_severity",
++    "-labsl_synchronization",
++]
++
+ cc_binary(
+     name = "client",
+     srcs = [
+@@ -104,7 +113,7 @@ cc_binary(
+         "//conditions:default": ["-Wno-sign-compare"],
+     }),
+     linkopts = select({
+-        "//src/conditions:darwin": [
++        "//src/conditions:darwin": _CLIENT_LINKOPTS + [
+         ],
+         "//src/conditions:freebsd": [
+             "-lprocstat",
+@@ -114,7 +123,7 @@ cc_binary(
+         ],
+         "//src/conditions:windows": [
+         ],
+-        "//conditions:default": [
++        "//conditions:default": _CLIENT_LINKOPTS + [
+             "-lrt",
+             "-ldl",
+         ],

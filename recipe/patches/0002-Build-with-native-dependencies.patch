@@ -1,7 +1,7 @@
-From 14cbbcde44e73686996f8db1fdfd773861dcb2bb Mon Sep 17 00:00:00 2001
+From 9afee1efb8c79d474448b46034340056aaa82276 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/14] Build with native dependencies
+Subject: [PATCH 02/15] Build with native dependencies
 
 ---
  WORKSPACE                                     |  37 +-
@@ -16,7 +16,7 @@ Subject: [PATCH 02/14] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/WORKSPACE b/WORKSPACE
-index b7f17ad..c015de0 100755
+index b7f17ad5fd..c015de0717 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -90,12 +90,43 @@ bind(
@@ -30,8 +30,8 @@ index b7f17ad..c015de0 100755
 -    patch_cmds_win = EXPORT_WORKSPACE_IN_BUILD_FILE_WIN,
 +    path = "./third_party/systemlibs",
 +    build_file = "./third_party/systemlibs/protobuf.BUILD",
-+)
-+
+ )
+ 
 +RULES_JVM_EXTERNAL_TAG = "4.0"
 +RULES_JVM_EXTERNAL_SHA = "31701ad93dbfe544d597dbe62c9a1fdd76d81d8a9150c2bf1ecf928ecdf97169"
 +
@@ -40,8 +40,8 @@ index b7f17ad..c015de0 100755
 +    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
 +    sha256 = RULES_JVM_EXTERNAL_SHA,
 +    url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
- )
- 
++)
++
 +load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
 +
 +rules_jvm_external_deps()
@@ -67,7 +67,7 @@ index b7f17ad..c015de0 100755
  # @rules_python//python:defs.bzl. It is used by protobuf.
  # TODO(#9029): We could potentially replace this with the real @rules_python.
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index eb051d0..cb6ccf0 100755
+index eb051d03f4..cb6ccf0399 100644
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
 @@ -430,7 +430,7 @@ java_library(
@@ -80,7 +80,7 @@ index eb051d0..cb6ccf0 100755
      ],
  )
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index 397089d..e6662ac 100755
+index 397089d9a5..e6662acc9f 100644
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -44,28 +44,23 @@ filegroup(
@@ -123,7 +123,7 @@ index 397089d..e6662ac 100755
  filegroup(
 diff --git a/third_party/systemlibs/protobuf.BUILD b/third_party/systemlibs/protobuf.BUILD
 new file mode 100644
-index 0000000..3e42a1b
+index 0000000000..3e42a1bf31
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf.BUILD
 @@ -0,0 +1,141 @@
@@ -270,7 +270,7 @@ index 0000000..3e42a1b
 +) for proto in WELL_KNOWN_PROTO_MAP.items()]
 diff --git a/third_party/systemlibs/protobuf.bzl b/third_party/systemlibs/protobuf.bzl
 new file mode 100644
-index 0000000..8b3a16e
+index 0000000000..8b3a16e7cf
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf.bzl
 @@ -0,0 +1,436 @@
@@ -712,7 +712,7 @@ index 0000000..8b3a16e
 +        fail("Bazel must be newer than 0.5.4")
 diff --git a/third_party/systemlibs/protobuf_deps.bzl b/third_party/systemlibs/protobuf_deps.bzl
 new file mode 100644
-index 0000000..aafd89b
+index 0000000000..aafd89b0aa
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf_deps.bzl
 @@ -0,0 +1,2 @@

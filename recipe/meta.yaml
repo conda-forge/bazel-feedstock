@@ -33,9 +33,10 @@ source:
     - patches/0013-Patch-protobuf-compatibility-during-bootstrap.patch         # [unix]
     # backport https://github.com/bazelbuild/bazel/commit/b817aeef1a55f8e470f91e11f7df58d4e655bbba
     - patches/0014-Removing-redundant-function-null_grpc_log_function.patch
+    - patches/0015-Add-missing-absl-dependency.patch
 
 build:
-  number: 4
+  number: 5
   ignore_prefix_files: true
   binary_relocation: false
 
@@ -47,13 +48,15 @@ requirements:
     - sed                      # [unix]
     - openjdk >=8,<17          # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
-    - grpc_java_plugin         # [unix]
+    # bazel vendors & expects quite an old grpc-java-plugin; avoid pulling in versions with
+    # https://github.com/grpc/grpc-java/commit/ea8c31c305eac5a6ac9a09de5ea2edb9ed719a31
+    - grpc_java_plugin <1.70   # [unix]
     - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
     - bazel-toolchain <0.2     # [ppc64le]
-    - bazel-toolchain >=0.2.0  # [unix and not ppc64le]
+    - bazel-toolchain >=0.2.0,<0.3  # [unix and not ppc64le]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
@@ -74,7 +77,7 @@ test:
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain  # [unix]
+    - bazel-toolchain <0.3  # [unix]
   commands:
     - bazel -h
     - bazel version
