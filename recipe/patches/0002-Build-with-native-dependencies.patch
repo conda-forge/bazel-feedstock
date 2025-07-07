@@ -1,10 +1,10 @@
-From 3e9ec6efe270b2947b43766c2638e95878883471 Mon Sep 17 00:00:00 2001
+From 70a2a34efb041d8a8f91db5529e5e16a8c4ea607 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/14] Build with native dependencies
+Subject: [PATCH 02/12] Build with native dependencies
 
 ---
- MODULE.bazel                                  |   9 +-
+ MODULE.bazel                                  |   6 +
  .../java/com/google/devtools/build/lib/BUILD  |   2 +-
  third_party/grpc/BUILD                        |  23 +-
  third_party/systemlibs/protobuf/BUILD         | 141 ++++++
@@ -12,7 +12,7 @@ Subject: [PATCH 02/14] Build with native dependencies
  third_party/systemlibs/protobuf/WORKSPACE     |   2 +
  third_party/systemlibs/protobuf/protobuf.bzl  | 436 ++++++++++++++++++
  third_party/systemlibs/protobuf_deps.bzl      |   2 +
- 8 files changed, 624 insertions(+), 18 deletions(-)
+ 8 files changed, 624 insertions(+), 15 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/BUILD
  create mode 100644 third_party/systemlibs/protobuf/MODULE.bazel
  create mode 100644 third_party/systemlibs/protobuf/WORKSPACE
@@ -20,44 +20,34 @@ Subject: [PATCH 02/14] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 84e08db938..c505a78987 100644
+index 497031b9e0..e3cd20d8d0 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -15,6 +15,10 @@ module(
- bazel_dep(name = "rules_license", version = "0.0.7")
- bazel_dep(name = "bazel_skylib", version = "1.6.1")
- bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
+@@ -43,6 +43,10 @@ bazel_dep(name = "rules_cc", version = "0.1.1")
+ 
+ # repo_name needs to be used, until WORKSPACE mode is to be supported in bazel_tools
+ bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
 +local_path_override(
 +    module_name = "protobuf",
 +    path = "./third_party/systemlibs/protobuf",
 +)
- bazel_dep(name = "grpc", version = "1.48.1.bcr.1", repo_name = "com_github_grpc_grpc")
- bazel_dep(name = "platforms", version = "0.0.10")
- bazel_dep(name = "rules_pkg", version = "0.9.1")
-@@ -113,6 +117,8 @@ maven.install(
+ 
+ # TODO: wyv@ - add remoteapis to the BCR
+ bazel_dep(name = "remoteapis", version = "")
+@@ -126,6 +130,8 @@ maven.install(
          "com.google.http-client:google-http-client-gson:1.42.0",
          "com.google.j2objc:j2objc-annotations:1.3",
-         "com.google.turbine:turbine:0.6.0",
+         "com.google.turbine:turbine:0.10.0",
 +        "com.google.protobuf:protobuf-java:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
 +        "com.google.protobuf:protobuf-java-util:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
          "com.guardsquare:proguard-base:jar:7.5.0",
          "com.ryanharter.auto.value:auto-value-gson-extension:1.3.1",
          "com.ryanharter.auto.value:auto-value-gson-factory:1.3.1",
-@@ -190,9 +196,6 @@ maven.install(
-         "org.apache.httpcomponents:httpclient",
-         "org.apache.httpcomponents:httpcore",
-         "org.eclipse.jgit:org.eclipse.jgit",
--        # We build protobuf Java library from source, exclude protobuf jars to be safe.
--        "com.google.protobuf:protobuf-java",
--        "com.google.protobuf:protobuf-javalite",
-     ],
-     # Don't forget to change this to back to True before submitting your change.
-     fail_if_repin_required = True,
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index b247593d57..7ba466ea57 100644
+index a2e6752c24..4394aa3160 100644
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
-@@ -474,7 +474,7 @@ java_library(
+@@ -517,7 +517,7 @@ java_library(
          "//third_party:guava",
          "//third_party:jsr305",
          "@com_google_protobuf//:protobuf_java",
@@ -67,10 +57,10 @@ index b247593d57..7ba466ea57 100644
      ],
  )
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index d8f64ef471..e622c42aac 100644
+index 1ef653cfdb..f9c470f388 100644
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
-@@ -44,28 +44,23 @@ filegroup(
+@@ -39,28 +39,23 @@ filegroup(
      ],
  )
  

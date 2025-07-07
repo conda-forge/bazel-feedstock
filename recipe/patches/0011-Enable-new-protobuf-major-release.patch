@@ -1,7 +1,7 @@
-From 5221612b7f1ebcf870fd651a56f561d281d967b6 Mon Sep 17 00:00:00 2001
+From 277ae5f8b737a4f83b116822d6978640ac935929 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
-Subject: [PATCH 11/14] Enable new protobuf major release
+Subject: [PATCH 11/12] Enable new protobuf major release
 
 ---
  MODULE.bazel                                 | 2 +-
@@ -10,23 +10,23 @@ Subject: [PATCH 11/14] Enable new protobuf major release
  3 files changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index c505a78987..f0c325af10 100644
+index e3cd20d8d0..ac42c4bb34 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -14,7 +14,7 @@ module(
+@@ -42,7 +42,7 @@ bazel_dep(name = "apple_support", version = "1.18.1")
+ bazel_dep(name = "rules_cc", version = "0.1.1")
  
- bazel_dep(name = "rules_license", version = "0.0.7")
- bazel_dep(name = "bazel_skylib", version = "1.6.1")
--bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
+ # repo_name needs to be used, until WORKSPACE mode is to be supported in bazel_tools
+-bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
 +bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
  local_path_override(
      module_name = "protobuf",
      path = "./third_party/systemlibs/protobuf",
 diff --git a/compile.sh b/compile.sh
-index 7590068b5f..d867758dcb 100755
+index bd7a6397bc..7759615ba2 100755
 --- a/compile.sh
 +++ b/compile.sh
-@@ -58,6 +58,10 @@ fi
+@@ -66,6 +66,10 @@ fi
  
  source scripts/bootstrap/bootstrap.sh
  
