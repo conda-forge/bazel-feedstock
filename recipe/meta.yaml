@@ -77,7 +77,7 @@ test:
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain  # [unix]
+    - bazel-toolchain <0.3  # [unix]
   commands:
     - bazel -h
     - bazel version
