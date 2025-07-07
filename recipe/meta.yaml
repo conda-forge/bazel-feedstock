@@ -55,7 +55,7 @@ requirements:
     - ijar {{ version }}       # [build_platform != target_platform]
     - singlejar {{ version }}  # [build_platform != target_platform]
     - bazel-toolchain <0.2     # [ppc64le]
-    - bazel-toolchain >=0.2.0  # [unix and not ppc64le]
+    - bazel-toolchain >=0.2.0,<0.3  # [unix and not ppc64le]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
