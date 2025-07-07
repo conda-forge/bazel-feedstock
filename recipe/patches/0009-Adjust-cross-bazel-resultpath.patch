@@ -1,7 +1,7 @@
 From 632e4f67475304645de66772c282d4ce57fcb9c7 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:10:21 +0100
-Subject: [PATCH 09/14] Adjust cross bazel resultpath
+Subject: [PATCH 09/15] Adjust cross bazel resultpath
 
 ---
  compile.sh | 1 +

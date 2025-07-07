@@ -1,7 +1,7 @@
 From b6ebbdf8f0c6dd263e604abf2a1a2dde5c45c8a0 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 14:00:58 +0200
-Subject: [PATCH 11/14] Use old-style conditions
+Subject: [PATCH 11/15] Use old-style conditions
 
 ---
  third_party/blake3/blake3.BUILD | 19 +++++++++++++++++--

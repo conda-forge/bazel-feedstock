@@ -33,6 +33,7 @@ source:
     - patches/0013-Patch-protobuf-compatibility-during-bootstrap.patch         # [unix]
     # backport https://github.com/bazelbuild/bazel/commit/b817aeef1a55f8e470f91e11f7df58d4e655bbba
     - patches/0014-Removing-redundant-function-null_grpc_log_function.patch
+    - patches/0015-Add-missing-absl-dependency.patch
 
 build:
   number: 5

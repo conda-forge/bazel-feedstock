@@ -1,7 +1,7 @@
 From bb898457b46ce71f6020fa46081db9623946b467 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Thu, 25 May 2023 20:35:02 +1100
-Subject: [PATCH 04/14] use C++17
+Subject: [PATCH 04/15] use C++17
 
 ---
  .bazelrc | 2 ++

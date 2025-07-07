@@ -1,7 +1,7 @@
 From 9afee1efb8c79d474448b46034340056aaa82276 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/14] Build with native dependencies
+Subject: [PATCH 02/15] Build with native dependencies
 
 ---
  WORKSPACE                                     |  37 +-
