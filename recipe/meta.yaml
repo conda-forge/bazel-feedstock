@@ -39,6 +39,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - sed                      # [unix]
+    - m2-sed                   # [win]
     - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
     # bazel vendors & expects quite an old grpc-java-plugin; avoid pulling in versions with

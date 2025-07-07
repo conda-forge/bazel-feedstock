@@ -189,6 +189,9 @@ set SBT_HOME=
 :: to run into "/lib/jvm/bin/java: Argument list too long" again.
 set
 
+sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
+if errorlevel 1 exit 1
+
 set "BAZEL_BUILD_OPTS=--cxxopt=/std:c++17"
 bash -lx ./compile.sh
 if errorlevel 1 exit 1
