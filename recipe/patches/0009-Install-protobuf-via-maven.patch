@@ -1,4 +1,4 @@
-From 7dac448cddd4e0ba660c553ce0ea7f75641e7e38 Mon Sep 17 00:00:00 2001
+From 8653957554c9e2c03f32244abaa35cfa7c0568aa Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 16:11:42 +0200
 Subject: [PATCH 09/12] Install protobuf via maven
@@ -8,7 +8,7 @@ Subject: [PATCH 09/12] Install protobuf via maven
  1 file changed, 15 insertions(+)
 
 diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
-index 57f0460b36..13123ff91e 100644
+index 57f0460..13123ff 100644
 --- a/third_party/systemlibs/protobuf/MODULE.bazel
 +++ b/third_party/systemlibs/protobuf/MODULE.bazel
 @@ -25,3 +25,18 @@ bazel_dep(name = "zlib", version = "1.2.11")

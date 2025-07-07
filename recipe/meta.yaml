@@ -53,11 +53,12 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    - libabseil        # [unix]
-    - libgrpc          # [unix]
-    - libprotobuf      # [unix]
-    - openjdk 21.*     # [win]
-    - posix            # [win]
+    - libabseil             # [unix]
+    - libgrpc               # [unix]
+    - libprotobuf           # [unix]
+    - protobuf-bazel-rules  # [unix]
+    - openjdk 21.*          # [win]
+    - posix                 # [win]
   run:
     - openjdk >=21
     - posix                    # [win]

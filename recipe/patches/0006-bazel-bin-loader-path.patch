@@ -1,4 +1,4 @@
-From 2ceb3f51c57169b23d5ad40e3bcffc20d100ba57 Mon Sep 17 00:00:00 2001
+From 7f5bd43db34432dc8e080a566ca8d65d9c25a16b Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:08:16 +0100
 Subject: [PATCH 06/12] bazel bin loader path
@@ -8,7 +8,7 @@ Subject: [PATCH 06/12] bazel bin loader path
  1 file changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/src/BUILD b/src/BUILD
-index 995c1487fb..9f1f6e9ed8 100644
+index 995c148..9f1f6e9 100755
 --- a/src/BUILD
 +++ b/src/BUILD
 @@ -316,16 +316,41 @@ genrule(
