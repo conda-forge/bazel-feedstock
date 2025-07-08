@@ -1,14 +1,14 @@
-From f91bba5b9022b4f99390f2e5adb06c6a7ef4283b Mon Sep 17 00:00:00 2001
+From bcf5aa46203c4b2e95d5ffee35f1ba16dacb99ed Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Mon, 7 Feb 2022 21:43:56 +0100
 Subject: [PATCH 08/12] win: Disable VS activation and make build verbose
 
 ---
- src/main/native/windows/build_windows_jni.sh | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ src/main/native/windows/build_windows_jni.sh | 21 ++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
 diff --git a/src/main/native/windows/build_windows_jni.sh b/src/main/native/windows/build_windows_jni.sh
-index 5d38ffd..5850fc0 100755
+index 5d38ffd..637bb81 100755
 --- a/src/main/native/windows/build_windows_jni.sh
 +++ b/src/main/native/windows/build_windows_jni.sh
 @@ -19,6 +19,8 @@
@@ -20,16 +20,27 @@ index 5d38ffd..5850fc0 100755
  DLL="$1"
  shift 1
  
-@@ -115,12 +117,11 @@ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
+@@ -101,7 +103,7 @@ done
+ 
+ # Copy jni headers to src/main/native folder
+ # Mimic genrule //src/main/native:copy_link_jni_md_header and //src/main/native:copy_link_jni_header
+-JNI_HEADERS_DIR="${VSTEMP}/src/main/native"
++JNI_HEADERS_DIR="${SRC_DIR}/src/main/native"
+ mkdir -p "$JNI_HEADERS_DIR"
+ cp -f "$JAVAINCLUDES/jni.h" "$JNI_HEADERS_DIR/"
+ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
+@@ -114,15 +116,14 @@ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
+ # directory. See https://github.com/bazelbuild/bazel/issues/3906
  abs_pwd="$(cygpath -a -w "${PWD}")"
  pwd_drive="$(echo "$abs_pwd" | head -c2)"
- cat > "${VSTEMP}/windows_jni.bat" <<EOF
+-cat > "${VSTEMP}/windows_jni.bat" <<EOF
 -@echo OFF
 -@call "${VSVARS}" amd64
 -@$pwd_drive
 -@cd "$abs_pwd"
 -@set TMP=$(cygpath -a -w "${VSTEMP}")
 -@CL /O2 /EHsc /LD /Fe:"$(cygpath -a -w ${DLL})" /I "%TMP%" /I . ${WINDOWS_SOURCES[*]} /link /DEFAULTLIB:advapi32.lib
++cat <<EOF >${SRC_DIR}/windows_jni.bat
 +@echo on
 +$pwd_drive
 +cd "$abs_pwd"
@@ -38,3 +49,7 @@ index 5d38ffd..5850fc0 100755
  EOF
  
  # Invoke the file and hopefully generate the .DLL .
+-chmod +x "${VSTEMP}/windows_jni.bat"
+-exec "${VSTEMP}/windows_jni.bat"
++chmod +x "${SRC_DIR}/windows_jni.bat"
++exec "${SRC_DIR}/windows_jni.bat"

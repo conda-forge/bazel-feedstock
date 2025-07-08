@@ -1,4 +1,8 @@
 @echo on
+
+sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
+if errorlevel 1 exit 1
+
 :: Delegate to the Unixy script. We need to translate the key path variables
 :: to be Unix-y rather than Windows-y, though.
 set "saved_recipe_dir=%RECIPE_DIR%"
@@ -188,9 +192,6 @@ set SBT_HOME=
 :: show remaining environment variables, in case the list grows enough
 :: to run into "/lib/jvm/bin/java: Argument list too long" again.
 set
-
-sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
-if errorlevel 1 exit 1
 
 set "BAZEL_BUILD_OPTS=--cxxopt=/std:c++17"
 bash -lx ./compile.sh
