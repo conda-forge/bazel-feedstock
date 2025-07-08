@@ -1,0 +1,5 @@
+# some issue with vs2022 for linker response file in windows_jni.bat 
+c_compiler:     # [win]
+  - vs2019      # [win]
+cxx_compiler:   # [win]
+  - vs2019      # [win]
