@@ -1,14 +1,14 @@
-From bcf5aa46203c4b2e95d5ffee35f1ba16dacb99ed Mon Sep 17 00:00:00 2001
+From c4dbcbcaca245a572ecd581c44ad0dede571158c Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Mon, 7 Feb 2022 21:43:56 +0100
 Subject: [PATCH 08/12] win: Disable VS activation and make build verbose
 
 ---
- src/main/native/windows/build_windows_jni.sh | 21 ++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ src/main/native/windows/build_windows_jni.sh | 24 +++++++++++---------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
 diff --git a/src/main/native/windows/build_windows_jni.sh b/src/main/native/windows/build_windows_jni.sh
-index 5d38ffd..637bb81 100755
+index 5d38ffd..e707dd9 100755
 --- a/src/main/native/windows/build_windows_jni.sh
 +++ b/src/main/native/windows/build_windows_jni.sh
 @@ -19,6 +19,8 @@
@@ -20,7 +20,17 @@ index 5d38ffd..637bb81 100755
  DLL="$1"
  shift 1
  
-@@ -101,7 +103,7 @@ done
+@@ -36,7 +38,8 @@ fi
+ 
+ # Create a temp directory. It will used for the batch file we generate soon and
+ # as the temp directory for CL.EXE .
+-VSTEMP=$(mktemp -d)
++VSTEMP=${SRC_DIR}/vstemp
++mkdir -p ${VSTEMP}
+ trap "rm -fr \"$VSTEMP\"" EXIT
+ VSVARS=""
+ 
+@@ -101,7 +104,7 @@ done
  
  # Copy jni headers to src/main/native folder
  # Mimic genrule //src/main/native:copy_link_jni_md_header and //src/main/native:copy_link_jni_header
@@ -29,7 +39,7 @@ index 5d38ffd..637bb81 100755
  mkdir -p "$JNI_HEADERS_DIR"
  cp -f "$JAVAINCLUDES/jni.h" "$JNI_HEADERS_DIR/"
  cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
-@@ -114,15 +116,14 @@ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
+@@ -114,15 +117,14 @@ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
  # directory. See https://github.com/bazelbuild/bazel/issues/3906
  abs_pwd="$(cygpath -a -w "${PWD}")"
  pwd_drive="$(echo "$abs_pwd" | head -c2)"
