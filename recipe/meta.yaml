@@ -18,7 +18,7 @@ source:
       - patches/0004-Use-conda-packages-for-build-tools.patch     # [unix]
       - patches/0005-grpc-java-plugin-from-build.patch            # [unix]
       - patches/0006-bazel-bin-loader-path.patch                  # [osx]
-      - patches/0007-Adjust-cross-bazel-resultpath.patch
+      - patches/0007-Adjust-cross-bazel-resultpath.patch          # [unix]
       - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
       - patches/0009-Install-protobuf-via-maven.patch             # [unix]
       - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
