@@ -1,7 +1,7 @@
 @echo on
 
-sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
-if errorlevel 1 exit 1
+@rem sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
+@rem if errorlevel 1 exit 1
 
 :: Delegate to the Unixy script. We need to translate the key path variables
 :: to be Unix-y rather than Windows-y, though.

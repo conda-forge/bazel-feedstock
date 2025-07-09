@@ -23,7 +23,7 @@ source:
       - patches/0009-Install-protobuf-via-maven.patch             # [unix]
       - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
       - patches/0011-Enable-new-protobuf-major-release.patch      # [unix]
-      - patches/0012-Add-missing-absl-dependency.patch
+      - patches/0012-Add-missing-absl-dependency.patch            # [unix]
 
 build:
   number: 0
