@@ -1,4 +1,8 @@
 @echo on
+
+@rem sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
+@rem if errorlevel 1 exit 1
+
 :: Delegate to the Unixy script. We need to translate the key path variables
 :: to be Unix-y rather than Windows-y, though.
 set "saved_recipe_dir=%RECIPE_DIR%"
@@ -26,7 +30,7 @@ set MSYS2_PATH_TYPE=inherit
 set CHERE_INVOKING=1
 set "BAZEL_VC=%VSINSTALLDIR%VC"
 set "BAZEL_VS=%VSINSTALLDIR%"
-set "EXTRA_BAZEL_ARGS=--tool_java_runtime_version=21 --java_runtime_version=21"
+set "EXTRA_BAZEL_ARGS=--tool_java_runtime_version=remotejdk_21 --java_runtime_version=remotejdk_21"
 
 :: We need to unset some environment variables to make the java command line short enough
 set AGENT_CLOUDID=
