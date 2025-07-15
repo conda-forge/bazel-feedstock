@@ -1,12 +1,33 @@
-From c4dbcbcaca245a572ecd581c44ad0dede571158c Mon Sep 17 00:00:00 2001
+From c86f47a4c9d28c7b6bea5570373be1d0a6fd89db Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Mon, 7 Feb 2022 21:43:56 +0100
 Subject: [PATCH 08/12] win: Disable VS activation and make build verbose
 
 ---
+ scripts/bootstrap/bootstrap.sh               |  2 --
  src/main/native/windows/build_windows_jni.sh | 24 +++++++++++---------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
+diff --git a/scripts/bootstrap/bootstrap.sh b/scripts/bootstrap/bootstrap.sh
+index 181bb94..9801784 100755
+--- a/scripts/bootstrap/bootstrap.sh
++++ b/scripts/bootstrap/bootstrap.sh
+@@ -37,7 +37,6 @@ _BAZEL_ARGS="--spawn_strategy=standalone \
+       --nojava_header_compilation \
+       --strategy=Javac=worker --worker_quit_after_build --ignore_unsupported_sandboxing \
+       --compilation_mode=opt \
+-      --repository_cache=derived/repository_cache \
+       --repo_contents_cache= \
+       --repo_env=BAZEL_HTTP_RULES_URLS_AS_DEFAULT_CANONICAL_ID=0 \
+       --extra_toolchains=//scripts/bootstrap:all \
+@@ -46,7 +45,6 @@ _BAZEL_ARGS="--spawn_strategy=standalone \
+       --enable_bzlmod \
+       --check_direct_dependencies=error \
+       --lockfile_mode=update \
+-      --override_repository=$(cat derived/maven/MAVEN_CANONICAL_REPO_NAME)=derived/maven \
+       --java_runtime_version=${JAVA_VERSION} \
+       --java_language_version=${JAVA_VERSION} \
+       --tool_java_runtime_version=${JAVA_VERSION} \
 diff --git a/src/main/native/windows/build_windows_jni.sh b/src/main/native/windows/build_windows_jni.sh
 index 5d38ffd..e707dd9 100755
 --- a/src/main/native/windows/build_windows_jni.sh
