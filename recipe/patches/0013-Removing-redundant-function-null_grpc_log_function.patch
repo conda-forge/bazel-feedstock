@@ -1,4 +1,4 @@
-From 128c6b757da27a828a93cc8f09820ee4d06d1d9a Mon Sep 17 00:00:00 2001
+From 9f64fbac663c4aa2d940f52576dff773d0e8f1f7 Mon Sep 17 00:00:00 2001
 From: Tanvi Jagtap <tjagtap@google.com>
 Date: Sun, 9 Jun 2024 20:00:08 -0700
 Subject: [PATCH 13/14] Removing redundant function null_grpc_log_function
@@ -12,7 +12,7 @@ Change-Id: Id3fdcce72b1f459e7f29f52f3d9f4e9acf1a6253
  1 file changed, 7 deletions(-)
 
 diff --git a/src/main/cpp/blaze.cc b/src/main/cpp/blaze.cc
-index de31219c4f..fd5493faed 100644
+index de31219..fd5493f 100755
 --- a/src/main/cpp/blaze.cc
 +++ b/src/main/cpp/blaze.cc
 @@ -29,7 +29,6 @@
