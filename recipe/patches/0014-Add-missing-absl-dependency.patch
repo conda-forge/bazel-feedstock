@@ -1,4 +1,4 @@
-From 818cfe1b72993a253046e3304823291eb4a041b9 Mon Sep 17 00:00:00 2001
+From 5935a91bd23f94d3779eb8359ed11785072ac915 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
 Subject: [PATCH 14/14] Add missing absl dependency
@@ -8,7 +8,7 @@ Subject: [PATCH 14/14] Add missing absl dependency
  1 file changed, 10 insertions(+)
 
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index efedce5da9..0b8d0db7a3 100644
+index efedce5..0b8d0db 100755
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -138,6 +138,16 @@ cc_binary(
