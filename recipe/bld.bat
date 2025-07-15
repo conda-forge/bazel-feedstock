@@ -193,7 +193,7 @@ set SBT_HOME=
 :: to run into "/lib/jvm/bin/java: Argument list too long" again.
 set
 
-set "BAZEL=%SRC_DIR$/bazel-%PKG_VERSION%-windows-x86_64.exe"
+set "BAZEL=%SRC_DIR%/bazel-%PKG_VERSION%-windows-x86_64.exe"
 set "BAZEL_BUILD_OPTS=--cxxopt=/std:c++17"
 bash -lx ./compile.sh
 if errorlevel 1 exit 1
