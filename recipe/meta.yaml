@@ -24,8 +24,8 @@ source:
       - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
       - patches/0011-Enable-new-protobuf-major-release.patch      # [unix]
       - patches/0012-Add-missing-absl-dependency.patch            # [unix]
-  - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe         # [win]
-    sha256: sha256:a3349d1d9e2327e03344c47244d4832ab14fc78142d050aa5599d85ee26b5f79  # [win]
+  - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
+    sha256: a3349d1d9e2327e03344c47244d4832ab14fc78142d050aa5599d85ee26b5f79  # [win]
 
 build:
   number: 0
