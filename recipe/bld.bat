@@ -30,7 +30,7 @@ set MSYS2_PATH_TYPE=inherit
 set CHERE_INVOKING=1
 set "BAZEL_VC=%VSINSTALLDIR%VC"
 set "BAZEL_VS=%VSINSTALLDIR%"
-set "EXTRA_BAZEL_ARGS=--tool_java_runtime_version=remotejdk_21 --java_runtime_version=remotejdk_21"
+set "EXTRA_BAZEL_ARGS=--tool_java_runtime_version=remotejdk_21 --java_runtime_version=remotejdk_21 --local_resources=cpu=1 --subcommands"
 
 :: We need to unset some environment variables to make the java command line short enough
 set AGENT_CLOUDID=
