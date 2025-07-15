@@ -14,7 +14,7 @@ source:
       ## taken over here, or synced back if change is necessary
       - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
       - patches/0002-Build-with-native-dependencies.patch         # [unix]
-      - patches/0003-use-C-17.patch
+      - patches/0003-use-C-17.patch                               # [unix]
       - patches/0004-Use-conda-packages-for-build-tools.patch     # [unix]
       - patches/0005-grpc-java-plugin-from-build.patch            # [unix]
       - patches/0006-bazel-bin-loader-path.patch                  # [osx]
