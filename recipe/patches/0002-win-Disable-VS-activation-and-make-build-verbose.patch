@@ -1,0 +1,86 @@
+From 3befdf2ed3e90278aa3416835a8101da26e2caf2 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Mon, 7 Feb 2022 21:43:56 +0100
+Subject: [PATCH 2/2] win: Disable VS activation and make build verbose
+
+---
+ scripts/bootstrap/bootstrap.sh               |  2 --
+ src/main/native/windows/build_windows_jni.sh | 24 +++++++++++---------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/scripts/bootstrap/bootstrap.sh b/scripts/bootstrap/bootstrap.sh
+index 932153b..ce8a122 100755
+--- a/scripts/bootstrap/bootstrap.sh
++++ b/scripts/bootstrap/bootstrap.sh
+@@ -37,7 +37,6 @@ _BAZEL_ARGS="--spawn_strategy=standalone \
+       --nojava_header_compilation \
+       --strategy=Javac=worker --worker_quit_after_build --ignore_unsupported_sandboxing \
+       --compilation_mode=opt \
+-      --repository_cache=derived/repository_cache \
+       --repo_env=BAZEL_HTTP_RULES_URLS_AS_DEFAULT_CANONICAL_ID=0 \
+       --extra_toolchains=//scripts/bootstrap:all \
+       --extra_toolchains=@rules_python//python:autodetecting_toolchain \
+@@ -45,7 +44,6 @@ _BAZEL_ARGS="--spawn_strategy=standalone \
+       --enable_bzlmod \
+       --check_direct_dependencies=error \
+       --lockfile_mode=update \
+-      --override_repository=$(cat derived/maven/MAVEN_CANONICAL_REPO_NAME)=derived/maven \
+       --java_runtime_version=${JAVA_VERSION} \
+       --java_language_version=${JAVA_VERSION} \
+       --tool_java_runtime_version=${JAVA_VERSION} \
+diff --git a/src/main/native/windows/build_windows_jni.sh b/src/main/native/windows/build_windows_jni.sh
+index 5d38ffd..e707dd9 100755
+--- a/src/main/native/windows/build_windows_jni.sh
++++ b/src/main/native/windows/build_windows_jni.sh
+@@ -19,6 +19,8 @@
+ # support multiple compilers in the same build yet, so we need to hack around
+ # this limitation using a genrule.
+ 
++set -x
++
+ DLL="$1"
+ shift 1
+ 
+@@ -36,7 +38,8 @@ fi
+ 
+ # Create a temp directory. It will used for the batch file we generate soon and
+ # as the temp directory for CL.EXE .
+-VSTEMP=$(mktemp -d)
++VSTEMP=${SRC_DIR}/vstemp
++mkdir -p ${VSTEMP}
+ trap "rm -fr \"$VSTEMP\"" EXIT
+ VSVARS=""
+ 
+@@ -101,7 +104,7 @@ done
+ 
+ # Copy jni headers to src/main/native folder
+ # Mimic genrule //src/main/native:copy_link_jni_md_header and //src/main/native:copy_link_jni_header
+-JNI_HEADERS_DIR="${VSTEMP}/src/main/native"
++JNI_HEADERS_DIR="${SRC_DIR}/src/main/native"
+ mkdir -p "$JNI_HEADERS_DIR"
+ cp -f "$JAVAINCLUDES/jni.h" "$JNI_HEADERS_DIR/"
+ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
+@@ -114,15 +117,14 @@ cp -f "$JAVAINCLUDES/win32/jni_md.h" "$JNI_HEADERS_DIR/"
+ # directory. See https://github.com/bazelbuild/bazel/issues/3906
+ abs_pwd="$(cygpath -a -w "${PWD}")"
+ pwd_drive="$(echo "$abs_pwd" | head -c2)"
+-cat > "${VSTEMP}/windows_jni.bat" <<EOF
+-@echo OFF
+-@call "${VSVARS}" amd64
+-@$pwd_drive
+-@cd "$abs_pwd"
+-@set TMP=$(cygpath -a -w "${VSTEMP}")
+-@CL /O2 /EHsc /LD /Fe:"$(cygpath -a -w ${DLL})" /I "%TMP%" /I . ${WINDOWS_SOURCES[*]} /link /DEFAULTLIB:advapi32.lib
++cat <<EOF >${SRC_DIR}/windows_jni.bat
++@echo on
++$pwd_drive
++cd "$abs_pwd"
++set TMP=$(cygpath -a -w "${VSTEMP}")
++CL /O2 /EHsc /LD /Fe:"$(cygpath -a -w ${DLL})" /I "%TMP%" /I . ${WINDOWS_SOURCES[*]} /link /DEFAULTLIB:advapi32.lib
+ EOF
+ 
+ # Invoke the file and hopefully generate the .DLL .
+-chmod +x "${VSTEMP}/windows_jni.bat"
+-exec "${VSTEMP}/windows_jni.bat"
++chmod +x "${SRC_DIR}/windows_jni.bat"
++exec "${SRC_DIR}/windows_jni.bat"
