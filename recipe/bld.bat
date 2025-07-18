@@ -3,6 +3,12 @@
 @rem sed -i "s/20240722.0.bcr.2/20250512.1/" MODULE.bazel
 @rem if errorlevel 1 exit 1
 
+%SRC_DIR%/bazel-%PKG_VERSION%-windows-x86_64.exe build --cxxopt=/std:c++17 src:bazel_nojdk.exe --action_env=PATH --spawn_strategy=standalone --nojava_header_compilation --strategy=Javac=worker --worker_quit_after_build --ignore_unsupported_sandboxing --compilation_mode=opt --enable_bzlmod --check_direct_dependencies=error --lockfile_mode=update
+@rem bash -lx ./compile.sh
+if errorlevel 1 exit 1
+
+dir output
+
 :: Delegate to the Unixy script. We need to translate the key path variables
 :: to be Unix-y rather than Windows-y, though.
 set "saved_recipe_dir=%RECIPE_DIR%"
@@ -195,7 +201,11 @@ set
 
 set "BAZEL=%SRC_DIR%/bazel-%PKG_VERSION%-windows-x86_64.exe"
 set "BAZEL_BUILD_OPTS=--cxxopt=/std:c++17"
-bash -lx ./compile.sh
+
+%SRC_DIR%/bazel-%PKG_VERSION%-windows-x86_64.exe --cxxopt=/std:c++17 src:bazel_nojdk.exe --action_env=PATH --spawn_strategy=standalone --nojava_header_compilation --strategy=Javac=worker --worker_quit_after_build --ignore_unsupported_sandboxing --compilation_mode=opt --enable_bzlmod --check_direct_dependencies=error --lockfile_mode=update
+@rem bash -lx ./compile.sh
 if errorlevel 1 exit 1
+
+dir output
 
 copy output\bazel.exe %LIBRARY_BIN%\
