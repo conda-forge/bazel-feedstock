@@ -200,6 +200,8 @@ bash -x %RECIPE_DIR%/build_win.sh
 @rem bash -lx ./compile.sh
 if errorlevel 1 exit 1
 
-dir out
+dir bazel-bin
+dir bazel-bin\src
 
-copy out\bazel.exe %LIBRARY_BIN%\
+copy bazel-bin\src\bazel_nojdk.exe %LIBRARY_BIN%\
+if errorlevel 1 exit 1
