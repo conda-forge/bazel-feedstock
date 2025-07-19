@@ -200,6 +200,6 @@ bash -x %RECIPE_DIR%/build_win.sh
 @rem bash -lx ./compile.sh
 if errorlevel 1 exit 1
 
-dir output
+dir out
 
-copy output\bazel.exe %LIBRARY_BIN%\
+copy out\bazel.exe %LIBRARY_BIN%\
