@@ -3,7 +3,7 @@
 set -euxo pipefail
 
 ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out build \
-	--cxxopt=/std:c++17 src:bazel_nojdk.exe \
+	--cxxopt=/std:c++17 \
 	--action_env=PATH \
 	--spawn_strategy=standalone \
 	--nojava_header_compilation \
@@ -13,8 +13,8 @@ ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out 
 	--compilation_mode=opt \
 	--enable_bzlmod \
 	--check_direct_dependencies=error \
-	--lockfile_mode=update
-# --subcommands --logging=6
+	--lockfile_mode=update \
+    src:bazel_nojdk.exe
 
-ls -l
-ls -l out
+cp bazel-bin/src/bazel_nojdk.exe ${LIBRARY_PREFIX}/bin/bazel.exe
+${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe clean --expunge
