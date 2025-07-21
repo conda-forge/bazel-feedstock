@@ -9,9 +9,9 @@ source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
     sha256: 79da863df05fa4de79a82c4f9d4e710766f040bc519fd8b184a4d4d51345d5ba
     patches:
-      ## bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
-      ## which patches the same sources; the patches from singlejar should either be
-      ## taken over here, or synced back if change is necessary
+      # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
+      # which patches the same sources; the patches from singlejar should either be
+      # taken over here, or synced back if change is necessary
       - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
       - patches/0002-Build-with-native-dependencies.patch         # [unix]
       - patches/0003-use-C-17.patch
@@ -19,11 +19,12 @@ source:
       - patches/0005-grpc-java-plugin-from-build.patch            # [unix]
       - patches/0006-bazel-bin-loader-path.patch                  # [osx]
       - patches/0007-Adjust-cross-bazel-resultpath.patch
-      - patches/0008-win-Disable-VS-activation-and-make-build-verbose.patch
-      - patches/0009-Install-protobuf-via-maven.patch             # [unix]
-      - patches/0010-Adopt-system-libprotobuf.patch               # [unix]
-      - patches/0011-Enable-new-protobuf-major-release.patch      # [unix]
-      - patches/0012-Add-missing-absl-dependency.patch
+      - patches/0008-Install-protobuf-via-maven.patch             # [unix]
+      - patches/0009-Adopt-system-libprotobuf.patch               # [unix]
+      - patches/0010-Enable-new-protobuf-major-release.patch      # [unix]
+      - patches/0011-Add-missing-absl-dependency.patch
+  - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
+    sha256: a3349d1d9e2327e03344c47244d4832ab14fc78142d050aa5599d85ee26b5f79  # [win]
 
 build:
   number: 0
@@ -38,6 +39,7 @@ requirements:
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - m2-sed                   # [win]
     - sed                      # [unix]
     - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
