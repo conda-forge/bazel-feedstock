@@ -1,0 +1,32 @@
+From 56814611f6a7474ff3a5b52c7d11bd1a3f691e36 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Thu, 27 Jun 2024 16:11:42 +0200
+Subject: [PATCH 08/11] Install protobuf via maven
+
+---
+ third_party/systemlibs/protobuf/MODULE.bazel | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
+index 57f0460..13123ff 100644
+--- a/third_party/systemlibs/protobuf/MODULE.bazel
++++ b/third_party/systemlibs/protobuf/MODULE.bazel
+@@ -25,3 +25,18 @@ bazel_dep(name = "zlib", version = "1.2.11")
+ # TODO: remove after toolchain types are moved to protobuf
+ bazel_dep(name = "rules_proto", version = "4.0.0")
+ 
++maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
++maven.install(
++    artifacts = [
++        # keep sorted
++        "com.google.protobuf:protobuf-java:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
++        "com.google.protobuf:protobuf-java-util:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
++    ],
++    # Don't forget to change this to back to True before submitting your change.
++    fail_if_repin_required = True,
++    lock_file = "//:maven_install.json",
++    repositories = [
++        "https://repo1.maven.org/maven2",
++    ],
++    strict_visibility = True,
++)

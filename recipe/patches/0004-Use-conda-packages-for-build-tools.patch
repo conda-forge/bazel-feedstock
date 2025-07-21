@@ -1,7 +1,7 @@
-From 9fd81f636805b5f953c3c287edcdccb43fb46cd0 Mon Sep 17 00:00:00 2001
+From 852de917204ecc709c0292497154f4916791f1b3 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
-Subject: [PATCH 04/14] Use conda packages for build tools
+Subject: [PATCH 04/11] Use conda packages for build tools
 
 ---
  src/tools/singlejar/BUILD | 44 +++++++++------------------------------
@@ -10,10 +10,10 @@ Subject: [PATCH 04/14] Use conda packages for build tools
  3 files changed, 27 insertions(+), 47 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 9d176220ba..a951e7fdbe 100644
+index 7043e27..f82ebbe 100755
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
-@@ -69,44 +69,20 @@ release_archive(
+@@ -73,44 +73,20 @@ release_archive(
      visibility = ["//src:__pkg__"],
  )
  
@@ -33,7 +33,7 @@ index 9d176220ba..a951e7fdbe 100644
 -    deps = [
 -        "options",
 -        "output_jar",
--        "//third_party/zlib",
+-        "@zlib",
 -    ],
 +    outs = ["singlejar.bin"],
 +    cmd = "ln -s ${BUILD_PREFIX}/bin/singlejar $@",
@@ -59,7 +59,7 @@ index 9d176220ba..a951e7fdbe 100644
 -        "desugar_checking",
 -        "options",
 -        "output_jar",
--        "//third_party/zlib",
+-        "@zlib",
 -    ],
 +    outs = ["singlejar_local.bin"],
 +    cmd = "ln -s ${BUILD_PREFIX}/bin/singlejar_local $@",
@@ -69,7 +69,7 @@ index 9d176220ba..a951e7fdbe 100644
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index fbe07892db..d6e99594e1 100644
+index c01848b..4e4870b 100755
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
 @@ -69,21 +69,20 @@ cc_library(
@@ -103,10 +103,11 @@ index fbe07892db..d6e99594e1 100644
  
  filegroup(
 diff --git a/tools/zip/BUILD.tools b/tools/zip/BUILD.tools
-index 0b8ce85dab..3fc4fee98b 100644
+index 478e7a1..ed35a5a 100755
 --- a/tools/zip/BUILD.tools
 +++ b/tools/zip/BUILD.tools
-@@ -1,11 +1,16 @@
+@@ -2,12 +2,17 @@ load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")
+ 
  package(default_visibility = ["//visibility:public"])
  
 +genrule(
@@ -120,8 +121,8 @@ index 0b8ce85dab..3fc4fee98b 100644
  filegroup(
      name = "zipper",
 -    srcs = select({
--        "//src/conditions:remote": ["//third_party/ijar:zipper"],
--        "//conditions:default": glob(["zipper/*"]),
+-        ":matches_host_constraints": glob(["zipper/*"]),
+-        "//conditions:default": ["//third_party/ijar:zipper"],
 -    }),
 +    srcs = [":zipper-exec"],
  )

@@ -1,0 +1,155 @@
+From 455f3d1649f30b864410535e788ad004e09ecbb3 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Sat, 28 Sep 2024 08:46:03 +0200
+Subject: [PATCH 10/11] Enable new protobuf major release
+
+---
+ MODULE.bazel                                 | 12 ++++++------
+ compile.sh                                   |  4 ++++
+ third_party/systemlibs/protobuf/BUILD        | 12 +++++++++---
+ third_party/systemlibs/protobuf/MODULE.bazel | 12 +++++++-----
+ 4 files changed, 26 insertions(+), 14 deletions(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index e3cd20d..a3a5457 100755
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -15,8 +15,8 @@ module(
+ 
+ bazel_dep(name = "rules_license", version = "1.0.0")
+ bazel_dep(name = "bazel_skylib", version = "1.7.1")
+-bazel_dep(name = "grpc", version = "1.66.0.bcr.2", repo_name = "com_github_grpc_grpc")
+-bazel_dep(name = "grpc-java", version = "1.66.0")
++bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
++bazel_dep(name = "grpc-java", version = "1.71.0")
+ bazel_dep(name = "googleapis", version = "0.0.0-20240819-fe8ba054a")
+ bazel_dep(name = "platforms", version = "1.0.0")
+ bazel_dep(name = "rules_pkg", version = "1.0.1")
+@@ -32,7 +32,7 @@ bazel_dep(name = "rules_python", version = "0.40.0")
+ bazel_dep(name = "rules_testing", version = "0.6.0")
+ bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
+ bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
+-bazel_dep(name = "abseil-cpp", version = "20240722.0.bcr.2")
++bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
+ bazel_dep(name = "rules_shell", version = "0.3.0")
+ bazel_dep(name = "chicory", version = "1.1.0")
+ 
+@@ -42,7 +42,7 @@ bazel_dep(name = "apple_support", version = "1.18.1")
+ bazel_dep(name = "rules_cc", version = "0.1.1")
+ 
+ # repo_name needs to be used, until WORKSPACE mode is to be supported in bazel_tools
+-bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
++bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
+ local_path_override(
+     module_name = "protobuf",
+     path = "./third_party/systemlibs/protobuf",
+@@ -88,8 +88,8 @@ local_path_override(
+ # but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
+ bazel_dep(name = "rules_apple", version = "3.16.0")
+ bazel_dep(name = "bazel_features", version = "1.30.0")
+-bazel_dep(name = "c-ares", version = "1.15.0")
+-bazel_dep(name = "rules_go", version = "0.48.0")
++bazel_dep(name = "c-ares", version = "1.19.1")
++bazel_dep(name = "rules_go", version = "0.50.1")
+ bazel_dep(name = "rules_kotlin", version = "1.9.6")
+ bazel_dep(name = "re2", version = "2024-07-02.bcr.1")
+ 
+diff --git a/compile.sh b/compile.sh
+index bd7a639..7759615 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -66,6 +66,10 @@ fi
+ 
+ source scripts/bootstrap/bootstrap.sh
+ 
++# Make Java code compatible with newer protobuf release now as the bootstrap builds with the old release
++sed -i 's/includingDefaultValueFields/alwaysPrintFieldsWithNoPresence/g' src/main/java/com/google/devtools/build/lib/util/io/MessageOutputStreamWrapper.java
++sed -i 's/includingDefaultValueFields/alwaysPrintFieldsWithNoPresence/g' src/main/java/com/google/devtools/build/lib/worker/JsonWorkerMessageProcessor.java
++
+ new_step 'Building Bazel with Bazel'
+ display "."
+ log "Building output/bazel"
+diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
+index d1be083..e949edd 100644
+--- a/third_party/systemlibs/protobuf/BUILD
++++ b/third_party/systemlibs/protobuf/BUILD
+@@ -14,6 +14,12 @@ filegroup(
+     visibility = ["//visibility:public"],
+ )
+ 
++alias(
++    name = "license",
++    actual = ":LICENSE",
++    visibility = ["//visibility:public"],
++)
++
+ # Map of all well known protos.
+ # name => (include path, imports)
+ WELL_KNOWN_PROTO_MAP = {
+@@ -74,7 +80,7 @@ cc_library(
+ 
+ cc_library(
+     name = "protoc_lib",
+-    linkopts = ["-lprotoc", "-labsl_log_internal_check_op", "-labsl_log_internal_message"],
++    linkopts = ["-lprotoc", "-lprotobuf", "-labsl_log_internal_check_op", "-labsl_log_internal_message", "-labsl_flags_reflection", "-labsl_hash", "-labsl_raw_hash_set", "-labsl_raw_logging_internal"],
+     visibility = ["//visibility:public"],
+ )
+ 
+@@ -108,13 +114,13 @@ py_library(
+ 
+ java_library(
+     name = "protobuf_java",
+-    exports = ["@maven_protobuf//:com_google_protobuf_protobuf_java"],
++    exports = ["@maven_protobuf//:original_com_google_protobuf_protobuf_java"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ java_library(
+     name = "protobuf_java_util",
+-    exports = ["@maven_protobuf//:com_google_protobuf_protobuf_java_util"],
++    exports = ["@maven_protobuf//:original_com_google_protobuf_protobuf_java_util"],
+     visibility = ["//visibility:public"],
+ )
+ 
+diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
+index 820e74d..e7b2a46 100644
+--- a/third_party/systemlibs/protobuf/MODULE.bazel
++++ b/third_party/systemlibs/protobuf/MODULE.bazel
+@@ -2,7 +2,7 @@
+ # https://github.com/protocolbuffers/protobuf/issues/14313
+ module(
+     name = "protobuf",
+-    version = "27.1", # Automatically updated on release
++    version = "PROTOC_VERSION", # Automatically updated on release
+     compatibility_level = 1,
+     repo_name = "com_google_protobuf",
+ )
+@@ -11,7 +11,8 @@ module(
+ # Bzlmod follows MVS:
+ # https://bazel.build/versions/6.0.0/build/bzlmod#version-resolution
+ # Thus the highest version in their module graph is resolved.
+-bazel_dep(name = "abseil-cpp", version = "20230125.1", repo_name = "com_google_absl")
++bazel_dep(name = "bazel_features", version = "1.21.0", repo_name = "proto_bazel_features")
++bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION", repo_name = "com_google_absl")
+ bazel_dep(name = "bazel_skylib", version = "1.4.1")
+ bazel_dep(name = "jsoncpp", version = "1.9.5")
+ bazel_dep(name = "rules_cc", version = "0.0.9")
+@@ -30,14 +31,15 @@ maven_protobuf.install(
+     name = "maven_protobuf",
+     artifacts = [
+         # keep sorted
+-        "com.google.protobuf:protobuf-java:3.25.3",
+-        "com.google.protobuf:protobuf-java-util:3.25.3",
++        "com.google.protobuf:protobuf-java:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
++        "com.google.protobuf:protobuf-java-util:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
+     ],
+     fail_if_repin_required = False,
+     repositories = [
+         "https://repo1.maven.org/maven2",
+     ],
+-    strict_visibility = True,
++    strict_visibility = False,
++    strict_visibility_value = ["//visibility:public"],
+ )
+ 
+ use_repo(maven_protobuf, "maven_protobuf")
