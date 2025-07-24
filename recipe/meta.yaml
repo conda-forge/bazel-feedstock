@@ -43,9 +43,7 @@ requirements:
     - sed                      # [unix]
     - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
-    # bazel vendors & expects quite an old grpc-java-plugin; avoid pulling in versions with
-    # https://github.com/grpc/grpc-java/commit/ea8c31c305eac5a6ac9a09de5ea2edb9ed719a31
-    - grpc_java_plugin <1.70   # [unix]
+    - grpc_java_plugin         # [unix]
     - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
