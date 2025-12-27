@@ -1,24 +1,22 @@
+# -*- mode: toml -*-
 # This file was generated automatically from conda-smithy. To update this configuration,
 # update the conda-forge.yml and/or the recipe/meta.yaml.
-# -*- mode: toml -*-
+"$schema" = "https://pixi.sh/v0.59.0/schema/manifest/schema.json"
 
-#                             VVVVVV  minimum `pixi` version
-"$schema" = "https://pixi.sh/v0.36.0/schema/manifest/schema.json"
-
-[project]
+[workspace]
 name = "bazel-feedstock"
-version = "3.51.1"  # conda-smithy version used to generate this file
+version = "3.54.1"  # conda-smithy version used to generate this file
 description = "Pixi configuration for conda-forge/bazel-feedstock"
 authors = ["@conda-forge/bazel"]
 channels = ["conda-forge"]
 platforms = ["linux-64", "osx-64", "win-64"]
+requires-pixi = ">=0.59.0"
 
 [dependencies]
 conda-build = ">=24.1"
 conda-forge-ci-setup = "4.*"
 python = "3.12.*"
 
-[tasks]
 [tasks.inspect-all]
 cmd = "inspect_artifacts --all-packages"
 description = "List contents of all packages found in conda-build build directory."
@@ -91,5 +89,6 @@ description = "Lint the feedstock recipe"
 
 [environments]
 smithy = ["smithy"]
+
 # This is a copy of default, to be enabled by build_steps.sh during Docker builds
 # __PLATFORM_SPECIFIC_ENV__ = []
