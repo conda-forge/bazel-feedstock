@@ -1,4 +1,4 @@
-From 5221612b7f1ebcf870fd651a56f561d281d967b6 Mon Sep 17 00:00:00 2001
+From 1b5fde08ec659cdb27aad1646c91bf22c61434a8 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 11/14] Enable new protobuf major release
@@ -10,13 +10,13 @@ Subject: [PATCH 11/14] Enable new protobuf major release
  3 files changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index c505a78987..f0c325af10 100644
+index 39099a335e..db97f93a0f 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -14,7 +14,7 @@ module(
  
  bazel_dep(name = "rules_license", version = "0.0.7")
- bazel_dep(name = "bazel_skylib", version = "1.6.1")
+ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 -bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
 +bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
  local_path_override(

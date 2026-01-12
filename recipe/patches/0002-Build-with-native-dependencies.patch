@@ -1,4 +1,4 @@
-From 3e9ec6efe270b2947b43766c2638e95878883471 Mon Sep 17 00:00:00 2001
+From ed6240292cb6a61b3df59f14bd9f70b3af442e53 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 02/14] Build with native dependencies
@@ -20,12 +20,12 @@ Subject: [PATCH 02/14] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 84e08db938..c505a78987 100644
+index 0a5ea5b7da..39099a335e 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -15,6 +15,10 @@ module(
  bazel_dep(name = "rules_license", version = "0.0.7")
- bazel_dep(name = "bazel_skylib", version = "1.6.1")
+ bazel_dep(name = "bazel_skylib", version = "1.7.1")
  bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
 +local_path_override(
 +    module_name = "protobuf",

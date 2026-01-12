@@ -1,4 +1,4 @@
-From 813d31e67022a1fb2d8b10704923282096b94955 Mon Sep 17 00:00:00 2001
+From b719e58209771c92c77be6f82003ba1f34aa7169 Mon Sep 17 00:00:00 2001
 From: Tanvi Jagtap <tjagtap@google.com>
 Date: Sun, 9 Jun 2024 20:00:08 -0700
 Subject: [PATCH 13/14] Removing redundant function null_grpc_log_function
