@@ -1,0 +1,28 @@
+From 24195dade1fcc81843068ff9e56a832ec9df02a1 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Fri, 23 Jan 2026 17:40:39 +0100
+Subject: [PATCH 15/15] Pin to older bazel_features
+
+---
+ MODULE.bazel | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index afcaaa9..66c50a6 100755
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -37,6 +37,14 @@ bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googl
+ bazel_dep(name = "with_cfg.bzl", version = "0.2.4")
+ bazel_dep(name = "abseil-cpp", version = "20240722.0")
+ 
++# Pin bazel_features to avoid issues with the `macro` global when building
++# Bazel 7.x with a bootstrap Bazel 8.x
++bazel_dep(name = "bazel_features", version = "1.9.1")
++single_version_override(
++    module_name = "bazel_features",
++    version = "1.9.1",
++)
++
+ # TODO(pcloudy): Add remoteapis and googleapis as Bazel modules in the BCR.
+ bazel_dep(name = "remoteapis", version = "")
+ bazel_dep(name = "googleapis", version = "")

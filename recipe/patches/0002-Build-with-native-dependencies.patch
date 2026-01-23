@@ -1,7 +1,7 @@
-From 3e9ec6efe270b2947b43766c2638e95878883471 Mon Sep 17 00:00:00 2001
+From 1b51e2f86a519985156e6252b1f7b76deba38e2f Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/14] Build with native dependencies
+Subject: [PATCH 02/15] Build with native dependencies
 
 ---
  MODULE.bazel                                  |   9 +-
@@ -20,12 +20,12 @@ Subject: [PATCH 02/14] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 84e08db938..c505a78987 100644
+index 0a5ea5b..39099a3 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -15,6 +15,10 @@ module(
  bazel_dep(name = "rules_license", version = "0.0.7")
- bazel_dep(name = "bazel_skylib", version = "1.6.1")
+ bazel_dep(name = "bazel_skylib", version = "1.7.1")
  bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
 +local_path_override(
 +    module_name = "protobuf",
@@ -54,7 +54,7 @@ index 84e08db938..c505a78987 100644
      # Don't forget to change this to back to True before submitting your change.
      fail_if_repin_required = True,
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index b247593d57..7ba466ea57 100644
+index b247593..7ba466e 100755
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
 @@ -474,7 +474,7 @@ java_library(
@@ -67,7 +67,7 @@ index b247593d57..7ba466ea57 100644
      ],
  )
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index d8f64ef471..e622c42aac 100644
+index d8f64ef..e622c42 100755
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -44,28 +44,23 @@ filegroup(
@@ -110,7 +110,7 @@ index d8f64ef471..e622c42aac 100644
  filegroup(
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
 new file mode 100644
-index 0000000000..47fbb7375d
+index 0000000..47fbb73
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -0,0 +1,141 @@
@@ -257,7 +257,7 @@ index 0000000000..47fbb7375d
 +) for proto in WELL_KNOWN_PROTO_MAP.items()]
 diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
 new file mode 100644
-index 0000000000..57f0460b36
+index 0000000..57f0460
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/MODULE.bazel
 @@ -0,0 +1,27 @@
@@ -290,7 +290,7 @@ index 0000000000..57f0460b36
 +
 diff --git a/third_party/systemlibs/protobuf/WORKSPACE b/third_party/systemlibs/protobuf/WORKSPACE
 new file mode 100644
-index 0000000000..45c689c3bd
+index 0000000..45c689c
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/WORKSPACE
 @@ -0,0 +1,2 @@
@@ -298,7 +298,7 @@ index 0000000000..45c689c3bd
 +
 diff --git a/third_party/systemlibs/protobuf/protobuf.bzl b/third_party/systemlibs/protobuf/protobuf.bzl
 new file mode 100644
-index 0000000000..8b3a16e7cf
+index 0000000..8b3a16e
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/protobuf.bzl
 @@ -0,0 +1,436 @@
@@ -740,7 +740,7 @@ index 0000000000..8b3a16e7cf
 +        fail("Bazel must be newer than 0.5.4")
 diff --git a/third_party/systemlibs/protobuf_deps.bzl b/third_party/systemlibs/protobuf_deps.bzl
 new file mode 100644
-index 0000000000..aafd89b0aa
+index 0000000..aafd89b
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf_deps.bzl
 @@ -0,0 +1,2 @@

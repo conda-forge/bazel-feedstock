@@ -1,0 +1,22 @@
+Remove Bazel 8.x globals (macro, set) that cause issues when building Bazel 7.x
+
+--- a/private/globals.bzl
++++ b/private/globals.bzl
+@@ -19,8 +19,6 @@ GLOBALS = {
+     "JavaInfo": ("", "8.0.0"),
+     "JavaPluginInfo": ("", "8.0.0"),
+     # https://github.com/bazelbuild/bazel/commit/0c100efeba05577b8bc334e1fae31149854bb0b7
+-    "macro": ("8.0.0", ""),
+-    # https://github.com/bazelbuild/bazel/commit/d1d35b280af1459458f996502e255d3774f391c2
+     "PackageSpecificationInfo": ("6.4.0", ""),
+     "ProtoInfo": ("", "8.0.0"),
+     "PyCcLinkParamsProvider": ("", "8.0.0"),
+@@ -29,8 +27,6 @@ GLOBALS = {
+     # https://github.com/bazelbuild/bazel/pull/15232
+     "RunEnvironmentInfo": ("5.3.0", ""),
+     # https://github.com/bazelbuild/bazel/commit/8ad5f32889d687bce4de833d87e56e7ef19989d8
+-    # https://github.com/bazelbuild/bazel/commit/c5e08d4de65167e91045d99e89dc4b6a17e9fb39
+-    "set": ("8.1.0", ""),
+     # https://github.com/bazelbuild/bazel/commit/e95c682bd1a1ab4495161b5a4423ad874112ad3f
+     "subrule": ("7.0.0", ""),
+     # Only used for testing bazel_features itself.
