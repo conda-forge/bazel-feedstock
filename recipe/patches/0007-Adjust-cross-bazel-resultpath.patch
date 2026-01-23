@@ -1,14 +1,14 @@
-From 8f6fb463d15c798e8e4ae348d60932313d7eb604 Mon Sep 17 00:00:00 2001
+From c745e4088801def16aa9658afe04c1c2cb81dead Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:10:21 +0100
-Subject: [PATCH 07/14] Adjust cross bazel resultpath
+Subject: [PATCH 07/15] Adjust cross bazel resultpath
 
 ---
  compile.sh | 9 +++++++--
  1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/compile.sh b/compile.sh
-index 3b75f6e336..7590068b5f 100755
+index 3b75f6e..7590068 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -65,10 +65,15 @@ log "Building output/bazel"
