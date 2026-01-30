@@ -1,4 +1,4 @@
-{% set version = "8.5.0" %}
+{% set version = "8.5.1" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: b476d96141f9bd803562aee0448376b61494112918bce441898585493db33ed1
+    sha256: bf66a1cbaaafec32e1e103d0e07343082f1f0f3f20ad4c6b66c4eda3f690ed4d
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
@@ -24,7 +24,7 @@ source:
       - patches/0010-Enable-new-protobuf-major-release.patch       # [unix]
       - patches/0011-Add-missing-absl-dependency.patch             # [unix]
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 4937970115a2117cfc7288c4776354ea80a666856dba7c2d6fba55de3cd4bdf7  # [win]
+    sha256: 9a601cb16c254b77a220a1fa04b520b87d2e4539af26be33837322cdcfabdb68  # [win]
 
 build:
   number: 0
