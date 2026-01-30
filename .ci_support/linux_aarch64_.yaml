@@ -17,11 +17,11 @@ cxx_compiler_version:
 docker_image:
 - quay.io/condaforge/linux-anvil-x86_64:alma9
 libabseil:
-- '20250512'
+- '20260107'
 libgrpc:
-- '1.73'
+- '1.78'
 libprotobuf:
-- 6.31.1
+- 6.33.5
 target_platform:
 - linux-aarch64
 zip_keys:
