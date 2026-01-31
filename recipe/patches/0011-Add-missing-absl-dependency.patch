@@ -1,4 +1,4 @@
-From 635bed77d8337123a5a275bd080e3f9410722b53 Mon Sep 17 00:00:00 2001
+From 0e3f1a7fcc25ca94acd50f8b23885336afdf0559 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
 Subject: [PATCH 11/11] Add missing absl dependency
@@ -9,7 +9,7 @@ Subject: [PATCH 11/11] Add missing absl dependency
  2 files changed, 27 insertions(+), 3 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index a3a5457..0b78d9c 100755
+index 8fa4462952..f63c3bd10b 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -30,7 +30,7 @@ bazel_dep(name = "rules_proto", version = "7.0.2")
@@ -22,7 +22,7 @@ index a3a5457..0b78d9c 100755
  bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
  bazel_dep(name = "rules_shell", version = "0.3.0")
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index dd3bc40..b7b2a65 100755
+index dd3bc40397..b7b2a65659 100644
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -90,6 +90,15 @@ cc_library(
