@@ -1,4 +1,4 @@
-{% set version = "6.5.0" %}
+{% set version = "6.6.0" %}
 
 package:
   name: bazel
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/bazelbuild/bazel/releases/download/{{ version }}/bazel-{{ version }}-dist.zip
-  sha256: fc89da919415289f29e4ff18a5e01270ece9a6fe83cb60967218bac4a3bb3ed2
+  sha256: 276c395ab589d36317b52d3cddf70c026a975793c53f3e855c4f104e10da7fcd
   patches:
     # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
     # which patches the same sources; the patches from singlejar should either be
@@ -36,7 +36,7 @@ source:
     - patches/0015-Add-missing-absl-dependency.patch
 
 build:
-  number: 5
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
 
