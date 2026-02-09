@@ -31,7 +31,7 @@ source:
       - patches/0015-Pin-to-older-bazel_features.patch
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
