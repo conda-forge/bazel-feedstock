@@ -1,7 +1,7 @@
-From c7ca4aae881dd29237c540ea116b714e25c3e363 Mon Sep 17 00:00:00 2001
+From 620237cbe740c00f4a4a26db8c53f93dfd3c15c0 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
-Subject: [PATCH 15/15] Add missing absl dependency
+Subject: [PATCH 15/16] Add missing absl dependency
 
 Co-Authored-By: H. Vetinari <h.vetinari@gmx.com>
 ---
