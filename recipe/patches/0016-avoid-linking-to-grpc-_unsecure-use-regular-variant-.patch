@@ -1,9 +1,11 @@
-From 5342dcdb926381f6e8a6c32262b3008b00b523c5 Mon Sep 17 00:00:00 2001
+From 99fbe771a2493210f659ed200768b8f1ca8b9613 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
 Subject: [PATCH 16/16] avoid linking to grpc{,++}_unsecure; use regular
  variant instead
 
+also link to absl_strings, whose linkage has been made private in grpc, see
+https://github.com/conda-forge/grpc-cpp-feedstock/blob/main/recipe/patches/0005-mark-linkages-of-grpc-_unsecure-as-private.patch
 ---
  src/main/protobuf/BUILD | 2 +-
  third_party/grpc/BUILD  | 6 +++---
@@ -23,7 +25,7 @@ index d6bd1cdac7..1ed5131b43 100644
  )
  
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index e622c42aac..ea7f8ea47d 100644
+index e622c42aac..a1628cbee4 100644
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -54,12 +54,12 @@ genrule(
@@ -38,7 +40,7 @@ index e622c42aac..ea7f8ea47d 100644
 -    name = "grpc++_unsecure",
 -    linkopts = ["-lgrpc++_unsecure", "-lgrpc_unsecure","-lgpr"],
 +    name = "grpc++",
-+    linkopts = ["-lgrpc++", "-lgrpc","-lgpr"],
++    linkopts = ["-lgrpc++", "-lgrpc", "-lgpr", "-labsl_strings"],
      visibility = ["//visibility:public"],
  )
  
