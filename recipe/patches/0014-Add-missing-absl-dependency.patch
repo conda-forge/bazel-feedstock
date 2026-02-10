@@ -1,7 +1,7 @@
-From 93296d463f26d808507233d8f3cfd7e024fe5b9a Mon Sep 17 00:00:00 2001
+From 9c7a8b5bb42712e81cd5cb2028e68e25b1445460 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
-Subject: [PATCH 14/15] Add missing absl dependency
+Subject: [PATCH 14/16] Add missing absl dependency
 
 Co-Authored-By: H. Vetinari <h.vetinari@gmx.com>
 ---
@@ -9,7 +9,7 @@ Co-Authored-By: H. Vetinari <h.vetinari@gmx.com>
  1 file changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index efedce5..1fbb24c 100755
+index efedce5da9..1fbb24c7dd 100644
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -90,6 +90,15 @@ cc_library(
