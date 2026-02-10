@@ -1,7 +1,7 @@
-From 2dc82a8cbfdea4486df5b53115a4f09b016785a5 Mon Sep 17 00:00:00 2001
+From 5e21063a33c3360f129880c5a0a6012cd9c270dd Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Fri, 16 Mar 2018 12:10:51 -0500
-Subject: [PATCH 01/11] allow args to be passed to bazel_build
+Subject: [PATCH 01/14] allow args to be passed to bazel_build
 
 Allow arguments to be passed to bazel_build via the BAZEL_BUILD_OPTS
 environment variable.
@@ -10,10 +10,10 @@ environment variable.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/compile.sh b/compile.sh
-index 4712355d48..2fc4840624 100755
+index f1fef87..482d904 100755
 --- a/compile.sh
 +++ b/compile.sh
-@@ -71,7 +71,7 @@ display "."
+@@ -67,7 +67,7 @@ display "."
  log "Building output/bazel"
  # We set host and target platform directly because we are building for the local
  # host.

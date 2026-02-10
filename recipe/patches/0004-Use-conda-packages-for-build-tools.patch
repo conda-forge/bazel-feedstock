@@ -1,19 +1,19 @@
-From 226660b8dacc68322230e5f8b768a9db10357393 Mon Sep 17 00:00:00 2001
+From 92f0a46054f82a8174329447d85cbc56c25c133f Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
-Subject: [PATCH 04/11] Use conda packages for build tools
+Subject: [PATCH 04/14] Use conda packages for build tools
 
 ---
- src/tools/singlejar/BUILD | 44 +++++++++------------------------------
+ src/tools/singlejar/BUILD | 45 +++++++++------------------------------
  third_party/ijar/BUILD    | 17 +++++++--------
- tools/zip/BUILD.tools     | 13 ++++++++----
- 3 files changed, 27 insertions(+), 47 deletions(-)
+ tools/zip/BUILD.tools     | 13 +++++++----
+ 3 files changed, 27 insertions(+), 48 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 7043e27b34..f82ebbe64c 100644
+index 93f4e6c..e930397 100755
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
-@@ -73,44 +73,20 @@ release_archive(
+@@ -80,45 +80,20 @@ release_archive(
      visibility = ["//src:__pkg__"],
  )
  
@@ -31,8 +31,9 @@ index 7043e27b34..f82ebbe64c 100644
 -    linkstatic = 1,
 -    visibility = ["//visibility:public"],
 -    deps = [
--        "options",
--        "output_jar",
+-        ":combiners",
+-        ":options",
+-        ":output_jar",
 -        "@zlib",
 -    ],
 +    outs = ["singlejar.bin"],
@@ -55,10 +56,10 @@ index 7043e27b34..f82ebbe64c 100644
 -    linkstatic = 1,
 -    visibility = ["//visibility:public"],
 -    deps = [
--        "combiners",
--        "desugar_checking",
--        "options",
--        "output_jar",
+-        ":combiners",
+-        ":desugar_checking",
+-        ":options",
+-        ":output_jar",
 -        "@zlib",
 -    ],
 +    outs = ["singlejar_local.bin"],
@@ -69,10 +70,10 @@ index 7043e27b34..f82ebbe64c 100644
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index c01848b718..4e4870b3eb 100644
+index 0cca0e6..49ba24e 100755
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
-@@ -69,21 +69,20 @@ cc_library(
+@@ -72,21 +72,20 @@ cc_library(
      ],
  )
  
@@ -103,7 +104,7 @@ index c01848b718..4e4870b3eb 100644
  
  filegroup(
 diff --git a/tools/zip/BUILD.tools b/tools/zip/BUILD.tools
-index 478e7a1722..ed35a5a4fd 100644
+index 478e7a1..ed35a5a 100755
 --- a/tools/zip/BUILD.tools
 +++ b/tools/zip/BUILD.tools
 @@ -2,12 +2,17 @@ load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")

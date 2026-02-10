@@ -23,6 +23,8 @@ source:
       - patches/0009-Adopt-system-libprotobuf.patch                # [unix]
       - patches/0010-Enable-new-protobuf-major-release.patch       # [unix]
       - patches/0011-Add-missing-absl-dependency.patch             # [unix]
+      - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
+
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
     sha256: 9a601cb16c254b77a220a1fa04b520b87d2e4539af26be33837322cdcfabdb68  # [win]
 

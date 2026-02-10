@@ -1,86 +1,130 @@
-From ea0fb19059419d3edac35cf704810220cf830270 Mon Sep 17 00:00:00 2001
+From 76f0c0dfaf58c02d16079c438e8bd5fe9212e46a Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
-Subject: [PATCH 10/11] Enable new protobuf major release
+Subject: [PATCH 10/14] Enable new protobuf major release
 
 ---
- MODULE.bazel                                  | 26 ++++++++++---------
- compile.sh                                    |  9 +++++++
- third_party/systemlibs/protobuf/BUILD         | 12 ++++++---
- third_party/systemlibs/protobuf/MODULE.bazel  | 12 +++++----
- .../src/google/protobuf/compiler/BUILD        |  7 +++++
- 5 files changed, 46 insertions(+), 20 deletions(-)
+ MODULE.bazel                                  | 64 ++++--------------
+ compile.sh                                    |  9 +++
+ third_party/grpc-41584.patch                  | 23 +++++++
+ third_party/grpc/BUILD                        |  2 +-
+ third_party/grpc/BUILDe                       | 67 +++++++++++++++++++
+ third_party/systemlibs/protobuf/BUILD         | 12 +++-
+ third_party/systemlibs/protobuf/MODULE.bazel  | 12 ++--
+ .../src/google/protobuf/compiler/BUILD        |  7 ++
+ 8 files changed, 135 insertions(+), 61 deletions(-)
+ create mode 100644 third_party/grpc-41584.patch
+ create mode 100755 third_party/grpc/BUILDe
  create mode 100644 third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 6cfd004d0c..72cd918c5a 100644
+index 911b361..3b2bd3a 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -14,13 +14,15 @@ module(
+@@ -13,24 +13,24 @@ module(
+ # Bazel module dependencies
  # =========================================
  
- bazel_dep(name = "rules_license", version = "1.0.0")
--bazel_dep(name = "bazel_skylib", version = "1.7.1")
--bazel_dep(name = "grpc", version = "1.66.0.bcr.2", repo_name = "com_github_grpc_grpc")
--bazel_dep(name = "grpc-java", version = "1.66.0")
--bazel_dep(name = "googleapis", version = "0.0.0-20240819-fe8ba054a")
-+bazel_dep(name = "bazel_skylib", version = "1.8.1")
-+bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
-+bazel_dep(name = "grpc-java", version = "1.73.0")
-+bazel_dep(name = "googleapis", version = "0.0.0-20241220-5e258e33.bcr.1")
-+bazel_dep(name = "googleapis-java", version = "1.0.0")
-+bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
- bazel_dep(name = "platforms", version = "1.0.0")
- bazel_dep(name = "rules_pkg", version = "1.0.1")
--bazel_dep(name = "stardoc", version = "0.7.1", repo_name = "io_bazel_skydoc")
-+bazel_dep(name = "stardoc", version = "0.7.2", repo_name = "io_bazel_skydoc")
- bazel_dep(name = "zstd-jni", version = "1.5.6-9")
- bazel_dep(name = "blake3", version = "1.5.1.bcr.1")
- bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
-@@ -28,21 +30,21 @@ bazel_dep(name = "rules_java", version = "8.14.0")
- bazel_dep(name = "rules_graalvm", version = "0.11.1")
- bazel_dep(name = "rules_proto", version = "7.0.2")
- bazel_dep(name = "rules_jvm_external", version = "6.0")
--bazel_dep(name = "rules_python", version = "0.40.0")
-+bazel_dep(name = "rules_python", version = "1.5.4")
- bazel_dep(name = "rules_testing", version = "0.6.0")
- bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
- bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
--bazel_dep(name = "abseil-cpp", version = "20240722.0.bcr.2")
--bazel_dep(name = "rules_shell", version = "0.2.0")
+-bazel_dep(name = "abseil-cpp", version = "20250814.1")
 +bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
-+bazel_dep(name = "rules_shell", version = "0.3.0")
- bazel_dep(name = "chicory", version = "1.1.0")
- 
- # Depend on apple_support first and then rules_cc so that the Xcode toolchain
- # from apple_support wins over the generic Unix toolchain from rules_cc.
- bazel_dep(name = "apple_support", version = "1.23.1")
--bazel_dep(name = "rules_cc", version = "0.1.1")
-+bazel_dep(name = "rules_cc", version = "0.2.16")
- 
- # repo_name needs to be used, until WORKSPACE mode is to be supported in bazel_tools
--bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
+ bazel_dep(name = "bazel_skylib", version = "1.8.2")
+ bazel_dep(name = "blake3", version = "1.8.2")
+ bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
+ bazel_dep(name = "googleapis-java", version = "1.0.0")
+ bazel_dep(name = "googleapis", version = "0.0.0-20250604-de157ca3")
+ bazel_dep(name = "googletest", version = "1.17.0.bcr.2", repo_name = "com_google_googletest")
+-bazel_dep(name = "grpc-java", version = "1.71.0")
+-bazel_dep(name = "grpc", version = "1.76.0.bcr.1", repo_name = "com_github_grpc_grpc")
++bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
++bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
+ bazel_dep(name = "platforms", version = "1.0.0")
+-bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
 +bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
- local_path_override(
-     module_name = "protobuf",
-     path = "./third_party/systemlibs/protobuf",
-@@ -100,8 +102,8 @@ local_path_override(
- # but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
- bazel_dep(name = "rules_apple", version = "3.16.0")
- bazel_dep(name = "bazel_features", version = "1.30.0")
--bazel_dep(name = "c-ares", version = "1.15.0")
--bazel_dep(name = "rules_go", version = "0.48.0")
-+bazel_dep(name = "c-ares", version = "1.19.1")
-+bazel_dep(name = "rules_go", version = "0.50.1")
- bazel_dep(name = "rules_kotlin", version = "1.9.6")
- bazel_dep(name = "re2", version = "2024-07-02.bcr.1")
+ bazel_dep(name = "re2", version = "2025-11-05.bcr.1")
+ bazel_dep(name = "rules_graalvm", version = "0.11.1")
+ bazel_dep(name = "rules_java", version = "9.0.3")
+ bazel_dep(name = "rules_jvm_external", version = "6.6")
+ bazel_dep(name = "rules_license", version = "1.0.0")
+ bazel_dep(name = "rules_pkg", version = "1.1.0")
+-bazel_dep(name = "rules_python", version = "1.7.0")
++bazel_dep(name = "rules_python", version = "1.8.4")
+ bazel_dep(name = "rules_shell", version = "0.6.1")
+ bazel_dep(name = "rules_testing", version = "0.9.0")
+ bazel_dep(name = "stardoc", version = "0.8.0", repo_name = "io_bazel_skydoc")
+@@ -70,6 +70,13 @@ single_version_override(
+     version = "6.6",
+ )
  
++single_version_override(
++    module_name = "grpc",
++    patch_strip = 1,
++    patches = ["//third_party:grpc-41584.patch"],
++    version = "GRPC_VERSION"
++)
++
+ # TODO(pcloudy): Remove once the next version of rules_graalvm is available.
+ single_version_override(
+     module_name = "rules_graalvm",
+@@ -81,53 +88,6 @@ single_version_override(
+     ],
+ )
+ 
+-single_version_override(
+-    module_name = "zstd-jni",
+-    patch_strip = 1,
+-    patches = ["//third_party:zstd-jni.patch"],
+-)
+-
+-single_version_override(
+-    module_name = "googleapis",
+-    patch_strip = 1,
+-    patches = ["//third_party:googleapis.patch"],
+-    version = "0.0.0-20250604-de157ca3",
+-)
+-
+-single_version_override(
+-    module_name = "protoc-gen-validate",
+-    patch_strip = 1,
+-    patches = ["//third_party:protoc-gen-validate.patch"],
+-    version = "1.2.1.bcr.1",
+-)
+-
+-# 1. Expose @com_google_protobuf//java/core:lite_runtime_only
+-# due to https://github.com/protocolbuffers/protobuf/commit/079be27925955348d1b3cb30ffbfa33dcec5778c
+-# We need to package the lite runtime jar for Bazel's bootstrap build
+-# 2. Partially revert of https://github.com/protocolbuffers/protobuf/commit/7ec5e19c0743b80c5097434a05cc0e972e7b4e7a
+-# to support grpc
+-single_version_override(
+-    module_name = "protobuf",
+-    patch_strip = 1,
+-    patches = ["//third_party:protobuf.patch"],
+-    version = "33.4",
+-)
+-
+-# Remove once the following PRs are available in a grpc-java release.
+-#   https://github.com/grpc/grpc-java/pull/12148
+-#   https://github.com/grpc/grpc-java/pull/12207
+-#   https://github.com/grpc/grpc-java/pull/12222
+-single_version_override(
+-    module_name = "grpc-java",
+-    patch_strip = 1,
+-    patches = [
+-        "//third_party:grpc-java.patch",
+-        "//third_party:grpc-java-12207.patch",
+-        "//third_party:grpc-java-12222.patch",
+-        "//third_party:grpc-java-addloads.patch",
+-    ],
+-)
+-
+ local_path_override(
+     module_name = "remoteapis",
+     path = "./third_party/remoteapis",
 diff --git a/compile.sh b/compile.sh
-index bd7a6397bc..f2cdac2d7e 100755
+index 0c0edf6..e95990a 100755
 --- a/compile.sh
 +++ b/compile.sh
-@@ -64,8 +64,17 @@ if [[ $PLATFORM == "windows" ]]; then
-   EXTRA_BAZEL_ARGS="${EXTRA_BAZEL_ARGS-} --cxxopt=/std:c++17 --host_cxxopt=/std:c++17"
+@@ -60,8 +60,17 @@ if [[ $PLATFORM == "darwin" ]] && \
+   EXTRA_BAZEL_ARGS="${EXTRA_BAZEL_ARGS-} --define IPHONE_SDK=1"
  fi
  
 +# The bootstrapped Bazel has no embedded version, so native.bazel_version returns "".
@@ -97,8 +141,123 @@ index bd7a6397bc..f2cdac2d7e 100755
  new_step 'Building Bazel with Bazel'
  display "."
  log "Building output/bazel"
+diff --git a/third_party/grpc-41584.patch b/third_party/grpc-41584.patch
+new file mode 100644
+index 0000000..c6fe1dd
+--- /dev/null
++++ b/third_party/grpc-41584.patch
+@@ -0,0 +1,23 @@
++From 542aefd067922ffb515d896df795e186cbf629e2 Mon Sep 17 00:00:00 2001
++From: maleo <maleo@google.com>
++Date: Mon, 9 Feb 2026 11:23:39 +0000
++Subject: [PATCH] Remove pre-release Python version from list of supported
++ Python versions
++
++This fails when module version resolutions resolves to a newer version of rules_python.
++---
++ MODULE.bazel | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/MODULE.bazel b/MODULE.bazel
++index 2a1c5aec1ec15..a2573a25c67f8 100644
++--- a/MODULE.bazel
+++++ b/MODULE.bazel
++@@ -68,7 +68,6 @@ PYTHON_VERSIONS = [
++     "3.11",
++     "3.12",
++     "3.13",
++-    "3.14.0b2",
++ ]
++ 
++ python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+index f9c470f..7dbefed 100755
+--- a/third_party/grpc/BUILD
++++ b/third_party/grpc/BUILD
+@@ -42,7 +42,7 @@ filegroup(
+ genrule(
+     name = "cpp_plugin",
+     outs = ["grpc-cpp-plugin.out"],
+-    cmd = "ln -s ${BUILD_PREFIX}/bin/grpc_cpp_plugin $@",
++    cmd = "ln -s /Users/uwe/.pixi/envs/conda-build/conda-bld/bazel_1770922284082/_build_env/bin/grpc_cpp_plugin $@",
+     executable = 1,
+     visibility = ["//visibility:public"],
+ )
+diff --git a/third_party/grpc/BUILDe b/third_party/grpc/BUILDe
+new file mode 100755
+index 0000000..da1a8b9
+--- /dev/null
++++ b/third_party/grpc/BUILDe
+@@ -0,0 +1,67 @@
++# gRPC Bazel BUILD file.
++#
++# Copyright 2016 gRPC authors.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++load("@rules_license//rules:license.bzl", "license")
++
++licenses(["notice"])  # Apache v2
++
++license(
++    name = "license",
++    package_name = "grpc",
++    license_kinds = [
++        "@rules_license//licenses/spdx:Apache-2.0",
++    ],
++    license_text = "LICENSE",
++    package_version = "1.48",
++)
++
++package(
++    default_applicable_licenses = [":license"],
++    default_visibility = ["//visibility:public"],
++)
++
++filegroup(
++    name = "srcs",
++    srcs = glob(["**"]) + [
++        "//third_party/grpc/bazel:srcs",
++    ],
++)
++
++genrule(
++    name = "cpp_plugin",
++    outs = ["grpc-cpp-plugin.out"],
++    cmd = "ln -s /Users/uwe/.pixi/envs/conda-build/conda-bld/bazel_1770922284082/_build_env/bin/grpc_cpp_plugin $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
++)
++
++alias(
++    name = "grpc++_codegen_proto",
++    actual = "grpc++",
++)
++
++cc_library(
++    name = "grpc++",
++    linkopts = ["-lgrpc++", "-lgrpc", "-lgpr", "-labsl_strings"],
++    visibility = ["//visibility:public"],
++)
++
++filegroup(
++    name = "embedded_tools_srcs",
++    srcs = [
++        "BUILD.tools",
++        "build_defs.bzl",
++    ],
++)
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
-index d1be0831a5..e949eddebb 100644
+index d1be083..e949edd 100644
 --- a/third_party/systemlibs/protobuf/BUILD
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -14,6 +14,12 @@ filegroup(
@@ -140,7 +299,7 @@ index d1be0831a5..e949eddebb 100644
  )
  
 diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
-index 820e74d87b..e7b2a46891 100644
+index 820e74d..e7b2a46 100644
 --- a/third_party/systemlibs/protobuf/MODULE.bazel
 +++ b/third_party/systemlibs/protobuf/MODULE.bazel
 @@ -2,7 +2,7 @@
@@ -183,7 +342,7 @@ index 820e74d87b..e7b2a46891 100644
  use_repo(maven_protobuf, "maven_protobuf")
 diff --git a/third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD b/third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 new file mode 100644
-index 0000000000..b448be65f7
+index 0000000..b448be6
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 @@ -0,0 +1,7 @@
