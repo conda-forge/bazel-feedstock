@@ -1,4 +1,4 @@
-From dc0a30b98005499a20f78bf0cf14833acad94193 Mon Sep 17 00:00:00 2001
+From b33a35c68f9583ffff8aa246878560a4c3e580e0 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 16:11:42 +0200
 Subject: [PATCH 08/12] Install protobuf via maven

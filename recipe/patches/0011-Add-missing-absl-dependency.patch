@@ -1,35 +1,21 @@
-From 11df098d155ae436968dfc6ccea7edceb154c6a2 Mon Sep 17 00:00:00 2001
+From bac914438e2b3251ecfc36737ef0866604358079 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
 Subject: [PATCH 11/12] Add missing absl dependency
 
 ---
- MODULE.bazel                                  |  2 +-
  src/main/cpp/BUILD                            | 28 +++++++-
  .../systemlibs/protobuf/toolchain/BUILD       |  0
  .../protobuf/toolchain/platforms.bzl          | 64 +++++++++++++++++++
- 4 files changed, 91 insertions(+), 3 deletions(-)
+ 3 files changed, 90 insertions(+), 2 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/toolchain/BUILD
  create mode 100644 third_party/systemlibs/protobuf/toolchain/platforms.bzl
 
-diff --git a/MODULE.bazel b/MODULE.bazel
-index 1b6669557f..1af34a02d0 100644
---- a/MODULE.bazel
-+++ b/MODULE.bazel
-@@ -32,7 +32,7 @@ bazel_dep(name = "rules_proto", version = "7.0.2")
- bazel_dep(name = "rules_jvm_external", version = "6.0")
- bazel_dep(name = "rules_python", version = "1.5.4")
- bazel_dep(name = "rules_testing", version = "0.6.0")
--bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
-+bazel_dep(name = "googletest", version = "1.17.0", repo_name = "com_google_googletest")
- bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
- bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
- bazel_dep(name = "rules_shell", version = "0.3.0")
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index dd3bc40397..b7b2a65659 100644
+index c973f0ad0a..944f1e63dd 100644
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
-@@ -90,6 +90,15 @@ cc_library(
+@@ -93,6 +93,15 @@ cc_library(
      ],
  )
  
@@ -45,7 +31,7 @@ index dd3bc40397..b7b2a65659 100644
  cc_binary(
      name = "client",
      srcs = [
-@@ -107,7 +116,7 @@ cc_binary(
+@@ -110,7 +119,7 @@ cc_binary(
          "//conditions:default": ["-Wno-sign-compare"],
      }),
      linkopts = select({
@@ -54,7 +40,7 @@ index dd3bc40397..b7b2a65659 100644
          ],
          "//src/conditions:freebsd": [
              "-lprocstat",
-@@ -117,7 +126,7 @@ cc_binary(
+@@ -120,7 +129,7 @@ cc_binary(
          ],
          "//src/conditions:windows": [
          ],
@@ -63,7 +49,7 @@ index dd3bc40397..b7b2a65659 100644
              "-lrt",
              "-ldl",
          ],
-@@ -138,6 +147,21 @@ cc_binary(
+@@ -143,6 +152,21 @@ cc_binary(
          "//src/main/protobuf:command_server_cc_grpc",
          "//src/main/protobuf:command_server_cc_proto",
          "//third_party/ijar:zip",

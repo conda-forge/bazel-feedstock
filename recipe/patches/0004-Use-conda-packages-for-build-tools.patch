@@ -1,19 +1,19 @@
-From 226660b8dacc68322230e5f8b768a9db10357393 Mon Sep 17 00:00:00 2001
+From 6a769281d894ee5fb4d544c95441bd42de613a15 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
 Subject: [PATCH 04/12] Use conda packages for build tools
 
 ---
- src/tools/singlejar/BUILD | 44 +++++++++------------------------------
+ src/tools/singlejar/BUILD | 45 +++++++++------------------------------
  third_party/ijar/BUILD    | 17 +++++++--------
- tools/zip/BUILD.tools     | 13 ++++++++----
- 3 files changed, 27 insertions(+), 47 deletions(-)
+ tools/zip/BUILD.tools     | 13 +++++++----
+ 3 files changed, 27 insertions(+), 48 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 7043e27b34..f82ebbe64c 100644
+index 93f4e6c4ea..e9303971a5 100644
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
-@@ -73,44 +73,20 @@ release_archive(
+@@ -80,45 +80,20 @@ release_archive(
      visibility = ["//src:__pkg__"],
  )
  
@@ -31,8 +31,9 @@ index 7043e27b34..f82ebbe64c 100644
 -    linkstatic = 1,
 -    visibility = ["//visibility:public"],
 -    deps = [
--        "options",
--        "output_jar",
+-        ":combiners",
+-        ":options",
+-        ":output_jar",
 -        "@zlib",
 -    ],
 +    outs = ["singlejar.bin"],
@@ -55,10 +56,10 @@ index 7043e27b34..f82ebbe64c 100644
 -    linkstatic = 1,
 -    visibility = ["//visibility:public"],
 -    deps = [
--        "combiners",
--        "desugar_checking",
--        "options",
--        "output_jar",
+-        ":combiners",
+-        ":desugar_checking",
+-        ":options",
+-        ":output_jar",
 -        "@zlib",
 -    ],
 +    outs = ["singlejar_local.bin"],
@@ -69,10 +70,10 @@ index 7043e27b34..f82ebbe64c 100644
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index c01848b718..4e4870b3eb 100644
+index 0cca0e68a1..49ba24e8a1 100644
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
-@@ -69,21 +69,20 @@ cc_library(
+@@ -72,21 +72,20 @@ cc_library(
      ],
  )
  

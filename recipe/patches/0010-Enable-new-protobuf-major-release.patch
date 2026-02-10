@@ -1,111 +1,101 @@
-From 256d2179f61d9be2416cfbcbe7e824af13fe34f4 Mon Sep 17 00:00:00 2001
+From 43dc6a69c10576525b568bd33d58324cd11863a8 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 10/12] Enable new protobuf major release
 
 ---
- MODULE.bazel                                  | 38 ++++++++-----------
- compile.sh                                    |  9 +++++
- third_party/systemlibs/protobuf/BUILD         | 12 ++++--
- third_party/systemlibs/protobuf/MODULE.bazel  | 12 +++---
+ MODULE.bazel                                  | 35 +++++++++----------
+ compile.sh                                    |  8 +++++
+ third_party/systemlibs/protobuf/BUILD         | 12 +++++--
+ third_party/systemlibs/protobuf/MODULE.bazel  | 12 ++++---
  .../src/google/protobuf/compiler/BUILD        |  7 ++++
- 5 files changed, 47 insertions(+), 31 deletions(-)
+ 5 files changed, 47 insertions(+), 27 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 6cfd004d0c..1b6669557f 100644
+index 9ce07b3e88..7c68ad927d 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -14,13 +14,15 @@ module(
+@@ -13,17 +13,18 @@ module(
+ # Bazel module dependencies
  # =========================================
  
- bazel_dep(name = "rules_license", version = "1.0.0")
--bazel_dep(name = "bazel_skylib", version = "1.7.1")
--bazel_dep(name = "grpc", version = "1.66.0.bcr.2", repo_name = "com_github_grpc_grpc")
--bazel_dep(name = "grpc-java", version = "1.66.0")
--bazel_dep(name = "googleapis", version = "0.0.0-20240819-fe8ba054a")
-+bazel_dep(name = "bazel_skylib", version = "1.8.1")
-+bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
-+bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
-+bazel_dep(name = "googleapis", version = "0.0.0-20241220-5e258e33.bcr.1")
-+bazel_dep(name = "googleapis-java", version = "1.0.0")
-+bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
- bazel_dep(name = "platforms", version = "1.0.0")
- bazel_dep(name = "rules_pkg", version = "1.0.1")
--bazel_dep(name = "stardoc", version = "0.7.1", repo_name = "io_bazel_skydoc")
-+bazel_dep(name = "stardoc", version = "0.7.2", repo_name = "io_bazel_skydoc")
- bazel_dep(name = "zstd-jni", version = "1.5.6-9")
- bazel_dep(name = "blake3", version = "1.5.1.bcr.1")
- bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
-@@ -28,21 +30,21 @@ bazel_dep(name = "rules_java", version = "8.14.0")
- bazel_dep(name = "rules_graalvm", version = "0.11.1")
- bazel_dep(name = "rules_proto", version = "7.0.2")
- bazel_dep(name = "rules_jvm_external", version = "6.0")
--bazel_dep(name = "rules_python", version = "0.40.0")
-+bazel_dep(name = "rules_python", version = "1.5.4")
- bazel_dep(name = "rules_testing", version = "0.6.0")
- bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
- bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
--bazel_dep(name = "abseil-cpp", version = "20240722.0.bcr.2")
--bazel_dep(name = "rules_shell", version = "0.2.0")
+-bazel_dep(name = "abseil-cpp", version = "20250814.1")
 +bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
-+bazel_dep(name = "rules_shell", version = "0.3.0")
- bazel_dep(name = "chicory", version = "1.1.0")
- 
- # Depend on apple_support first and then rules_cc so that the Xcode toolchain
- # from apple_support wins over the generic Unix toolchain from rules_cc.
- bazel_dep(name = "apple_support", version = "1.23.1")
--bazel_dep(name = "rules_cc", version = "0.1.1")
-+bazel_dep(name = "rules_cc", version = "0.2.16")
- 
- # repo_name needs to be used, until WORKSPACE mode is to be supported in bazel_tools
--bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
+ bazel_dep(name = "bazel_skylib", version = "1.8.2")
+ bazel_dep(name = "blake3", version = "1.8.2")
+ bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
+ bazel_dep(name = "googleapis-java", version = "1.0.0")
+ bazel_dep(name = "googleapis", version = "0.0.0-20250604-de157ca3")
+ bazel_dep(name = "googletest", version = "1.17.0.bcr.2", repo_name = "com_google_googletest")
+-bazel_dep(name = "grpc-java", version = "1.71.0")
+-bazel_dep(name = "grpc", version = "1.76.0.bcr.1", repo_name = "com_github_grpc_grpc")
++bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
++bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
+ bazel_dep(name = "platforms", version = "1.0.0")
+-bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
 +bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
++
  local_path_override(
      module_name = "protobuf",
      path = "./third_party/systemlibs/protobuf",
-@@ -79,17 +81,7 @@ single_version_override(
-     ],
+@@ -45,7 +46,7 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
+ # Depend on apple_support first and then rules_cc so that the Xcode toolchain
+ # from apple_support wins over the generic Unix toolchain from rules_cc.
+ bazel_dep(name = "apple_support", version = "1.24.5")
+-bazel_dep(name = "rules_cc", version = "0.2.14")
++bazel_dep(name = "rules_cc", version = "0.2.16")
+ 
+ # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
+ # load the rule class directly, so we need to expose the cc_compatibility_proxy
+@@ -113,26 +114,22 @@ single_version_override(
+     version = "33.5",
  )
  
 -# Remove once the following PRs are available in a grpc-java release.
+-#   https://github.com/grpc/grpc-java/pull/12148
 -#   https://github.com/grpc/grpc-java/pull/12207
 -#   https://github.com/grpc/grpc-java/pull/12222
 -single_version_override(
 -    module_name = "grpc-java",
 -    patch_strip = 1,
 -    patches = [
+-        "//third_party:grpc-java.patch",
 -        "//third_party:grpc-java-12207.patch",
 -        "//third_party:grpc-java-12222.patch",
+-        "//third_party:grpc-java-addloads.patch",
 -    ],
 -)
 +# PRs #12207 and #12222 are included in grpc-java 1.78.0.
  
  local_path_override(
      module_name = "remoteapis",
-@@ -100,8 +92,8 @@ local_path_override(
- # but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
- bazel_dep(name = "rules_apple", version = "3.16.0")
- bazel_dep(name = "bazel_features", version = "1.30.0")
--bazel_dep(name = "c-ares", version = "1.15.0")
--bazel_dep(name = "rules_go", version = "0.48.0")
+     path = "./third_party/remoteapis",
+ )
+ 
++# The following Bazel modules are not direct dependencies for building Bazel,
++# but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
++bazel_dep(name = "rules_apple", version = "3.16.0")
++bazel_dep(name = "bazel_features", version = "1.30.0")
 +bazel_dep(name = "c-ares", version = "1.19.1")
 +bazel_dep(name = "rules_go", version = "0.50.1")
- bazel_dep(name = "rules_kotlin", version = "1.9.6")
- bazel_dep(name = "re2", version = "2024-07-02.bcr.1")
- 
++bazel_dep(name = "rules_kotlin", version = "1.9.6")
++bazel_dep(name = "re2", version = "2024-07-02.bcr.1")
++
+ # =========================================
+ # Java dependencies
+ # =========================================
 diff --git a/compile.sh b/compile.sh
-index bd7a6397bc..f2cdac2d7e 100755
+index 0c0edf6eb3..f72d6f8b77 100755
 --- a/compile.sh
 +++ b/compile.sh
-@@ -64,8 +64,17 @@ if [[ $PLATFORM == "windows" ]]; then
-   EXTRA_BAZEL_ARGS="${EXTRA_BAZEL_ARGS-} --cxxopt=/std:c++17 --host_cxxopt=/std:c++17"
+@@ -60,8 +60,16 @@ if [[ $PLATFORM == "darwin" ]] && \
+   EXTRA_BAZEL_ARGS="${EXTRA_BAZEL_ARGS-} --define IPHONE_SDK=1"
  fi
  
-+# The bootstrapped Bazel has no embedded version, so native.bazel_version returns "".
-+# bazel_features treats "" as a dev version (999999.999999.999999), causing rules_cc's
-+# compatibility proxy to incorrectly select the Bazel 9+ code path.
-+export BAZEL_DEV_VERSION_OVERRIDE="8.5.1"
++if [[ $PLATFORM == "windows" ]]; then
++  EXTRA_BAZEL_ARGS="${EXTRA_BAZEL_ARGS-} --cxxopt=/std:c++17 --host_cxxopt=/std:c++17"
++fi
 +
  source scripts/bootstrap/bootstrap.sh
  

@@ -1,4 +1,4 @@
-From dba9d7c72df7aff2d3a58fc32285be11eb7019c9 Mon Sep 17 00:00:00 2001
+From d83767080363d5df0acb57b7437863f27b9981bf Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
 Subject: [PATCH 12/12] avoid linking to grpc{,++}_unsecure; use regular
@@ -12,15 +12,15 @@ https://github.com/conda-forge/grpc-cpp-feedstock/blob/main/recipe/patches/0005-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/src/main/protobuf/BUILD b/src/main/protobuf/BUILD
-index 5649080a6b..69d70a10a6 100644
+index f8fce154cb..290980155d 100644
 --- a/src/main/protobuf/BUILD
 +++ b/src/main/protobuf/BUILD
-@@ -212,7 +212,7 @@ cc_grpc_library(
-     extra_cc_library_kwargs = {"defines": ["GRPC_USE_PROTO_LITE=ON"]},
+@@ -213,7 +213,7 @@ cc_grpc_library(
+     grpc_only = True,
      deps = [
          ":command_server_cc_proto",
--        "//third_party/grpc:grpc++_unsecure",
-+        "//third_party/grpc:grpc++",
+-        "@com_github_grpc_grpc//:grpc++_unsecure",
++        "@com_github_grpc_grpc//:grpc++",
      ],
  )
  
