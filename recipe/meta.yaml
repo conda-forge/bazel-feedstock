@@ -1,4 +1,4 @@
-{% set version = "8.5.1" %}
+{% set version = "9.0.0" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: bf66a1cbaaafec32e1e103d0e07343082f1f0f3f20ad4c6b66c4eda3f690ed4d
+    sha256: dfa496089624d726a158afcac353725166f81c5708ee1ecc9e662f2891b3544d
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
@@ -26,10 +26,10 @@ source:
       - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 9a601cb16c254b77a220a1fa04b520b87d2e4539af26be33837322cdcfabdb68  # [win]
+    sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8  # [win]
 
 build:
-  number: 1
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
