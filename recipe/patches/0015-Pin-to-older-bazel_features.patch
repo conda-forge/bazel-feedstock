@@ -1,14 +1,14 @@
-From 24195dade1fcc81843068ff9e56a832ec9df02a1 Mon Sep 17 00:00:00 2001
+From 75ddf70749e5fa938e276f6188b010df42d459e5 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 23 Jan 2026 17:40:39 +0100
-Subject: [PATCH 15/15] Pin to older bazel_features
+Subject: [PATCH 15/16] Pin to older bazel_features
 
 ---
  MODULE.bazel | 8 ++++++++
  1 file changed, 8 insertions(+)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index afcaaa9..66c50a6 100755
+index afcaaa9b39..66c50a6cf3 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -37,6 +37,14 @@ bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googl

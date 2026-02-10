@@ -1,0 +1,44 @@
+From 5342dcdb926381f6e8a6c32262b3008b00b523c5 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Tue, 10 Feb 2026 11:43:39 +1100
+Subject: [PATCH 16/16] avoid linking to grpc{,++}_unsecure; use regular
+ variant instead
+
+---
+ src/main/protobuf/BUILD | 2 +-
+ third_party/grpc/BUILD  | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/protobuf/BUILD b/src/main/protobuf/BUILD
+index d6bd1cdac7..1ed5131b43 100644
+--- a/src/main/protobuf/BUILD
++++ b/src/main/protobuf/BUILD
+@@ -179,7 +179,7 @@ cc_grpc_library(
+     extra_cc_library_kwargs = {"defines": ["GRPC_USE_PROTO_LITE=ON"]},
+     deps = [
+         ":command_server_cc_proto",
+-        "//third_party/grpc:grpc++_unsecure",
++        "//third_party/grpc:grpc++",
+     ],
+ )
+ 
+diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+index e622c42aac..ea7f8ea47d 100644
+--- a/third_party/grpc/BUILD
++++ b/third_party/grpc/BUILD
+@@ -54,12 +54,12 @@ genrule(
+ 
+ alias(
+     name = "grpc++_codegen_proto",
+-    actual = "grpc++_unsecure",
++    actual = "grpc++",
+ )
+ 
+ cc_library(
+-    name = "grpc++_unsecure",
+-    linkopts = ["-lgrpc++_unsecure", "-lgrpc_unsecure","-lgpr"],
++    name = "grpc++",
++    linkopts = ["-lgrpc++", "-lgrpc","-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
