@@ -24,6 +24,8 @@ source:
       - patches/0010-Enable-new-protobuf-major-release.patch       # [unix]
       - patches/0011-Add-missing-absl-dependency.patch             # [unix]
       - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
+      - patches/0013-fix.patch  # [unix]
+      - patches/0014-Additional-fixes.patch  # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
     sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8  # [win]
@@ -50,7 +52,7 @@ requirements:
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
-    - bazel-toolchain >=0.2.0  # [unix]
+    - bazel-toolchain >=0.5.0  # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
@@ -71,7 +73,7 @@ test:
   requires:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain >=0.2    # [unix]
+    - bazel-toolchain >=0.5    # [unix]
   commands:
     - bazel -h
     - bazel version

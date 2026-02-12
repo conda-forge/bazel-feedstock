@@ -1,7 +1,7 @@
-From 075b1fd3764a024e8b0755ff5b9c8ffe18a60ba9 Mon Sep 17 00:00:00 2001
+From dad786fad11d21c9882d2e997d25f5ded9c787e6 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
-Subject: [PATCH 12/12] avoid linking to grpc{,++}_unsecure; use regular
+Subject: [PATCH 12/14] avoid linking to grpc{,++}_unsecure; use regular
  variant instead
 
 also link to absl_strings, whose linkage has been made private in grpc, see
@@ -12,7 +12,7 @@ https://github.com/conda-forge/grpc-cpp-feedstock/blob/main/recipe/patches/0005-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/src/main/protobuf/BUILD b/src/main/protobuf/BUILD
-index f8fce154cb..290980155d 100644
+index f8fce15..2909801 100755
 --- a/src/main/protobuf/BUILD
 +++ b/src/main/protobuf/BUILD
 @@ -213,7 +213,7 @@ cc_grpc_library(
@@ -25,7 +25,7 @@ index f8fce154cb..290980155d 100644
  )
  
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index f9c470f388..63542f8cfa 100644
+index 7dbefed..da1a8b9 100755
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -49,12 +49,12 @@ genrule(

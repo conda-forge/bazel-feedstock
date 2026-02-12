@@ -1,7 +1,7 @@
-From 3bf1bf481257a3b2f400a31a5aedd4a9ddd46b53 Mon Sep 17 00:00:00 2001
+From 7e7168e4b56e0cc722a010265e3adecb50e7d68d Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
-Subject: [PATCH 11/12] Add missing absl dependency
+Subject: [PATCH 11/14] Add missing absl dependency
 
 ---
  src/main/cpp/BUILD                            | 28 +++++++-
@@ -12,7 +12,7 @@ Subject: [PATCH 11/12] Add missing absl dependency
  create mode 100644 third_party/systemlibs/protobuf/toolchain/platforms.bzl
 
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index c973f0ad0a..944f1e63dd 100644
+index c973f0a..944f1e6 100755
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -93,6 +93,15 @@ cc_library(
@@ -73,10 +73,10 @@ index c973f0ad0a..944f1e63dd 100644
  
 diff --git a/third_party/systemlibs/protobuf/toolchain/BUILD b/third_party/systemlibs/protobuf/toolchain/BUILD
 new file mode 100644
-index 0000000000..e69de29bb2
+index 0000000..e69de29
 diff --git a/third_party/systemlibs/protobuf/toolchain/platforms.bzl b/third_party/systemlibs/protobuf/toolchain/platforms.bzl
 new file mode 100644
-index 0000000000..dbd386a104
+index 0000000..dbd386a
 --- /dev/null
 +++ b/third_party/systemlibs/protobuf/toolchain/platforms.bzl
 @@ -0,0 +1,64 @@

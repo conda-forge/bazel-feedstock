@@ -1,0 +1,902 @@
+From 030cf64e84b54f843c3370f20a013d140ab56b8a Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwe.korn@quantco.com>
+Date: Sat, 14 Feb 2026 07:06:30 +0100
+Subject: [PATCH 14/14] Additional fixes
+
+---
+ MODULE.bazel                                  |  29 +-
+ .../0001-Prefer-language-rules-41304.patch    | 250 ++++++++++++++++++
+ third_party/grpc-skip-universal-binary.patch  |  31 +++
+ third_party/grpc/BUILD                        |   1 +
+ third_party/systemlibs/protobuf/BUILD         |  63 +++--
+ .../systemlibs/protobuf/java/core/BUILD       |   3 +-
+ third_party/systemlibs/protobuf/protobuf.bzl  |   6 +-
+ third_party/systemlibs/protobuf/upb/BUILD     |  43 +++
+ .../systemlibs/protobuf/upb/base/BUILD        |   8 +
+ third_party/systemlibs/protobuf/upb/copts.bzl |  16 ++
+ .../systemlibs/protobuf/upb/json/BUILD        |   9 +
+ third_party/systemlibs/protobuf/upb/mem/BUILD |   7 +
+ .../systemlibs/protobuf/upb/message/BUILD     |   8 +
+ .../systemlibs/protobuf/upb/reflection/BUILD  |  15 ++
+ .../systemlibs/protobuf/upb/text/BUILD        |   8 +
+ .../upb/upb_minitable_proto_library.bzl       |  82 ++++++
+ .../systemlibs/protobuf/upb_generator/c/BUILD |  19 ++
+ .../protobuf/upb_generator/minitable/BUILD    |  20 ++
+ .../protobuf/upb_generator/reflection/BUILD   |  21 ++
+ 19 files changed, 614 insertions(+), 25 deletions(-)
+ create mode 100644 third_party/0001-Prefer-language-rules-41304.patch
+ create mode 100644 third_party/grpc-skip-universal-binary.patch
+ create mode 100644 third_party/systemlibs/protobuf/upb/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/base/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/copts.bzl
+ create mode 100644 third_party/systemlibs/protobuf/upb/json/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/mem/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/message/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/reflection/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/text/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb/upb_minitable_proto_library.bzl
+ create mode 100644 third_party/systemlibs/protobuf/upb_generator/c/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb_generator/minitable/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/upb_generator/reflection/BUILD
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 3b2bd3a..f0536b8 100755
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -16,6 +16,9 @@ module(
+ bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
+ bazel_dep(name = "bazel_skylib", version = "1.8.2")
+ bazel_dep(name = "blake3", version = "1.8.2")
++bazel_dep(name = "c-ares", version = "1.34.6", repo_name = "com_github_cares_cares")
++bazel_dep(name = "cel-spec", version = "0.25.1")
++bazel_dep(name = "envoy_api", version = "0.0.0-20251216-6ef568c")
+ bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
+ bazel_dep(name = "googleapis-java", version = "1.0.0")
+ bazel_dep(name = "googleapis", version = "0.0.0-20250604-de157ca3")
+@@ -41,7 +44,7 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
+ # Depend on apple_support first and then rules_cc so that the Xcode toolchain
+ # from apple_support wins over the generic Unix toolchain from rules_cc.
+ bazel_dep(name = "apple_support", version = "1.24.5")
+-bazel_dep(name = "rules_cc", version = "0.2.14")
++bazel_dep(name = "rules_cc", version = "0.2.15")
+ 
+ # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
+ # load the rule class directly, so we need to expose the cc_compatibility_proxy
+@@ -73,8 +76,8 @@ single_version_override(
+ single_version_override(
+     module_name = "grpc",
+     patch_strip = 1,
+-    patches = ["//third_party:grpc-41584.patch"],
+-    version = "GRPC_VERSION"
++    patches = ["//third_party:grpc-41584.patch", "//third_party:0001-Prefer-language-rules-41304.patch", "//third_party:grpc-skip-universal-binary.patch"],
++    version = "1.78.0"
+ )
+ 
+ # TODO(pcloudy): Remove once the next version of rules_graalvm is available.
+@@ -88,6 +91,26 @@ single_version_override(
+     ],
+ )
+ 
++single_version_override(
++    module_name = "zstd-jni",
++    patch_strip = 1,
++    patches = ["//third_party:zstd-jni.patch"],
++)
++
++single_version_override(
++    module_name = "googleapis",
++    patch_strip = 1,
++    patches = ["//third_party:googleapis.patch"],
++    version = "0.0.0-20250604-de157ca3",
++)
++
++single_version_override(
++    module_name = "protoc-gen-validate",
++    patch_strip = 1,
++    patches = ["//third_party:protoc-gen-validate.patch"],
++    version = "1.2.1.bcr.1",
++)
++
+ local_path_override(
+     module_name = "remoteapis",
+     path = "./third_party/remoteapis",
+diff --git a/third_party/0001-Prefer-language-rules-41304.patch b/third_party/0001-Prefer-language-rules-41304.patch
+new file mode 100644
+index 0000000..21a9cf2
+--- /dev/null
++++ b/third_party/0001-Prefer-language-rules-41304.patch
+@@ -0,0 +1,250 @@
++From ddf50378eed2eeb5805a0ee8ea49f8bd8f8d614f Mon Sep 17 00:00:00 2001
++From: Marcel <maleo@google.com>
++Date: Thu, 22 Jan 2026 14:09:40 -0800
++Subject: [PATCH] Prefer language rules (#41304)
++
++The native rules are disabled by default in Bazel 9 via [`--incompatible_autoload_externally=`](https://github.com/bazelbuild/bazel/issues/23043) (empty list).
++
++Closes #41304
++
++PiperOrigin-RevId: 859767890
++---
++ BUILD                                         |  3 ---
++ MODULE.bazel                                  |  4 ++--
++ bazel/cc_grpc_library.bzl                     |  3 ++-
++ bazel/grpc_build_system.bzl                   | 19 ++++++++++++-------
++ src/compiler/BUILD                            | 14 +++++++-------
++ .../address_sorting/address_sorting.bzl       |  4 +++-
++ third_party/xxhash/BUILD                      |  2 ++
++ tools/bazelify_tests/build_defs.bzl           |  3 ++-
++ 8 files changed, 30 insertions(+), 22 deletions(-)
++
++diff --git a/BUILD b/BUILD
++index 5428542dbe..c2229f0a70 100644
++--- a/BUILD
+++++ b/BUILD
++@@ -997,7 +997,6 @@ grpc_cc_library(
++         "//src/core:grpc_check",
++         "@com_google_protobuf//:any_cc_proto",
++         "@com_google_protobuf//:protobuf",
++-        "@com_google_protobuf//src/google/protobuf/io",
++     ],
++ )
++ 
++@@ -1069,7 +1068,6 @@ grpc_cc_library(
++         "//src/core:slice",
++         "@com_google_protobuf//:any_cc_proto",
++         "@com_google_protobuf//:protobuf",
++-        "@com_google_protobuf//src/google/protobuf/io",
++     ],
++ )
++ 
++@@ -2817,7 +2815,6 @@ grpc_cc_library(
++     visibility = ["//visibility:public"],
++     deps = [
++         "@com_google_protobuf//:protobuf",
++-        "@com_google_protobuf//src/google/protobuf/io",
++     ],
++ )
++ 
++diff --git a/MODULE.bazel b/MODULE.bazel
++index 2a1c5aec1e..cdafc23960 100644
++--- a/MODULE.bazel
+++++ b/MODULE.bazel
++@@ -1,5 +1,5 @@
++ # Copyright 2025 the gRPC authors.
++-#
+++#Go! 
++ # Licensed under the Apache License, Version 2.0 (the "License");
++ # you may not use this file except in compliance with the License.
++ # You may obtain a copy of the License at
++@@ -40,6 +40,7 @@ bazel_dep(name = "re2", version = "2024-07-02", repo_name = "com_googlesource_co
++ bazel_dep(name = "rules_apple", version = "3.16.0", repo_name = "build_bazel_rules_apple")
++ bazel_dep(name = "rules_cc", version = "0.0.17")
++ bazel_dep(name = "rules_proto", version = "7.0.2")
+++bazel_dep(name = "rules_shell", version = "0.4.0")
++ bazel_dep(name = "xds", version = "0.0.0-20240423-555b57e", repo_name = "com_github_cncf_xds")  # mismatched 20231116
++ bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
++ 
++@@ -55,7 +56,6 @@ switched_rules.use_languages(
++ 
++ bazel_dep(name = "fuzztest", version = "20241028.0", dev_dependency = True, repo_name = "com_google_fuzztest")  # mistmached 2023-05-16
++ bazel_dep(name = "google_benchmark", version = "1.9.0", dev_dependency = True, repo_name = "com_github_google_benchmark")
++-bazel_dep(name = "rules_shell", version = "0.4.0", dev_dependency = True)
++ 
++ # Python dependencies
++ # ===================
++diff --git a/bazel/cc_grpc_library.bzl b/bazel/cc_grpc_library.bzl
++index 3f4f5347fb..9f7e21be00 100644
++--- a/bazel/cc_grpc_library.bzl
+++++ b/bazel/cc_grpc_library.bzl
++@@ -14,6 +14,7 @@
++ """Generates and compiles C++ grpc stubs from proto_library rules."""
++ 
++ load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
+++load("@rules_cc//cc:cc_library.bzl", "cc_library")
++ load("@rules_proto//proto:defs.bzl", "proto_library")
++ load("//bazel:generate_cc.bzl", "generate_cc")
++ load("//bazel:protobuf.bzl", "well_known_proto_libs")
++@@ -112,7 +113,7 @@ def cc_grpc_library(
++             **kwargs
++         )
++ 
++-        native.cc_library(
+++        cc_library(
++             name = name,
++             srcs = [":" + codegen_grpc_target],
++             hdrs = [":" + codegen_grpc_target],
++diff --git a/bazel/grpc_build_system.bzl b/bazel/grpc_build_system.bzl
++index 6ee535f858..66d6368325 100644
++--- a/bazel/grpc_build_system.bzl
+++++ b/bazel/grpc_build_system.bzl
++@@ -32,8 +32,13 @@ load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
++ load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl", "ios_test_runner")
++ load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
++ load("@com_google_protobuf//bazel:upb_proto_library.bzl", "upb_proto_library", "upb_proto_reflection_library")
+++load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+++load("@rules_cc//cc:cc_library.bzl", "cc_library")
+++load("@rules_cc//cc:cc_test.bzl", "cc_test")
++ load("@rules_proto//proto:defs.bzl", "proto_library")
++ load("@rules_python//python:defs.bzl", "py_binary")
+++load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+++load("@rules_shell//shell:sh_test.bzl", "sh_test")
++ load("//bazel:cc_grpc_library.bzl", "cc_grpc_library")
++ load("//bazel:copts.bzl", "GRPC_DEFAULT_COPTS")
++ load("//bazel:experiments.bzl", "EXPERIMENTS", "EXPERIMENT_ENABLES", "EXPERIMENT_POLLERS")
++@@ -151,7 +156,7 @@ def grpc_cc_library(
++     # See b/391433873.
++     if "fuzztest" in external_deps and "grpc-fuzztest" not in tags:
++         tags = tags + ["grpc-fuzztest"]
++-    native.cc_library(
+++    cc_library(
++         name = name,
++         srcs = srcs,
++         defines = defines +
++@@ -186,7 +191,7 @@ def grpc_cc_library(
++     )
++ 
++ def grpc_proto_plugin(name, srcs = [], deps = []):
++-    native.cc_binary(
+++    cc_binary(
++         name = name + "_native",
++         srcs = srcs,
++         deps = deps,
++@@ -582,7 +587,7 @@ def grpc_cc_test(name, srcs = [], deps = [], external_deps = [], args = [], data
++             **test_args
++         )
++ 
++-    native.cc_library(
+++    cc_library(
++         name = "%s_TEST_LIBRARY" % name,
++         testonly = 1,
++         srcs = srcs,
++@@ -596,7 +601,7 @@ def grpc_cc_test(name, srcs = [], deps = [], external_deps = [], args = [], data
++             fail("srcs changed")
++         if poller_config["deps"] != core_deps:
++             fail("deps changed: %r --> %r" % (deps, poller_config["deps"]))
++-        native.cc_test(
+++        cc_test(
++             name = poller_config["name"],
++             deps = ["%s_TEST_LIBRARY" % name],
++             tags = poller_config["tags"],
++@@ -626,7 +631,7 @@ def grpc_cc_binary(name, srcs = [], deps = [], external_deps = [], args = [], da
++     """
++     visibility = _update_visibility(visibility)
++     copts = []
++-    native.cc_binary(
+++    cc_binary(
++         name = name,
++         srcs = srcs,
++         args = args,
++@@ -693,7 +698,7 @@ def grpc_sh_test(name, srcs = [], args = [], data = [], uses_polling = True, siz
++     }
++ 
++     for poller_config in expand_tests(name, srcs, [], tags, args, exclude_pollers, uses_polling, uses_event_engine, flaky):
++-        native.sh_test(
+++        sh_test(
++             name = poller_config["name"],
++             srcs = poller_config["srcs"],
++             deps = poller_config["deps"],
++@@ -705,7 +710,7 @@ def grpc_sh_test(name, srcs = [], args = [], data = [], uses_polling = True, siz
++         )
++ 
++ def grpc_sh_binary(name, srcs, data = []):
++-    native.sh_binary(
+++    sh_binary(
++         name = name,
++         srcs = srcs,
++         data = data,
++diff --git a/src/compiler/BUILD b/src/compiler/BUILD
++index c78d632313..163e2e6534 100644
++--- a/src/compiler/BUILD
+++++ b/src/compiler/BUILD
++@@ -82,13 +82,13 @@ grpc_cc_library(
++         "proto_parser_helper",
++         "//:gpr_platform",
++         "//:grpc++_config_proto",
++-        "@com_google_protobuf//src/google/protobuf/compiler:code_generator",
++-        "@com_google_protobuf//src/google/protobuf/compiler:plugin",
++-        "@com_google_protobuf//src/google/protobuf/compiler/csharp:names",
++-        "@com_google_protobuf//src/google/protobuf/compiler/objectivec:names",
++-        "@com_google_protobuf//src/google/protobuf/compiler/php:names",
++-        "@com_google_protobuf//src/google/protobuf/io",
++-        "@com_google_protobuf//src/google/protobuf/io:printer",
+++        #"@com_google_protobuf//src/google/protobuf/compiler:code_generator",
+++        #"@com_google_protobuf//src/google/protobuf/compiler:plugin",
+++        #"@com_google_protobuf//src/google/protobuf/compiler/csharp:names",
+++        #"@com_google_protobuf//src/google/protobuf/compiler/objectivec:names",
+++        #"@com_google_protobuf//src/google/protobuf/compiler/php:names",
+++        #"@com_google_protobuf//src/google/protobuf/io",
+++        #"@com_google_protobuf//src/google/protobuf/io:printer",
++     ],
++ )
++ 
++diff --git a/third_party/address_sorting/address_sorting.bzl b/third_party/address_sorting/address_sorting.bzl
++index 05b4c6d847..af44c1bf65 100644
++--- a/third_party/address_sorting/address_sorting.bzl
+++++ b/third_party/address_sorting/address_sorting.bzl
++@@ -28,8 +28,10 @@
++ # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ # SUCH DAMAGE.
++ 
+++load("@rules_cc//cc:defs.bzl", "cc_library")
+++
++ def address_sorting_cc_library(name, srcs, hdrs, copts, includes, linkopts=[]):
++-    native.cc_library(
+++    cc_library(
++         name = name,
++         srcs = srcs,
++         hdrs = hdrs,
++diff --git a/third_party/xxhash/BUILD b/third_party/xxhash/BUILD
++index 91d7bd0566..da95fe8653 100644
++--- a/third_party/xxhash/BUILD
+++++ b/third_party/xxhash/BUILD
++@@ -1,3 +1,5 @@
+++load("@rules_cc//cc:defs.bzl", "cc_library")
+++
++ # TODO(donnadionne): describe this package.
++ cc_library(
++     name = "xxhash",
++diff --git a/tools/bazelify_tests/build_defs.bzl b/tools/bazelify_tests/build_defs.bzl
++index 05755816c3..0dbc37d0bc 100644
++--- a/tools/bazelify_tests/build_defs.bzl
+++++ b/tools/bazelify_tests/build_defs.bzl
++@@ -17,6 +17,7 @@ Contains macros used for running bazelified tests.
++ """
++ 
++ load("@bazel_toolchains//rules/exec_properties:exec_properties.bzl", "create_rbe_exec_properties_dict")
+++load("@rules_shell//shell:sh_test.bzl", "sh_test")
++ load(":dockerimage_current_versions.bzl", "DOCKERIMAGE_CURRENT_VERSIONS")
++ 
++ def _dockerized_sh_test(name, srcs = [], args = [], data = [], size = "medium", timeout = None, tags = [], exec_compatible_with = [], flaky = None, docker_image_version = None, docker_run_as_root = False, env = {}):
++@@ -59,7 +60,7 @@ def _dockerized_sh_test(name, srcs = [], args = [], data = [], size = "medium",
++         "exec_properties": exec_properties,
++     }
++ 
++-    native.sh_test(
+++    sh_test(
++         **test_args
++     )
++ 
+diff --git a/third_party/grpc-skip-universal-binary.patch b/third_party/grpc-skip-universal-binary.patch
+new file mode 100644
+index 0000000..bcdf28a
+--- /dev/null
++++ b/third_party/grpc-skip-universal-binary.patch
+@@ -0,0 +1,31 @@
++--- a/bazel/grpc_build_system.bzl
+++++ b/bazel/grpc_build_system.bzl
++@@ -27,7 +27,6 @@
++ Contains macros used throughout the repo.
++ """
++ 
++-load("@build_bazel_apple_support//rules:universal_binary.bzl", "universal_binary")
++ load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
++ load("@build_bazel_rules_apple//apple/testing/default_runner:ios_test_runner.bzl", "ios_test_runner")
++ load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
++@@ -195,19 +194,12 @@
++         name = name + "_native",
++         srcs = srcs,
++         deps = deps,
++-    )
++-    universal_binary(
++-        name = name + "_universal",
++-        binary = name + "_native",
++     )
++ 
++     # In order to avoid warnings from Bazel, names of the rule and its output file must differ.
++     native.genrule(
++         name = name,
++-        srcs = select({
++-            "@platforms//os:macos": [name + "_universal"],
++-            "//conditions:default": [name + "_native"],
++-        }),
+++        srcs = [name + "_native"],
++         outs = [name + "_binary"],
++         cmd = "cp $< $@",
++         executable = True,
+diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+index da1a8b9..a868033 100755
+--- a/third_party/grpc/BUILD
++++ b/third_party/grpc/BUILD
+@@ -13,6 +13,7 @@
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
++load("@rules_cc//cc:cc_library.bzl", "cc_library")
+ load("@rules_license//rules:license.bzl", "license")
+ 
+ licenses(["notice"])  # Apache v2
+diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
+index e949edd..2a74377 100644
+--- a/third_party/systemlibs/protobuf/BUILD
++++ b/third_party/systemlibs/protobuf/BUILD
+@@ -1,8 +1,12 @@
+-load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain", "proto_library")
++load("@rules_java//java:defs.bzl", "java_library")
+ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test", "objc_library")
++load("//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
++load("//bazel:cc_proto_library.bzl", "cc_proto_library")
++load("//bazel:proto_library.bzl", "proto_library")
++load("//bazel:upb_c_proto_library.bzl", "upb_c_proto_library")
++load("//bazel:upb_minitable_proto_library.bzl", "upb_minitable_proto_library")
+ load(
+     ":protobuf.bzl",
+-    "cc_proto_library",
+     "proto_gen",
+     "py_proto_library",
+ )
+@@ -23,10 +27,11 @@ alias(
+ # Map of all well known protos.
+ # name => (include path, imports)
+ WELL_KNOWN_PROTO_MAP = {
+-    "any": ("google/protobuf/any.proto", []),
++    "any": ("google/protobuf/any.proto", ["descriptor"]),
+     "api": (
+         "google/protobuf/api.proto",
+         [
++            "descriptor",
+             "source_context",
+             "type",
+         ],
+@@ -36,20 +41,21 @@ WELL_KNOWN_PROTO_MAP = {
+         ["descriptor"],
+     ),
+     "descriptor": ("google/protobuf/descriptor.proto", []),
+-    "duration": ("google/protobuf/duration.proto", []),
+-    "empty": ("google/protobuf/empty.proto", []),
+-    "field_mask": ("google/protobuf/field_mask.proto", []),
+-    "source_context": ("google/protobuf/source_context.proto", []),
+-    "struct": ("google/protobuf/struct.proto", []),
+-    "timestamp": ("google/protobuf/timestamp.proto", []),
++    "duration": ("google/protobuf/duration.proto", ["descriptor"]),
++    "empty": ("google/protobuf/empty.proto", ["descriptor"]),
++    "field_mask": ("google/protobuf/field_mask.proto", ["descriptor"]),
++    "source_context": ("google/protobuf/source_context.proto", ["descriptor"]),
++    "struct": ("google/protobuf/struct.proto", ["descriptor"]),
++    "timestamp": ("google/protobuf/timestamp.proto", ["descriptor"]),
+     "type": (
+         "google/protobuf/type.proto",
+         [
+             "any",
++            "descriptor",
+             "source_context",
+         ],
+     ),
+-    "wrappers": ("google/protobuf/wrappers.proto", []),
++    "wrappers": ("google/protobuf/wrappers.proto", ["descriptor"]),
+ }
+ 
+ RELATIVE_WELL_KNOWN_PROTOS = [proto[1][0] for proto in WELL_KNOWN_PROTO_MAP.items()]
+@@ -81,6 +87,17 @@ cc_library(
+ cc_library(
+     name = "protoc_lib",
+     linkopts = ["-lprotoc", "-lprotobuf", "-labsl_log_internal_check_op", "-labsl_log_internal_message", "-labsl_flags_reflection", "-labsl_hash", "-labsl_raw_hash_set", "-labsl_raw_logging_internal"],
++    deps = [
++        "@com_google_absl//absl/algorithm:container",
++        "@com_google_absl//absl/cleanup",
++        "@com_google_absl//absl/container:btree",
++        "@com_google_absl//absl/container:flat_hash_map",
++        "@com_google_absl//absl/log:absl_check",
++        "@com_google_absl//absl/log:absl_log",
++        "@com_google_absl//absl/log:absl_vlog_is_on",
++        "@com_google_absl//absl/status:statusor",
++        "@com_google_absl//absl/strings",
++    ],
+     visibility = ["//visibility:public"],
+ )
+ 
+@@ -94,8 +111,6 @@ genrule(
+ 
+ cc_proto_library(
+     name = "cc_wkt_protos",
+-    internal_bootstrap_hack = 1,
+-    protoc = ":protoc",
+     visibility = ["//visibility:public"],
+ )
+ 
+@@ -106,12 +121,6 @@ proto_gen(
+     visibility = ["//visibility:public"],
+ )
+ 
+-py_library(
+-    name = "protobuf_python",
+-    srcs_version = "PY3",
+-    visibility = ["//visibility:public"],
+-)
+-
+ java_library(
+     name = "protobuf_java",
+     exports = ["@maven_protobuf//:original_com_google_protobuf_protobuf_java"],
+@@ -145,3 +154,21 @@ proto_lang_toolchain(
+     visibility = ["//visibility:public"],
+     deps = [dep + "_proto" for dep in proto[1][1]],
+ ) for proto in WELL_KNOWN_PROTO_MAP.items()]
++
++[cc_proto_library(
++    name = proto[0] + "_cc_proto",
++    deps = [":" + proto[0] + "_proto"],
++    visibility = ["//visibility:public"],
++) for proto in WELL_KNOWN_PROTO_MAP.items()]
++
++upb_c_proto_library(
++    name = "descriptor_upb_c_proto",
++    visibility = ["//visibility:public"],
++    deps = ["descriptor_proto"],
++)
++
++upb_minitable_proto_library(
++    name = "descriptor_upb_minitable_proto",
++    visibility = ["//visibility:public"],
++    deps = ["descriptor_proto"],
++)
+diff --git a/third_party/systemlibs/protobuf/java/core/BUILD b/third_party/systemlibs/protobuf/java/core/BUILD
+index 162a240..5c6a355 100644
+--- a/third_party/systemlibs/protobuf/java/core/BUILD
++++ b/third_party/systemlibs/protobuf/java/core/BUILD
+@@ -1,6 +1,7 @@
++load("@rules_java//java:defs.bzl", "java_library")
+ java_library(
+     name = "core",
+-    exports = ["@maven_protobuf//:com_google_protobuf_protobuf_java"],
++    runtime_deps = ["@maven_protobuf//:com_google_protobuf_protobuf_java"],
+     visibility = ["//visibility:public"],
+ )
+ 
+diff --git a/third_party/systemlibs/protobuf/protobuf.bzl b/third_party/systemlibs/protobuf/protobuf.bzl
+index 8b3a16e..a40f438 100644
+--- a/third_party/systemlibs/protobuf/protobuf.bzl
++++ b/third_party/systemlibs/protobuf/protobuf.bzl
+@@ -137,7 +137,7 @@ def _proto_gen_impl(ctx):
+ proto_gen = rule(
+     attrs = {
+         "srcs": attr.label_list(allow_files = True),
+-        "deps": attr.label_list(providers = ["proto"]),
++        "deps": attr.label_list(providers = [ProtoInfo]),
+         "includes": attr.string_list(),
+         "protoc": attr.label(
+             cfg = "host",
+@@ -234,7 +234,7 @@ def cc_proto_library(
+         )
+ 
+         # An empty cc_library to make rule dependency consistent.
+-        native.cc_library(
++        cc_library(
+             name = name,
+             **kargs
+         )
+@@ -266,7 +266,7 @@ def cc_proto_library(
+     if use_grpc_plugin:
+         cc_libs = cc_libs + ["//external:grpc_lib"]
+ 
+-    native.cc_library(
++    cc_library(
+         name = name,
+         srcs = gen_srcs,
+         hdrs = gen_hdrs,
+diff --git a/third_party/systemlibs/protobuf/upb/BUILD b/third_party/systemlibs/protobuf/upb/BUILD
+new file mode 100644
+index 0000000..efe89c9
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/BUILD
+@@ -0,0 +1,43 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
++load("//bazel/private:upb_proto_library_internal/copts.bzl", "upb_proto_library_copts")
++
++bool_flag(
++    name = "fasttable_enabled",
++    build_setting_default = False,
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "fasttable_enabled_setting",
++    flag_values = {"//upb:fasttable_enabled": "true"},
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "windows",
++    constraint_values = ["@platforms//os:windows"],
++    visibility = ["//visibility:public"],
++)
++
++UPB_DEFAULT_COPTS = select({
++    "//upb:windows": [],
++    "//conditions:default": [""],
++}) + select({
++    "//upb:fasttable_enabled_setting": ["-DUPB_ENABLE_FASTTABLE"],
++    "//conditions:default": [],
++}) + select({
++    "//conditions:default": [],
++})
++
++upb_proto_library_copts(
++    name = "upb_proto_library_copts",
++    copts = UPB_DEFAULT_COPTS,
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++    name = "generated_code_support",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
+diff --git a/third_party/systemlibs/protobuf/upb/base/BUILD b/third_party/systemlibs/protobuf/upb/base/BUILD
+new file mode 100644
+index 0000000..5bd0e68
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/base/BUILD
+@@ -0,0 +1,8 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "base",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
++
+diff --git a/third_party/systemlibs/protobuf/upb/copts.bzl b/third_party/systemlibs/protobuf/upb/copts.bzl
+new file mode 100644
+index 0000000..3005625
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/copts.bzl
+@@ -0,0 +1,16 @@
++"""Dummy rule to expose select() copts to aspects."""
++
++UpbProtoLibraryCoptsInfo = provider(
++    "Provides copts for upb proto targets",
++    fields = {
++        "copts": "copts for upb_proto_library()",
++    },
++)
++
++def upb_proto_library_copts_impl(ctx):
++    return UpbProtoLibraryCoptsInfo(copts = ctx.attr.copts)
++
++upb_proto_library_copts = rule(
++    implementation = upb_proto_library_copts_impl,
++    attrs = {"copts": attr.string_list(default = [])},
++)
+diff --git a/third_party/systemlibs/protobuf/upb/json/BUILD b/third_party/systemlibs/protobuf/upb/json/BUILD
+new file mode 100644
+index 0000000..c7ebf16
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/json/BUILD
+@@ -0,0 +1,9 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "json",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
++
++
+diff --git a/third_party/systemlibs/protobuf/upb/mem/BUILD b/third_party/systemlibs/protobuf/upb/mem/BUILD
+new file mode 100644
+index 0000000..6aa505c
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/mem/BUILD
+@@ -0,0 +1,7 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "mem",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
+diff --git a/third_party/systemlibs/protobuf/upb/message/BUILD b/third_party/systemlibs/protobuf/upb/message/BUILD
+new file mode 100644
+index 0000000..9cb258b
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/message/BUILD
+@@ -0,0 +1,8 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "message",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
++
+diff --git a/third_party/systemlibs/protobuf/upb/reflection/BUILD b/third_party/systemlibs/protobuf/upb/reflection/BUILD
+new file mode 100644
+index 0000000..9a3ed05
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/reflection/BUILD
+@@ -0,0 +1,15 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "reflection",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++    name = "generated_reflection_support",
++    linkopts = ["-lupb", "-lutf8_range"],
++    deps = ["//:descriptor_upb_c_proto"],
++    visibility = ["//visibility:public"],
++)
++
+diff --git a/third_party/systemlibs/protobuf/upb/text/BUILD b/third_party/systemlibs/protobuf/upb/text/BUILD
+new file mode 100644
+index 0000000..c9a9d6c
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/text/BUILD
+@@ -0,0 +1,8 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++cc_library(
++    name = "text",
++    linkopts = ["-lupb", "-lutf8_range"],
++    visibility = ["//visibility:public"],
++)
++
+diff --git a/third_party/systemlibs/protobuf/upb/upb_minitable_proto_library.bzl b/third_party/systemlibs/protobuf/upb/upb_minitable_proto_library.bzl
+new file mode 100644
+index 0000000..4bc4fa3
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb/upb_minitable_proto_library.bzl
+@@ -0,0 +1,82 @@
++"""upb_minitable_proto_library() exposes upb's generated minitables (foo.upb_minitable.h)"""
++
++load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
++load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
++load("//bazel/common:proto_info.bzl", "ProtoInfo")
++load("//bazel/private:upb_proto_library_internal/aspect.bzl", "upb_proto_aspect_impl")
++load("//bazel/private:upb_proto_library_internal/cc_library_func.bzl", "upb_use_cpp_toolchain")
++load("//bazel/private:upb_proto_library_internal/rule.bzl", "upb_proto_rule_impl")
++
++
++UpbMinitableCcInfo = provider(
++    "Provider for cc_info for protos",
++    fields = ["cc_info"],
++)
++
++_UpbWrappedGeneratedSrcsInfo = provider(
++    "Provider for generated sources",
++    fields = ["srcs"],
++)
++
++def _upb_minitable_proto_library_aspect_impl(target, ctx):
++    return upb_proto_aspect_impl(
++        target = target,
++        ctx = ctx,
++        generator = "upb_minitable",
++        cc_provider = UpbMinitableCcInfo,
++        dep_cc_provider = None,
++        file_provider = _UpbWrappedGeneratedSrcsInfo,
++    )
++
++def _get_upb_minitable_proto_library_aspect_provides():
++    provides = [
++        UpbMinitableCcInfo,
++        _UpbWrappedGeneratedSrcsInfo,
++    ]
++
++    if hasattr(cc_common, "CcSharedLibraryHintInfo"):
++        provides.append(cc_common.CcSharedLibraryHintInfo)
++    elif hasattr(cc_common, "CcSharedLibraryHintInfo_6_X_getter_do_not_use"):
++        # This branch can be deleted once 6.X is not supported by upb rules
++        provides.append(cc_common.CcSharedLibraryHintInfo_6_X_getter_do_not_use)
++
++    return provides
++
++upb_minitable_proto_library_aspect = aspect(
++    attrs = {
++        "_copts": attr.label(
++            default = "//upb:upb_proto_library_copts",
++        ),
++        "_upb_minitable_toolchain": attr.label(
++            default = Label("//upb_generator/minitable:toolchain"),
++        ),
++        "_cc_toolchain": attr.label(
++            default = "@bazel_tools//tools/cpp:current_cc_toolchain",
++        ),
++        "_fasttable_enabled": attr.label(default = "//upb:fasttable_enabled"),
++    },
++    implementation = _upb_minitable_proto_library_aspect_impl,
++    provides = _get_upb_minitable_proto_library_aspect_provides(),
++    attr_aspects = ["deps"],
++    fragments = ["cpp"],
++    toolchains = upb_use_cpp_toolchain(),
++    exec_groups = {
++        "proto_compiler": exec_group(),
++    },
++    required_providers = [ProtoInfo],
++)
++
++def _upb_minitable_proto_library_rule_impl(ctx):
++    return upb_proto_rule_impl(ctx, UpbMinitableCcInfo, _UpbWrappedGeneratedSrcsInfo)
++
++upb_minitable_proto_library = rule(
++    implementation = _upb_minitable_proto_library_rule_impl,
++    attrs = {
++        "deps": attr.label_list(
++            aspects = [upb_minitable_proto_library_aspect],
++            allow_rules = ["proto_library"],
++            providers = [ProtoInfo],
++        ),
++    },
++    provides = [CcInfo],
++)
+diff --git a/third_party/systemlibs/protobuf/upb_generator/c/BUILD b/third_party/systemlibs/protobuf/upb_generator/c/BUILD
+new file mode 100644
+index 0000000..810febc
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb_generator/c/BUILD
+@@ -0,0 +1,19 @@
++load("//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
++
++genrule(
++    name = "protoc-gen-upb",
++    outs = ["protoc-gen-upb.bin"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/protoc-gen-upb $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
++)
++proto_lang_toolchain(
++    name = "toolchain",
++    command_line = "--upb_out=$(OUT)",
++    output_files = "multiple",
++    plugin = ":protoc-gen-upb",
++    plugin_format_flag = "--plugin=protoc-gen-upb=%s",
++    progress_message = "Generating upb protos",
++    runtime = "//upb:generated_code_support",
++    visibility = ["//visibility:public"],
++)
+diff --git a/third_party/systemlibs/protobuf/upb_generator/minitable/BUILD b/third_party/systemlibs/protobuf/upb_generator/minitable/BUILD
+new file mode 100644
+index 0000000..3c712f2
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb_generator/minitable/BUILD
+@@ -0,0 +1,20 @@
++load("//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
++
++genrule(
++    name = "protoc-gen-upb_minitable",
++    outs = ["protoc-gen-upb_minitable.bin"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/protoc-gen-upb_minitable $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
++)
++
++proto_lang_toolchain(
++    name = "toolchain",
++    command_line = "--upb_minitable_out=$(OUT)",
++    output_files = "multiple",
++    plugin = ":protoc-gen-upb_minitable",
++    plugin_format_flag = "--plugin=protoc-gen-upb_minitable=%s",
++    progress_message = "Generating upb minitables",
++    runtime = "//upb:generated_code_support",
++    visibility = ["//visibility:public"],
++)
+diff --git a/third_party/systemlibs/protobuf/upb_generator/reflection/BUILD b/third_party/systemlibs/protobuf/upb_generator/reflection/BUILD
+new file mode 100644
+index 0000000..71cfa7d
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/upb_generator/reflection/BUILD
+@@ -0,0 +1,21 @@
++load("//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
++
++genrule(
++    name = "protoc-gen-upbdefs",
++    outs = ["protoc-gen-upbdefs.bin"],
++    srcs = ["//:descriptor_upb_c_proto"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/protoc-gen-upbdefs $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
++)
++
++proto_lang_toolchain(
++    name = "toolchain",
++    command_line = "--upbdefs_out=$(OUT)",
++    output_files = "multiple",
++    plugin = ":protoc-gen-upbdefs",
++    plugin_format_flag = "--plugin=protoc-gen-upbdefs=%s",
++    progress_message = "Generating upb protos",
++    runtime = "//upb/reflection:generated_reflection_support",
++    visibility = ["//visibility:public"],
++)

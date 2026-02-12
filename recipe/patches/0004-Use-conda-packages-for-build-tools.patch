@@ -1,7 +1,7 @@
-From 6a769281d894ee5fb4d544c95441bd42de613a15 Mon Sep 17 00:00:00 2001
+From 92f0a46054f82a8174329447d85cbc56c25c133f Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
-Subject: [PATCH 04/12] Use conda packages for build tools
+Subject: [PATCH 04/14] Use conda packages for build tools
 
 ---
  src/tools/singlejar/BUILD | 45 +++++++++------------------------------
@@ -10,7 +10,7 @@ Subject: [PATCH 04/12] Use conda packages for build tools
  3 files changed, 27 insertions(+), 48 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 93f4e6c4ea..e9303971a5 100644
+index 93f4e6c..e930397 100755
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
 @@ -80,45 +80,20 @@ release_archive(
@@ -70,7 +70,7 @@ index 93f4e6c4ea..e9303971a5 100644
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index 0cca0e68a1..49ba24e8a1 100644
+index 0cca0e6..49ba24e 100755
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
 @@ -72,21 +72,20 @@ cc_library(
@@ -104,7 +104,7 @@ index 0cca0e68a1..49ba24e8a1 100644
  
  filegroup(
 diff --git a/tools/zip/BUILD.tools b/tools/zip/BUILD.tools
-index 478e7a1722..ed35a5a4fd 100644
+index 478e7a1..ed35a5a 100755
 --- a/tools/zip/BUILD.tools
 +++ b/tools/zip/BUILD.tools
 @@ -2,12 +2,17 @@ load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")
