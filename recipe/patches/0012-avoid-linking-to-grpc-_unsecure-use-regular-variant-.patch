@@ -1,4 +1,4 @@
-From d83767080363d5df0acb57b7437863f27b9981bf Mon Sep 17 00:00:00 2001
+From 075b1fd3764a024e8b0755ff5b9c8ffe18a60ba9 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
 Subject: [PATCH 12/12] avoid linking to grpc{,++}_unsecure; use regular

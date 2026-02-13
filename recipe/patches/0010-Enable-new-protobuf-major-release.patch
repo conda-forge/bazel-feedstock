@@ -1,22 +1,22 @@
-From 43dc6a69c10576525b568bd33d58324cd11863a8 Mon Sep 17 00:00:00 2001
+From 8d465c95c2050cedd3ed1c15909ead6061431773 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 10/12] Enable new protobuf major release
 
 ---
- MODULE.bazel                                  | 35 +++++++++----------
- compile.sh                                    |  8 +++++
- third_party/systemlibs/protobuf/BUILD         | 12 +++++--
- third_party/systemlibs/protobuf/MODULE.bazel  | 12 ++++---
- .../src/google/protobuf/compiler/BUILD        |  7 ++++
- 5 files changed, 47 insertions(+), 27 deletions(-)
+ MODULE.bazel                                  | 46 ++++++-------------
+ compile.sh                                    |  8 ++++
+ third_party/systemlibs/protobuf/BUILD         | 12 +++--
+ third_party/systemlibs/protobuf/MODULE.bazel  | 12 +++--
+ .../src/google/protobuf/compiler/BUILD        |  7 +++
+ 5 files changed, 46 insertions(+), 39 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 9ce07b3e88..7c68ad927d 100644
+index 9ce07b3e88..db8d0869d1 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -13,17 +13,18 @@ module(
+@@ -13,17 +13,17 @@ module(
  # Bazel module dependencies
  # =========================================
  
@@ -35,11 +35,10 @@ index 9ce07b3e88..7c68ad927d 100644
  bazel_dep(name = "platforms", version = "1.0.0")
 -bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
 +bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
-+
  local_path_override(
      module_name = "protobuf",
      path = "./third_party/systemlibs/protobuf",
-@@ -45,7 +46,7 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
+@@ -45,7 +45,7 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
  # Depend on apple_support first and then rules_cc so that the Xcode toolchain
  # from apple_support wins over the generic Unix toolchain from rules_cc.
  bazel_dep(name = "apple_support", version = "1.24.5")
@@ -48,10 +47,22 @@ index 9ce07b3e88..7c68ad927d 100644
  
  # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
  # load the rule class directly, so we need to expose the cc_compatibility_proxy
-@@ -113,26 +114,22 @@ single_version_override(
-     version = "33.5",
+@@ -101,38 +101,22 @@ single_version_override(
+     version = "1.2.1.bcr.1",
  )
  
+-# 1. Expose @com_google_protobuf//java/core:lite_runtime_only
+-# due to https://github.com/protocolbuffers/protobuf/commit/079be27925955348d1b3cb30ffbfa33dcec5778c
+-# We need to package the lite runtime jar for Bazel's bootstrap build
+-# 2. Partially revert of https://github.com/protocolbuffers/protobuf/commit/7ec5e19c0743b80c5097434a05cc0e972e7b4e7a
+-# to support grpc
+-single_version_override(
+-    module_name = "protobuf",
+-    patch_strip = 1,
+-    patches = ["//third_party:protobuf.patch"],
+-    version = "33.5",
+-)
+-
 -# Remove once the following PRs are available in a grpc-java release.
 -#   https://github.com/grpc/grpc-java/pull/12148
 -#   https://github.com/grpc/grpc-java/pull/12207
