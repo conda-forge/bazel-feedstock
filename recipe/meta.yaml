@@ -45,7 +45,7 @@ requirements:
     - sed                      # [unix]
     - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
-    - grpc_java_plugin <1.74   # [unix]
+    - grpc_java_plugin         # [unix]
     - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
