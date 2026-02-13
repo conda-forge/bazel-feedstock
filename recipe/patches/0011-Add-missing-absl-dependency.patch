@@ -1,20 +1,24 @@
-From 635bed77d8337123a5a275bd080e3f9410722b53 Mon Sep 17 00:00:00 2001
+From 791d0b7330e7f9b231e789625021671f80f17a7e Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
 Subject: [PATCH 11/11] Add missing absl dependency
 
 ---
- MODULE.bazel       |  2 +-
- src/main/cpp/BUILD | 28 ++++++++++++++++++++++++++--
- 2 files changed, 27 insertions(+), 3 deletions(-)
+ MODULE.bazel                                  |  2 +-
+ src/main/cpp/BUILD                            | 28 +++++++-
+ .../systemlibs/protobuf/toolchain/BUILD       |  0
+ .../protobuf/toolchain/platforms.bzl          | 64 +++++++++++++++++++
+ 4 files changed, 91 insertions(+), 3 deletions(-)
+ create mode 100644 third_party/systemlibs/protobuf/toolchain/BUILD
+ create mode 100644 third_party/systemlibs/protobuf/toolchain/platforms.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index a3a5457..0b78d9c 100755
+index 72cd918c5a..862597e2f1 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -30,7 +30,7 @@ bazel_dep(name = "rules_proto", version = "7.0.2")
+@@ -32,7 +32,7 @@ bazel_dep(name = "rules_proto", version = "7.0.2")
  bazel_dep(name = "rules_jvm_external", version = "6.0")
- bazel_dep(name = "rules_python", version = "0.40.0")
+ bazel_dep(name = "rules_python", version = "1.5.4")
  bazel_dep(name = "rules_testing", version = "0.6.0")
 -bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
 +bazel_dep(name = "googletest", version = "1.17.0", repo_name = "com_google_googletest")
@@ -22,7 +26,7 @@ index a3a5457..0b78d9c 100755
  bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
  bazel_dep(name = "rules_shell", version = "0.3.0")
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index dd3bc40..b7b2a65 100755
+index dd3bc40397..b7b2a65659 100644
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -90,6 +90,15 @@ cc_library(
@@ -81,3 +85,76 @@ index dd3bc40..b7b2a65 100755
      ],
  )
  
+diff --git a/third_party/systemlibs/protobuf/toolchain/BUILD b/third_party/systemlibs/protobuf/toolchain/BUILD
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/third_party/systemlibs/protobuf/toolchain/platforms.bzl b/third_party/systemlibs/protobuf/toolchain/platforms.bzl
+new file mode 100644
+index 0000000000..dbd386a104
+--- /dev/null
++++ b/third_party/systemlibs/protobuf/toolchain/platforms.bzl
+@@ -0,0 +1,64 @@
++"List of published platforms on protobuf GitHub releases"
++
++# Keys are chosen to match the filenames published on protocolbuffers/protobuf releases
++# NB: keys in this list are nearly identical to /toolchain/BUILD.bazel#TOOLCHAINS
++# Perhaps we should share code.
++PROTOBUF_PLATFORMS = {
++    # "k8", # this is in /toolchain/BUILD.bazel but not a released platform
++    # "osx-universal_binary", # this is not in /toolchain/BUILD.bazel
++    # but also Bazel will never request it, as we have a darwin binary for each architecture
++    "linux-aarch_64": {
++        "compatible_with": [
++            "@platforms//os:linux",
++            "@platforms//cpu:aarch64",
++        ],
++    },
++    "linux-ppcle_64": {
++        "compatible_with": [
++            "@platforms//os:linux",
++            "@platforms//cpu:ppc64le",
++        ],
++    },
++    "linux-s390_64": {
++        "compatible_with": [
++            "@platforms//os:linux",
++            "@platforms//cpu:s390x",
++        ],
++    },
++    "linux-x86_32": {
++        "compatible_with": [
++            "@platforms//os:linux",
++            "@platforms//cpu:x86_32",
++        ],
++    },
++    "linux-x86_64": {
++        "compatible_with": [
++            "@platforms//os:linux",
++            "@platforms//cpu:x86_64",
++        ],
++    },
++    "osx-aarch_64": {
++        "compatible_with": [
++            "@platforms//os:macos",
++            "@platforms//cpu:aarch64",
++        ],
++    },
++    "osx-x86_64": {
++        "compatible_with": [
++            "@platforms//os:macos",
++            "@platforms//cpu:x86_64",
++        ],
++    },
++    "win32": {
++        "compatible_with": [
++            "@platforms//os:windows",
++            "@platforms//cpu:x86_32",
++        ],
++    },
++    "win64": {
++        "compatible_with": [
++            "@platforms//os:windows",
++            "@platforms//cpu:x86_64",
++        ],
++    },
++}
