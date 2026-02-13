@@ -1,19 +1,19 @@
-From ea0fb19059419d3edac35cf704810220cf830270 Mon Sep 17 00:00:00 2001
+From 256d2179f61d9be2416cfbcbe7e824af13fe34f4 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 10/11] Enable new protobuf major release
 
 ---
- MODULE.bazel                                  | 26 ++++++++++---------
- compile.sh                                    |  9 +++++++
- third_party/systemlibs/protobuf/BUILD         | 12 ++++++---
- third_party/systemlibs/protobuf/MODULE.bazel  | 12 +++++----
- .../src/google/protobuf/compiler/BUILD        |  7 +++++
- 5 files changed, 46 insertions(+), 20 deletions(-)
+ MODULE.bazel                                  | 38 ++++++++-----------
+ compile.sh                                    |  9 +++++
+ third_party/systemlibs/protobuf/BUILD         | 12 ++++--
+ third_party/systemlibs/protobuf/MODULE.bazel  | 12 +++---
+ .../src/google/protobuf/compiler/BUILD        |  7 ++++
+ 5 files changed, 47 insertions(+), 31 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 6cfd004d0c..72cd918c5a 100644
+index 6cfd004d0c..1b6669557f 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -14,13 +14,15 @@ module(
@@ -26,7 +26,7 @@ index 6cfd004d0c..72cd918c5a 100644
 -bazel_dep(name = "googleapis", version = "0.0.0-20240819-fe8ba054a")
 +bazel_dep(name = "bazel_skylib", version = "1.8.1")
 +bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
-+bazel_dep(name = "grpc-java", version = "1.73.0")
++bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
 +bazel_dep(name = "googleapis", version = "0.0.0-20241220-5e258e33.bcr.1")
 +bazel_dep(name = "googleapis-java", version = "1.0.0")
 +bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
@@ -64,7 +64,26 @@ index 6cfd004d0c..72cd918c5a 100644
  local_path_override(
      module_name = "protobuf",
      path = "./third_party/systemlibs/protobuf",
-@@ -100,8 +102,8 @@ local_path_override(
+@@ -79,17 +81,7 @@ single_version_override(
+     ],
+ )
+ 
+-# Remove once the following PRs are available in a grpc-java release.
+-#   https://github.com/grpc/grpc-java/pull/12207
+-#   https://github.com/grpc/grpc-java/pull/12222
+-single_version_override(
+-    module_name = "grpc-java",
+-    patch_strip = 1,
+-    patches = [
+-        "//third_party:grpc-java-12207.patch",
+-        "//third_party:grpc-java-12222.patch",
+-    ],
+-)
++# PRs #12207 and #12222 are included in grpc-java 1.78.0.
+ 
+ local_path_override(
+     module_name = "remoteapis",
+@@ -100,8 +92,8 @@ local_path_override(
  # but are required for visibility from DIST_ARCHIVE_REPOS in repositories.bzl
  bazel_dep(name = "rules_apple", version = "3.16.0")
  bazel_dep(name = "bazel_features", version = "1.30.0")
