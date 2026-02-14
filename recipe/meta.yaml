@@ -61,6 +61,7 @@ requirements:
     - libgrpc               # [unix]
     - libprotobuf           # [unix]
     - protobuf-bazel-rules  # [unix]
+    - grpc-bazel-rules      # [unix]
     - openjdk 21.*          # [win]
     - posix                 # [win]
   run:
