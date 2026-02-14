@@ -5,7 +5,8 @@ set -euxo pipefail
 if [[ "${target_platform}" == osx-* ]]; then
   export LDFLAGS="${LDFLAGS} -framework IOKit"
   # See also https://gitlab.kitware.com/cmake/cmake/-/issues/25755
-  export CFLAGS="${CFLAGS} -fno-define-target-os-macros"
+  export CFLAGS="${CFLAGS} -fno-define-target-os-macros -target ${HOST}"
+  export LDFLAGS="${LDFLAGS} -target ${HOST}"
 else
   export LDFLAGS="${LDFLAGS} -lpthread -labsl_synchronization -lm"
 fi
