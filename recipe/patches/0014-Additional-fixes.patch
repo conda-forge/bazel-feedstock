@@ -1,14 +1,14 @@
-From 9447ac765db118f64a7b8e227ee9997d8c0bd138 Mon Sep 17 00:00:00 2001
+From 67b88eaedbf9afdfdabd3ec88566acd838c90692 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 14 Feb 2026 07:06:30 +0100
 Subject: [PATCH 14/14] Additional fixes
 
 ---
- MODULE.bazel                                  | 33 ++++++--
+ MODULE.bazel                                  | 51 ++++++++----
  third_party/grpc/BUILD                        |  1 +
  third_party/systemlibs/grpc/BUILD             | 70 ++++++++++++++++
  third_party/systemlibs/grpc/MODULE.bazel      | 10 +++
- third_party/systemlibs/protobuf/BUILD         | 63 ++++++++++----
+ third_party/systemlibs/protobuf/BUILD         | 52 ++++++++----
  .../systemlibs/protobuf/java/core/BUILD       |  3 +-
  third_party/systemlibs/protobuf/protobuf.bzl  |  6 +-
  third_party/systemlibs/protobuf/upb/BUILD     | 43 ++++++++++
@@ -23,7 +23,7 @@ Subject: [PATCH 14/14] Additional fixes
  .../systemlibs/protobuf/upb_generator/c/BUILD | 19 +++++
  .../protobuf/upb_generator/minitable/BUILD    | 20 +++++
  .../protobuf/upb_generator/reflection/BUILD   | 21 +++++
- 19 files changed, 412 insertions(+), 30 deletions(-)
+ 19 files changed, 410 insertions(+), 39 deletions(-)
  create mode 100644 third_party/systemlibs/grpc/BUILD
  create mode 100644 third_party/systemlibs/grpc/MODULE.bazel
  create mode 100644 third_party/systemlibs/protobuf/upb/BUILD
@@ -40,7 +40,7 @@ Subject: [PATCH 14/14] Additional fixes
  create mode 100644 third_party/systemlibs/protobuf/upb_generator/reflection/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 3b2bd3a..a9e7eae 100755
+index 3b2bd3a..46ffdfe 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -41,7 +41,7 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
@@ -104,6 +104,31 @@ index 3b2bd3a..a9e7eae 100755
  local_path_override(
      module_name = "remoteapis",
      path = "./third_party/remoteapis",
+@@ -140,15 +157,15 @@ maven.install(
+         "commons-collections:commons-collections:3.2.2",
+         "commons-lang:commons-lang:2.6",
+         "io.github.java-diff-utils:java-diff-utils:4.12",
+-        "io.grpc:grpc-api:1.66.0",
+-        "io.grpc:grpc-auth:1.66.0",
+-        "io.grpc:grpc-context:1.66.0",
+-        "io.grpc:grpc-core:1.66.0",
+-        "io.grpc:grpc-inprocess:1.66.0",
+-        "io.grpc:grpc-netty:1.66.0",
+-        "io.grpc:grpc-protobuf:1.66.0",
+-        "io.grpc:grpc-protobuf-lite:1.66.0",
+-        "io.grpc:grpc-stub:1.66.0",
++        "io.grpc:grpc-api:GRPC_VERSION",
++        "io.grpc:grpc-auth:GRPC_VERSION",
++        "io.grpc:grpc-context:GRPC_VERSION",
++        "io.grpc:grpc-core:GRPC_VERSION",
++        "io.grpc:grpc-inprocess:GRPC_VERSION",
++        "io.grpc:grpc-netty:GRPC_VERSION",
++        "io.grpc:grpc-protobuf:GRPC_VERSION",
++        "io.grpc:grpc-protobuf-lite:GRPC_VERSION",
++        "io.grpc:grpc-stub:GRPC_VERSION",
+         "io.netty:netty-buffer:4.1.119.Final",
+         "io.netty:netty-codec:4.1.119.Final",
+         "io.netty:netty-codec-http:4.1.119.Final",
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
 index da1a8b9..a868033 100755
 --- a/third_party/grpc/BUILD
@@ -209,7 +234,7 @@ index 0000000..70906b6
 +bazel_dep(name = "rules_proto", version = "7.0.2")
 +bazel_dep(name = "rules_shell", version = "0.4.0")
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
-index e949edd..2a74377 100644
+index e949edd..571aba7 100644
 --- a/third_party/systemlibs/protobuf/BUILD
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -1,8 +1,12 @@
@@ -269,25 +294,7 @@ index e949edd..2a74377 100644
  }
  
  RELATIVE_WELL_KNOWN_PROTOS = [proto[1][0] for proto in WELL_KNOWN_PROTO_MAP.items()]
-@@ -81,6 +87,17 @@ cc_library(
- cc_library(
-     name = "protoc_lib",
-     linkopts = ["-lprotoc", "-lprotobuf", "-labsl_log_internal_check_op", "-labsl_log_internal_message", "-labsl_flags_reflection", "-labsl_hash", "-labsl_raw_hash_set", "-labsl_raw_logging_internal"],
-+    deps = [
-+        "@com_google_absl//absl/algorithm:container",
-+        "@com_google_absl//absl/cleanup",
-+        "@com_google_absl//absl/container:btree",
-+        "@com_google_absl//absl/container:flat_hash_map",
-+        "@com_google_absl//absl/log:absl_check",
-+        "@com_google_absl//absl/log:absl_log",
-+        "@com_google_absl//absl/log:absl_vlog_is_on",
-+        "@com_google_absl//absl/status:statusor",
-+        "@com_google_absl//absl/strings",
-+    ],
-     visibility = ["//visibility:public"],
- )
- 
-@@ -94,8 +111,6 @@ genrule(
+@@ -94,8 +100,6 @@ genrule(
  
  cc_proto_library(
      name = "cc_wkt_protos",
@@ -296,7 +303,7 @@ index e949edd..2a74377 100644
      visibility = ["//visibility:public"],
  )
  
-@@ -106,12 +121,6 @@ proto_gen(
+@@ -106,12 +110,6 @@ proto_gen(
      visibility = ["//visibility:public"],
  )
  
@@ -309,7 +316,7 @@ index e949edd..2a74377 100644
  java_library(
      name = "protobuf_java",
      exports = ["@maven_protobuf//:original_com_google_protobuf_protobuf_java"],
-@@ -145,3 +154,21 @@ proto_lang_toolchain(
+@@ -145,3 +143,21 @@ proto_lang_toolchain(
      visibility = ["//visibility:public"],
      deps = [dep + "_proto" for dep in proto[1][1]],
  ) for proto in WELL_KNOWN_PROTO_MAP.items()]
