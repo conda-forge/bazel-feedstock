@@ -1,7 +1,7 @@
 From 5a58ae745288adb3c4047931d45f319d67a5850e Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:08:16 +0100
-Subject: [PATCH 06/14] bazel bin loader path
+Subject: [PATCH 06/15] bazel bin loader path
 
 ---
  src/BUILD | 29 +++++++++++++++++++++++++++--

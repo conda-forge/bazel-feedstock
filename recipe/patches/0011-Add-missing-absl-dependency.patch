@@ -1,7 +1,7 @@
 From 7e7168e4b56e0cc722a010265e3adecb50e7d68d Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
-Subject: [PATCH 11/14] Add missing absl dependency
+Subject: [PATCH 11/15] Add missing absl dependency
 
 ---
  src/main/cpp/BUILD                            | 28 +++++++-

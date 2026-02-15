@@ -1,7 +1,7 @@
 From 9447ac765db118f64a7b8e227ee9997d8c0bd138 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 14 Feb 2026 07:06:30 +0100
-Subject: [PATCH 14/14] Additional fixes
+Subject: [PATCH 14/15] Additional fixes
 
 ---
  MODULE.bazel                                  | 33 ++++++--
