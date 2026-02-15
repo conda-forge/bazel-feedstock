@@ -1,14 +1,14 @@
-From 9447ac765db118f64a7b8e227ee9997d8c0bd138 Mon Sep 17 00:00:00 2001
+From 2f34702a341f6d9ece3eaca7d4bf183377fae3e6 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 14 Feb 2026 07:06:30 +0100
-Subject: [PATCH 14/15] Additional fixes
+Subject: [PATCH 14/14] Additional fixes
 
 ---
  MODULE.bazel                                  | 33 ++++++--
  third_party/grpc/BUILD                        |  1 +
  third_party/systemlibs/grpc/BUILD             | 70 ++++++++++++++++
  third_party/systemlibs/grpc/MODULE.bazel      | 10 +++
- third_party/systemlibs/protobuf/BUILD         | 63 ++++++++++----
+ third_party/systemlibs/protobuf/BUILD         | 54 +++++++-----
  .../systemlibs/protobuf/java/core/BUILD       |  3 +-
  third_party/systemlibs/protobuf/protobuf.bzl  |  6 +-
  third_party/systemlibs/protobuf/upb/BUILD     | 43 ++++++++++
@@ -23,7 +23,7 @@ Subject: [PATCH 14/15] Additional fixes
  .../systemlibs/protobuf/upb_generator/c/BUILD | 19 +++++
  .../protobuf/upb_generator/minitable/BUILD    | 20 +++++
  .../protobuf/upb_generator/reflection/BUILD   | 21 +++++
- 19 files changed, 412 insertions(+), 30 deletions(-)
+ 19 files changed, 402 insertions(+), 31 deletions(-)
  create mode 100644 third_party/systemlibs/grpc/BUILD
  create mode 100644 third_party/systemlibs/grpc/MODULE.bazel
  create mode 100644 third_party/systemlibs/protobuf/upb/BUILD
@@ -209,7 +209,7 @@ index 0000000..70906b6
 +bazel_dep(name = "rules_proto", version = "7.0.2")
 +bazel_dep(name = "rules_shell", version = "0.4.0")
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
-index e949edd..2a74377 100644
+index e949edd..fa8b7d5 100644
 --- a/third_party/systemlibs/protobuf/BUILD
 +++ b/third_party/systemlibs/protobuf/BUILD
 @@ -1,8 +1,12 @@
@@ -269,25 +269,15 @@ index e949edd..2a74377 100644
  }
  
  RELATIVE_WELL_KNOWN_PROTOS = [proto[1][0] for proto in WELL_KNOWN_PROTO_MAP.items()]
-@@ -81,6 +87,17 @@ cc_library(
- cc_library(
-     name = "protoc_lib",
-     linkopts = ["-lprotoc", "-lprotobuf", "-labsl_log_internal_check_op", "-labsl_log_internal_message", "-labsl_flags_reflection", "-labsl_hash", "-labsl_raw_hash_set", "-labsl_raw_logging_internal"],
-+    deps = [
-+        "@com_google_absl//absl/algorithm:container",
-+        "@com_google_absl//absl/cleanup",
-+        "@com_google_absl//absl/container:btree",
-+        "@com_google_absl//absl/container:flat_hash_map",
-+        "@com_google_absl//absl/log:absl_check",
-+        "@com_google_absl//absl/log:absl_log",
-+        "@com_google_absl//absl/log:absl_vlog_is_on",
-+        "@com_google_absl//absl/status:statusor",
-+        "@com_google_absl//absl/strings",
-+    ],
+@@ -87,15 +93,13 @@ cc_library(
+ genrule(
+     name = "protoc",
+     outs = ["protoc.bin"],
+-    cmd = "ln -s ${BUILD_PREFIX}/bin/protoc $@",
++    cmd = "ln -s /Users/uwe/.pixi/envs/conda-build/conda-bld/bazel_1770922284082/_build_env/bin/protoc $@",
+     executable = 1,
      visibility = ["//visibility:public"],
  )
- 
-@@ -94,8 +111,6 @@ genrule(
  
  cc_proto_library(
      name = "cc_wkt_protos",
@@ -296,7 +286,7 @@ index e949edd..2a74377 100644
      visibility = ["//visibility:public"],
  )
  
-@@ -106,12 +121,6 @@ proto_gen(
+@@ -106,12 +110,6 @@ proto_gen(
      visibility = ["//visibility:public"],
  )
  
@@ -309,7 +299,7 @@ index e949edd..2a74377 100644
  java_library(
      name = "protobuf_java",
      exports = ["@maven_protobuf//:original_com_google_protobuf_protobuf_java"],
-@@ -145,3 +154,21 @@ proto_lang_toolchain(
+@@ -145,3 +143,21 @@ proto_lang_toolchain(
      visibility = ["//visibility:public"],
      deps = [dep + "_proto" for dep in proto[1][1]],
  ) for proto in WELL_KNOWN_PROTO_MAP.items()]

@@ -1,7 +1,7 @@
 From dad786fad11d21c9882d2e997d25f5ded9c787e6 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
-Subject: [PATCH 12/15] avoid linking to grpc{,++}_unsecure; use regular
+Subject: [PATCH 12/14] avoid linking to grpc{,++}_unsecure; use regular
  variant instead
 
 also link to absl_strings, whose linkage has been made private in grpc, see
