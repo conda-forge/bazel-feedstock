@@ -61,17 +61,17 @@ export GRPC_VERSION=$(conda list -p $PREFIX libgrpc --fields version | grep -v '
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
-export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain --toolchain_resolution_debug='.*' --noincompatible_enable_proto_toolchain_resolution"
+export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain --noincompatible_enable_proto_toolchain_resolution"
 if [[ "${target_platform}" == "osx-arm64" ]]; then
   export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --macos_cpus=arm64 --@apple_support//platforms:macos_x86_64_platform=//bazel_toolchain:target_platform --@apple_support//platforms:macos_arm64_platform=//bazel_toolchain:target_platform"
 elif [[ "${target_platform}" == "osx-64" ]]; then
   export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --macos_cpus=x86_64 --@apple_support//platforms:macos_x86_64_platform=//bazel_toolchain:target_platform --@apple_support//platforms:macos_arm64_platform=//bazel_toolchain:target_platform"
 fi
-export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=21 --toolchain_resolution_debug='@@bazel_tools//tools/cpp:toolchain_type'"
+export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=21"
 
-sed -ie "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
-sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
-sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
+sed -i "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
+sed -i "s:\${PREFIX}:${PREFIX}:" src/BUILD
+sed -i "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
         third_party/grpc/BUILD \
         third_party/grpc-java/BUILD \
         third_party/systemlibs/protobuf/BUILD \
@@ -82,18 +82,18 @@ sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
 	third_party/systemlibs/grpc/BUILD \
 	third_party/ijar/BUILD \
         src/tools/singlejar/BUILD
-sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
-sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
-sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" \
+sed -i "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
+sed -i "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
+sed -i "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/absl/MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
-sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
+sed -i "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
 sed -i "s:PROTOC_VERSION:${PROTOC_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
-sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" \
+sed -i "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
 
