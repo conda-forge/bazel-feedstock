@@ -136,5 +136,7 @@ done
 find $PREFIX/share/bazel/install/${INSTALL_BASE_KEY} -type f | xargs touch -mt $(($(date '+%Y') + 10))10101010
 chmod -R a-w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
 
-# Clean up working directory to speedup any conda-build post-processing
-bazel clean --expunge
+if [[ "${build_platform}" == "${target_platform}" ]]; then
+  # Clean up working directory to speedup any conda-build post-processing
+  bazel clean --expunge
+fi
