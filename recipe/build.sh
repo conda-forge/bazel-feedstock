@@ -78,9 +78,6 @@ sed -i "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
         third_party/grpc-java/BUILD \
         third_party/systemlibs/protobuf/BUILD \
 	third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD \
-	third_party/systemlibs/protobuf/upb_generator/c/BUILD \
-	third_party/systemlibs/protobuf/upb_generator/minitable/BUILD \
-	third_party/systemlibs/protobuf/upb_generator/reflection/BUILD \
 	third_party/systemlibs/grpc/BUILD \
 	third_party/ijar/BUILD \
         src/tools/singlejar/BUILD
