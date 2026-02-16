@@ -52,7 +52,7 @@ requirements:
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
-    - bazel-toolchain >=0.5.0  # [unix]
+    - bazel-toolchain >=0.5.1  # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
@@ -74,7 +74,7 @@ test:
   requires:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain >=0.5    # [unix]
+    - bazel-toolchain >=0.5.1  # [unix]
   commands:
     - bazel -h
     - bazel version

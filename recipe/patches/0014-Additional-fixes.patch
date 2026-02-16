@@ -1,14 +1,14 @@
-From 67b88eaedbf9afdfdabd3ec88566acd838c90692 Mon Sep 17 00:00:00 2001
+From a96c6dd972970c51faecc2ca30e2644b0ac80a98 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 14 Feb 2026 07:06:30 +0100
 Subject: [PATCH 14/14] Additional fixes
 
 ---
- MODULE.bazel                                  | 51 ++++++++----
+ MODULE.bazel                                  | 55 +++++++++----
  third_party/grpc/BUILD                        |  1 +
  third_party/systemlibs/grpc/BUILD             | 70 ++++++++++++++++
  third_party/systemlibs/grpc/MODULE.bazel      | 10 +++
- third_party/systemlibs/protobuf/BUILD         | 52 ++++++++----
+ third_party/systemlibs/protobuf/BUILD         | 38 +++++----
  .../systemlibs/protobuf/java/core/BUILD       |  3 +-
  third_party/systemlibs/protobuf/protobuf.bzl  |  6 +-
  third_party/systemlibs/protobuf/upb/BUILD     | 43 ++++++++++
@@ -23,7 +23,7 @@ Subject: [PATCH 14/14] Additional fixes
  .../systemlibs/protobuf/upb_generator/c/BUILD | 19 +++++
  .../protobuf/upb_generator/minitable/BUILD    | 20 +++++
  .../protobuf/upb_generator/reflection/BUILD   | 21 +++++
- 19 files changed, 410 insertions(+), 39 deletions(-)
+ 19 files changed, 400 insertions(+), 39 deletions(-)
  create mode 100644 third_party/systemlibs/grpc/BUILD
  create mode 100644 third_party/systemlibs/grpc/MODULE.bazel
  create mode 100644 third_party/systemlibs/protobuf/upb/BUILD
@@ -40,10 +40,10 @@ Subject: [PATCH 14/14] Additional fixes
  create mode 100644 third_party/systemlibs/protobuf/upb_generator/reflection/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 3b2bd3a..46ffdfe 100755
+index 3b2bd3a..a7cb823 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -41,7 +41,7 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
+@@ -41,17 +41,25 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
  # Depend on apple_support first and then rules_cc so that the Xcode toolchain
  # from apple_support wins over the generic Unix toolchain from rules_cc.
  bazel_dep(name = "apple_support", version = "1.24.5")
@@ -52,7 +52,14 @@ index 3b2bd3a..46ffdfe 100755
  
  # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
  # load the rule class directly, so we need to expose the cc_compatibility_proxy
-@@ -52,6 +52,10 @@ local_path_override(
+ # repo for access to the symbols
+ cc_compatibility_proxy = use_extension("@rules_cc//cc:extensions.bzl", "compatibility_proxy")
+ use_repo(cc_compatibility_proxy, "cc_compatibility_proxy")
++local_path_override(
++    module_name = "abseil-cpp",
++    path = "./third_party/systemlibs/absl",
++)
+ local_path_override(
      module_name = "protobuf",
      path = "./third_party/systemlibs/protobuf",
  )
@@ -63,7 +70,7 @@ index 3b2bd3a..46ffdfe 100755
  
  # TODO: wyv@ - add remoteapis to the BCR
  bazel_dep(name = "remoteapis", version = "")
-@@ -70,13 +74,6 @@ single_version_override(
+@@ -70,13 +78,6 @@ single_version_override(
      version = "6.6",
  )
  
@@ -77,7 +84,7 @@ index 3b2bd3a..46ffdfe 100755
  # TODO(pcloudy): Remove once the next version of rules_graalvm is available.
  single_version_override(
      module_name = "rules_graalvm",
-@@ -88,6 +85,26 @@ single_version_override(
+@@ -88,6 +89,26 @@ single_version_override(
      ],
  )
  
@@ -104,7 +111,7 @@ index 3b2bd3a..46ffdfe 100755
  local_path_override(
      module_name = "remoteapis",
      path = "./third_party/remoteapis",
-@@ -140,15 +157,15 @@ maven.install(
+@@ -140,15 +161,15 @@ maven.install(
          "commons-collections:commons-collections:3.2.2",
          "commons-lang:commons-lang:2.6",
          "io.github.java-diff-utils:java-diff-utils:4.12",
@@ -234,25 +241,23 @@ index 0000000..70906b6
 +bazel_dep(name = "rules_proto", version = "7.0.2")
 +bazel_dep(name = "rules_shell", version = "0.4.0")
 diff --git a/third_party/systemlibs/protobuf/BUILD b/third_party/systemlibs/protobuf/BUILD
-index e949edd..571aba7 100644
+index e949edd..6dbb56d 100644
 --- a/third_party/systemlibs/protobuf/BUILD
 +++ b/third_party/systemlibs/protobuf/BUILD
-@@ -1,8 +1,12 @@
+@@ -1,8 +1,10 @@
 -load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain", "proto_library")
 +load("@rules_java//java:defs.bzl", "java_library")
  load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test", "objc_library")
 +load("//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
 +load("//bazel:cc_proto_library.bzl", "cc_proto_library")
 +load("//bazel:proto_library.bzl", "proto_library")
-+load("//bazel:upb_c_proto_library.bzl", "upb_c_proto_library")
-+load("//bazel:upb_minitable_proto_library.bzl", "upb_minitable_proto_library")
  load(
      ":protobuf.bzl",
 -    "cc_proto_library",
      "proto_gen",
      "py_proto_library",
  )
-@@ -23,10 +27,11 @@ alias(
+@@ -23,10 +25,11 @@ alias(
  # Map of all well known protos.
  # name => (include path, imports)
  WELL_KNOWN_PROTO_MAP = {
@@ -265,7 +270,7 @@ index e949edd..571aba7 100644
              "source_context",
              "type",
          ],
-@@ -36,20 +41,21 @@ WELL_KNOWN_PROTO_MAP = {
+@@ -36,20 +39,21 @@ WELL_KNOWN_PROTO_MAP = {
          ["descriptor"],
      ),
      "descriptor": ("google/protobuf/descriptor.proto", []),
@@ -294,7 +299,7 @@ index e949edd..571aba7 100644
  }
  
  RELATIVE_WELL_KNOWN_PROTOS = [proto[1][0] for proto in WELL_KNOWN_PROTO_MAP.items()]
-@@ -94,8 +100,6 @@ genrule(
+@@ -94,8 +98,6 @@ genrule(
  
  cc_proto_library(
      name = "cc_wkt_protos",
@@ -303,7 +308,7 @@ index e949edd..571aba7 100644
      visibility = ["//visibility:public"],
  )
  
-@@ -106,12 +110,6 @@ proto_gen(
+@@ -106,12 +108,6 @@ proto_gen(
      visibility = ["//visibility:public"],
  )
  
@@ -316,7 +321,7 @@ index e949edd..571aba7 100644
  java_library(
      name = "protobuf_java",
      exports = ["@maven_protobuf//:original_com_google_protobuf_protobuf_java"],
-@@ -145,3 +143,21 @@ proto_lang_toolchain(
+@@ -145,3 +141,9 @@ proto_lang_toolchain(
      visibility = ["//visibility:public"],
      deps = [dep + "_proto" for dep in proto[1][1]],
  ) for proto in WELL_KNOWN_PROTO_MAP.items()]
@@ -326,18 +331,6 @@ index e949edd..571aba7 100644
 +    deps = [":" + proto[0] + "_proto"],
 +    visibility = ["//visibility:public"],
 +) for proto in WELL_KNOWN_PROTO_MAP.items()]
-+
-+upb_c_proto_library(
-+    name = "descriptor_upb_c_proto",
-+    visibility = ["//visibility:public"],
-+    deps = ["descriptor_proto"],
-+)
-+
-+upb_minitable_proto_library(
-+    name = "descriptor_upb_minitable_proto",
-+    visibility = ["//visibility:public"],
-+    deps = ["descriptor_proto"],
-+)
 diff --git a/third_party/systemlibs/protobuf/java/core/BUILD b/third_party/systemlibs/protobuf/java/core/BUILD
 index 162a240..5c6a355 100644
 --- a/third_party/systemlibs/protobuf/java/core/BUILD

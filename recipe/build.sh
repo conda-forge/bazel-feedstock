@@ -22,6 +22,28 @@ for _tc_cfg in bazel_toolchain/cc_toolchain_config.bzl bazel_toolchain/cc_toolch
   }' "$_tc_cfg"
 done
 
+# Prepare systemlibs defintions
+mkdir -p third_party/systemlibs
+rm -rf third_party/systemlibs/absl
+cp -ap $RECIPE_DIR/systemlibs/absl third_party/systemlibs/
+
+cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
+cp -ap $PREFIX/share/bazel/grpc/bazel third_party/systemlibs/grpc/
+
+# TODO: Patch grpc-bazel-rules
+sed -i '/^load("\/\/bazel:protobuf\.bzl",/a load("@rules_cc//cc:cc_library.bzl", "cc_library")' third_party/systemlibs/grpc/bazel/cc_grpc_library.bzl
+sed -i 's/native.cc_library/cc_library/' third_party/systemlibs/grpc/bazel/cc_grpc_library.bzl
+# Make the rules repository-local
+sed -i 's/\@com_github_grpc_grpc//' third_party/systemlibs/grpc/bazel/*.bzl
+
+# Bazel 9 removed native proto rules but kept stubs that fail; always use Starlark versions
+sed -i 's/if not hasattr(native,.*/if True:/' \
+    third_party/systemlibs/protobuf/bazel/cc_proto_library.bzl \
+    third_party/systemlibs/protobuf/bazel/java_proto_library.bzl \
+    third_party/systemlibs/protobuf/bazel/java_lite_proto_library.bzl \
+    third_party/systemlibs/protobuf/bazel/proto_library.bzl
+
+
 if [[ "${target_platform}" == "osx-64" ]]; then
   export TARGET_CPU="darwin"
 fi
@@ -46,19 +68,13 @@ elif [[ "${target_platform}" == "osx-64" ]]; then
   export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --macos_cpus=x86_64 --@apple_support//platforms:macos_x86_64_platform=//bazel_toolchain:target_platform --@apple_support//platforms:macos_arm64_platform=//bazel_toolchain:target_platform"
 fi
 export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=21 --toolchain_resolution_debug='@@bazel_tools//tools/cpp:toolchain_type'"
-sed -i "s:PROTOC_VERSION:${PROTOC_VERSION}:" \
-    MODULE.bazel \
-    third_party/systemlibs/protobuf/MODULE.bazel \
-    third_party/systemlibs/grpc/MODULE.bazel
-sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" \
-    MODULE.bazel \
-    third_party/systemlibs/protobuf/MODULE.bazel
+
 sed -ie "s:\${INSTALL_NAME_TOOL}:${INSTALL_NAME_TOOL:-install_name_tool}:" src/BUILD
 sed -ie "s:\${PREFIX}:${PREFIX}:" src/BUILD
-sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc/BUILD
-sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/grpc-java/BUILD
-sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/protobuf/BUILD
 sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
+        third_party/grpc/BUILD \
+        third_party/grpc-java/BUILD \
+        third_party/systemlibs/protobuf/BUILD \
 	third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD \
 	third_party/systemlibs/protobuf/upb_generator/c/BUILD \
 	third_party/systemlibs/protobuf/upb_generator/minitable/BUILD \
@@ -68,28 +84,18 @@ sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
         src/tools/singlejar/BUILD
 sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
 sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
-sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
-sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" MODULE.bazel
+sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" \
+    MODULE.bazel \
+    third_party/systemlibs/absl/MODULE.bazel \
+    third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
-
-cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
-cp -ap $PREFIX/share/bazel/grpc/bazel third_party/systemlibs/grpc/
-
-# TODO: Patch grpc-bazel-rules
-sed -i '/^load("\/\/bazel:protobuf\.bzl",/a load("@rules_cc//cc:cc_library.bzl", "cc_library")' third_party/systemlibs/grpc/bazel/cc_grpc_library.bzl
-sed -i 's/native.cc_library/cc_library/' third_party/systemlibs/grpc/bazel/cc_grpc_library.bzl
-# Make the rules repository-local
-sed -i 's/\@com_github_grpc_grpc//' third_party/systemlibs/grpc/bazel/*.bzl
-
-# Bazel 9 removed native proto rules but kept stubs that fail; always use Starlark versions
-sed -i 's/if not hasattr(native,.*/if True:/' \
-    third_party/systemlibs/protobuf/bazel/cc_proto_library.bzl \
-    third_party/systemlibs/protobuf/bazel/java_proto_library.bzl \
-    third_party/systemlibs/protobuf/bazel/java_lite_proto_library.bzl \
-    third_party/systemlibs/protobuf/bazel/proto_library.bzl
-
-# rules_java 9 disallows deps without srcs in java_library; use runtime_deps instead
-#sed -ie '/runtime_deps/!s/deps = \["@maven_protobuf/runtime_deps = ["@maven_protobuf/' third_party/systemlibs/protobuf/BUILD
+sed -i "s:PROTOC_VERSION:${PROTOC_VERSION}:" \
+    MODULE.bazel \
+    third_party/systemlibs/protobuf/MODULE.bazel \
+    third_party/systemlibs/grpc/MODULE.bazel
+sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" \
+    MODULE.bazel \
+    third_party/systemlibs/protobuf/MODULE.bazel
 
 ./compile.sh
 
