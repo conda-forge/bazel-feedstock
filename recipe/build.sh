@@ -26,6 +26,8 @@ done
 mkdir -p third_party/systemlibs
 rm -rf third_party/systemlibs/absl
 cp -ap $RECIPE_DIR/systemlibs/absl third_party/systemlibs/
+rm -rf third_party/systemlibs/grpc
+cp -ap $RECIPE_DIR/systemlibs/grpc third_party/systemlibs/
 
 cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
 cp -ap $PREFIX/share/bazel/grpc/bazel third_party/systemlibs/grpc/
@@ -88,7 +90,9 @@ sed -i "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/absl/MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
-sed -i "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
+sed -i "s:GRPC_VERSION:${GRPC_VERSION}:" \
+    MODULE.bazel \
+    third_party/systemlibs/grpc/MODULE.bazel
 sed -i "s:PROTOC_VERSION:${PROTOC_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel \
