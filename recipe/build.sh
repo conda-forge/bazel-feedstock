@@ -23,11 +23,8 @@ for _tc_cfg in bazel_toolchain/cc_toolchain_config.bzl bazel_toolchain/cc_toolch
 done
 
 # Prepare systemlibs defintions
-mkdir -p third_party/systemlibs
-rm -rf third_party/systemlibs/absl
-cp -ap $RECIPE_DIR/systemlibs/absl third_party/systemlibs/
-rm -rf third_party/systemlibs/grpc
-cp -ap $RECIPE_DIR/systemlibs/grpc third_party/systemlibs/
+rm -rf third_party/systemlibs/
+cp -ap $RECIPE_DIR/systemlibs third_party/
 
 cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
 cp -ap $PREFIX/share/bazel/grpc/bazel third_party/systemlibs/grpc/
