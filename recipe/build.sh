@@ -90,6 +90,12 @@ sed -i "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
 
+if [[ "${build_platform}" == linux-* ]]; then
+    sed -i "s:\"unzip:\"$BUILD_PREFIX/bin/unzip:" tools/build_rules/java_rules_skylark.bzl
+    sed -i "s:\\sunzip: $BUILD_PREFIX/bin/unzip:" third_party/BUILD
+    sed -i "s:\\szip: $BUILD_PREFIX/bin/zip:" third_party/BUILD
+fi
+
 ./compile.sh
 
 mkdir -p $PREFIX/bin/
