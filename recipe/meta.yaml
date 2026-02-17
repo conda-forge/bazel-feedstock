@@ -68,7 +68,7 @@ test:
   requires:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain >=0.5  # [unix]
+    - bazel-toolchain >=0.5.1  # [unix]
   commands:
     - bazel -h
     - bazel version
