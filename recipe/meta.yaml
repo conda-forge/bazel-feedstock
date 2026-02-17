@@ -19,7 +19,7 @@ source:
       - patches/0005-bazel-bin-loader-path.patch                                 # [osx]
       - patches/0006-Adjust-cross-bazel-resultpath.patch                         # [unix]
       - patches/0007-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch  # [unix]
-      - patches/0008-Build-with-native-dependencies.patch                        # [unix
+      - patches/0008-Build-with-native-dependencies.patch                        # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
     sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8  # [win]
