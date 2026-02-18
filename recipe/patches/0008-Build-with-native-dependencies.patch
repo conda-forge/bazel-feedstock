@@ -1,4 +1,4 @@
-From 28db811723186b64f64d40445cab0fb953b30c46 Mon Sep 17 00:00:00 2001
+From bc557e3a8174200272c03230b8c5220bc87819b0 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 8/8] Build with native dependencies
@@ -227,7 +227,7 @@ index d385177..db65056 100755
      ],
  )
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index 822d03d..a868033 100755
+index 822d03d..f307b1d 100755
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -13,6 +13,7 @@
@@ -250,7 +250,7 @@ index 822d03d..a868033 100755
 -        "//conditions:default": "@com_github_grpc_grpc//src/compiler:grpc_cpp_plugin",
 -    }),
 +    outs = ["grpc-cpp-plugin.out"],
-+    cmd = "ln -s /Users/uwe/.pixi/envs/conda-build/conda-bld/bazel_1770922284082/_build_env/bin/grpc_cpp_plugin $@",
++    cmd = "ln -s ${BUILD_PREFIX}/bin/grpc_cpp_plugin $@",
 +    executable = 1,
 +    visibility = ["//visibility:public"],
  )
