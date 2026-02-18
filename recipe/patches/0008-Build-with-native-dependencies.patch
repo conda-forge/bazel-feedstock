@@ -1,0 +1,258 @@
+From bc557e3a8174200272c03230b8c5220bc87819b0 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <uwelk@xhochy.com>
+Date: Sun, 21 Mar 2021 21:26:54 +0100
+Subject: [PATCH 8/8] Build with native dependencies
+
+---
+ MODULE.bazel                                  | 69 ++++++++-----------
+ compile.sh                                    |  9 +++
+ src/main/cpp/BUILD                            | 28 +++++++-
+ .../java/com/google/devtools/build/lib/BUILD  |  2 +-
+ third_party/grpc/BUILD                        | 11 +--
+ 5 files changed, 69 insertions(+), 50 deletions(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index d33fff2..a7cb823 100755
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -13,24 +13,24 @@ module(
+ # Bazel module dependencies
+ # =========================================
+ 
+-bazel_dep(name = "abseil-cpp", version = "20250814.1")
++bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
+ bazel_dep(name = "bazel_skylib", version = "1.8.2")
+ bazel_dep(name = "blake3", version = "1.8.2")
+ bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
+ bazel_dep(name = "googleapis-java", version = "1.0.0")
+ bazel_dep(name = "googleapis", version = "0.0.0-20250604-de157ca3")
+ bazel_dep(name = "googletest", version = "1.17.0.bcr.2", repo_name = "com_google_googletest")
+-bazel_dep(name = "grpc-java", version = "1.71.0")
+-bazel_dep(name = "grpc", version = "1.76.0.bcr.1", repo_name = "com_github_grpc_grpc")
++bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
++bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
+ bazel_dep(name = "platforms", version = "1.0.0")
+-bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
++bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
+ bazel_dep(name = "re2", version = "2025-11-05.bcr.1")
+ bazel_dep(name = "rules_graalvm", version = "0.11.1")
+ bazel_dep(name = "rules_java", version = "9.0.3")
+ bazel_dep(name = "rules_jvm_external", version = "6.6")
+ bazel_dep(name = "rules_license", version = "1.0.0")
+ bazel_dep(name = "rules_pkg", version = "1.1.0")
+-bazel_dep(name = "rules_python", version = "1.7.0")
++bazel_dep(name = "rules_python", version = "1.8.4")
+ bazel_dep(name = "rules_shell", version = "0.6.1")
+ bazel_dep(name = "rules_testing", version = "0.9.0")
+ bazel_dep(name = "stardoc", version = "0.8.0", repo_name = "io_bazel_skydoc")
+@@ -41,13 +41,25 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
+ # Depend on apple_support first and then rules_cc so that the Xcode toolchain
+ # from apple_support wins over the generic Unix toolchain from rules_cc.
+ bazel_dep(name = "apple_support", version = "1.24.5")
+-bazel_dep(name = "rules_cc", version = "0.2.14")
++bazel_dep(name = "rules_cc", version = "0.2.15")
+ 
+ # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
+ # load the rule class directly, so we need to expose the cc_compatibility_proxy
+ # repo for access to the symbols
+ cc_compatibility_proxy = use_extension("@rules_cc//cc:extensions.bzl", "compatibility_proxy")
+ use_repo(cc_compatibility_proxy, "cc_compatibility_proxy")
++local_path_override(
++    module_name = "abseil-cpp",
++    path = "./third_party/systemlibs/absl",
++)
++local_path_override(
++    module_name = "protobuf",
++    path = "./third_party/systemlibs/protobuf",
++)
++local_path_override(
++    module_name = "grpc",
++    path = "./third_party/systemlibs/grpc",
++)
+ 
+ # TODO: wyv@ - add remoteapis to the BCR
+ bazel_dep(name = "remoteapis", version = "")
+@@ -97,33 +109,6 @@ single_version_override(
+     version = "1.2.1.bcr.1",
+ )
+ 
+-# 1. Expose @com_google_protobuf//java/core:lite_runtime_only
+-# due to https://github.com/protocolbuffers/protobuf/commit/079be27925955348d1b3cb30ffbfa33dcec5778c
+-# We need to package the lite runtime jar for Bazel's bootstrap build
+-# 2. Partially revert of https://github.com/protocolbuffers/protobuf/commit/7ec5e19c0743b80c5097434a05cc0e972e7b4e7a
+-# to support grpc
+-single_version_override(
+-    module_name = "protobuf",
+-    patch_strip = 1,
+-    patches = ["//third_party:protobuf.patch"],
+-    version = "33.4",
+-)
+-
+-# Remove once the following PRs are available in a grpc-java release.
+-#   https://github.com/grpc/grpc-java/pull/12148
+-#   https://github.com/grpc/grpc-java/pull/12207
+-#   https://github.com/grpc/grpc-java/pull/12222
+-single_version_override(
+-    module_name = "grpc-java",
+-    patch_strip = 1,
+-    patches = [
+-        "//third_party:grpc-java.patch",
+-        "//third_party:grpc-java-12207.patch",
+-        "//third_party:grpc-java-12222.patch",
+-        "//third_party:grpc-java-addloads.patch",
+-    ],
+-)
+-
+ local_path_override(
+     module_name = "remoteapis",
+     path = "./third_party/remoteapis",
+@@ -176,15 +161,15 @@ maven.install(
+         "commons-collections:commons-collections:3.2.2",
+         "commons-lang:commons-lang:2.6",
+         "io.github.java-diff-utils:java-diff-utils:4.12",
+-        "io.grpc:grpc-api:1.66.0",
+-        "io.grpc:grpc-auth:1.66.0",
+-        "io.grpc:grpc-context:1.66.0",
+-        "io.grpc:grpc-core:1.66.0",
+-        "io.grpc:grpc-inprocess:1.66.0",
+-        "io.grpc:grpc-netty:1.66.0",
+-        "io.grpc:grpc-protobuf:1.66.0",
+-        "io.grpc:grpc-protobuf-lite:1.66.0",
+-        "io.grpc:grpc-stub:1.66.0",
++        "io.grpc:grpc-api:GRPC_VERSION",
++        "io.grpc:grpc-auth:GRPC_VERSION",
++        "io.grpc:grpc-context:GRPC_VERSION",
++        "io.grpc:grpc-core:GRPC_VERSION",
++        "io.grpc:grpc-inprocess:GRPC_VERSION",
++        "io.grpc:grpc-netty:GRPC_VERSION",
++        "io.grpc:grpc-protobuf:GRPC_VERSION",
++        "io.grpc:grpc-protobuf-lite:GRPC_VERSION",
++        "io.grpc:grpc-stub:GRPC_VERSION",
+         "io.netty:netty-buffer:4.1.119.Final",
+         "io.netty:netty-codec:4.1.119.Final",
+         "io.netty:netty-codec-http:4.1.119.Final",
+diff --git a/compile.sh b/compile.sh
+index 0c0edf6..abadf80 100755
+--- a/compile.sh
++++ b/compile.sh
+@@ -60,8 +60,17 @@ if [[ $PLATFORM == "darwin" ]] && \
+   EXTRA_BAZEL_ARGS="${EXTRA_BAZEL_ARGS-} --define IPHONE_SDK=1"
+ fi
+ 
++# The bootstrapped Bazel has no embedded version, so native.bazel_version returns "".
++# bazel_features treats "" as a dev version (999999.999999.999999), causing rules_cc's
++# compatibility proxy to incorrectly select the Bazel 9+ code path.
++export BAZEL_DEV_VERSION_OVERRIDE="${PKG_VERSION}"
++
+ source scripts/bootstrap/bootstrap.sh
+ 
++# Make Java code compatible with newer protobuf release now as the bootstrap builds with the old release
++sed -i 's/includingDefaultValueFields/alwaysPrintFieldsWithNoPresence/g' src/main/java/com/google/devtools/build/lib/util/io/MessageOutputStreamWrapper.java
++sed -i 's/includingDefaultValueFields/alwaysPrintFieldsWithNoPresence/g' src/main/java/com/google/devtools/build/lib/worker/JsonWorkerMessageProcessor.java
++
+ new_step 'Building Bazel with Bazel'
+ display "."
+ log "Building output/bazel"
+diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
+index c973f0a..944f1e6 100755
+--- a/src/main/cpp/BUILD
++++ b/src/main/cpp/BUILD
+@@ -93,6 +93,15 @@ cc_library(
+     ],
+ )
+ 
++# cannot do `[...] + select(...)` in starlark, so factor out common libraries into
++# a variable; note that this is likely not the full list, because we're inheriting
++# the linkopts from protobuf (see third_party/systemlibs/protobuf/BUILD), so several
++# abseil libraries will already be present
++_CLIENT_LINKOPTS = [
++    "-labsl_log_severity",
++    "-labsl_synchronization",
++]
++
+ cc_binary(
+     name = "client",
+     srcs = [
+@@ -110,7 +119,7 @@ cc_binary(
+         "//conditions:default": ["-Wno-sign-compare"],
+     }),
+     linkopts = select({
+-        "//src/conditions:darwin": [
++        "//src/conditions:darwin": _CLIENT_LINKOPTS + [
+         ],
+         "//src/conditions:freebsd": [
+             "-lprocstat",
+@@ -120,7 +129,7 @@ cc_binary(
+         ],
+         "//src/conditions:windows": [
+         ],
+-        "//conditions:default": [
++        "//conditions:default": _CLIENT_LINKOPTS + [
+             "-lrt",
+             "-ldl",
+         ],
+@@ -143,6 +152,21 @@ cc_binary(
+         "//src/main/protobuf:command_server_cc_grpc",
+         "//src/main/protobuf:command_server_cc_proto",
+         "//third_party/ijar:zip",
++        # required dependencies we need to add because we're unvendoring; however, any
++        # `@abseil-cpp//absl/foo` added here don't actually take effect from the POV
++        # of the linker, because abseil will by default look for a static library, e.g.
++        #   bazel-out/darwin-opt/bin/external/abseil-cpp~/absl/foo/libfoo.a
++        # This could be because we're building abseil itself with CMake rather than
++        # bazel (so the metadata might be off). Rather than come up with complicated
++        # wrappers, we abuse linkopts to add the right libraries (see above).
++        "@abseil-cpp//absl/base:log_severity",
++        "@abseil-cpp//absl/log:absl_check",
++        "@abseil-cpp//absl/container:flat_hash_map",
++        "@abseil-cpp//absl/container:btree",
++        "@abseil-cpp//absl/log:log",
++        "@abseil-cpp//absl/log:absl_log",
++        "@abseil-cpp//absl/strings:cord",
++        "@abseil-cpp//absl/status:statusor",
+     ],
+ )
+ 
+diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
+index d385177..db65056 100755
+--- a/src/main/java/com/google/devtools/build/lib/BUILD
++++ b/src/main/java/com/google/devtools/build/lib/BUILD
+@@ -582,7 +582,7 @@ java_library(
+         "//third_party:guava",
+         "//third_party:jsr305",
+         "@com_google_protobuf//:protobuf_java",
+-        "@com_google_protobuf//java/util",
++        "@com_google_protobuf//:protobuf_java_util",
+         "@zstd-jni//:zstd-jni",
+     ],
+ )
+diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+index 822d03d..f307b1d 100755
+--- a/third_party/grpc/BUILD
++++ b/third_party/grpc/BUILD
+@@ -13,6 +13,7 @@
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
++load("@rules_cc//cc:cc_library.bzl", "cc_library")
+ load("@rules_license//rules:license.bzl", "license")
+ 
+ licenses(["notice"])  # Apache v2
+@@ -39,12 +40,12 @@ filegroup(
+     ],
+ )
+ 
+-alias(
++genrule(
+     name = "cpp_plugin",
+-    actual = select({
+-        "//src/conditions:debian_build": "@debian_bin_deps//:grpc-cpp-plugin",
+-        "//conditions:default": "@com_github_grpc_grpc//src/compiler:grpc_cpp_plugin",
+-    }),
++    outs = ["grpc-cpp-plugin.out"],
++    cmd = "ln -s ${BUILD_PREFIX}/bin/grpc_cpp_plugin $@",
++    executable = 1,
++    visibility = ["//visibility:public"],
+ )
+ 
+ alias(

@@ -1,4 +1,4 @@
-{% set version = "8.5.1" %}
+{% set version = "9.0.0" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,24 +7,22 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: bf66a1cbaaafec32e1e103d0e07343082f1f0f3f20ad4c6b66c4eda3f690ed4d
+    sha256: dfa496089624d726a158afcac353725166f81c5708ee1ecc9e662f2891b3544d
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
       # taken over here, or synced back if change is necessary
-      - patches/0001-allow-args-to-be-passed-to-bazel_build.patch  # [unix]
-      - patches/0002-Build-with-native-dependencies.patch          # [unix]
-      - patches/0003-use-C-17.patch                                # [unix]
-      - patches/0004-Use-conda-packages-for-build-tools.patch      # [unix]
-      - patches/0005-grpc-java-plugin-from-build.patch             # [unix]
-      - patches/0006-bazel-bin-loader-path.patch                   # [osx]
-      - patches/0007-Adjust-cross-bazel-resultpath.patch           # [unix]
-      - patches/0008-Install-protobuf-via-maven.patch              # [unix]
-      - patches/0009-Adopt-system-libprotobuf.patch                # [unix]
-      - patches/0010-Enable-new-protobuf-major-release.patch       # [unix]
-      - patches/0011-Add-missing-absl-dependency.patch             # [unix]
+      - patches/0001-allow-args-to-be-passed-to-bazel_build.patch                # [unix]
+      - patches/0002-use-C-17.patch                                              # [unix]
+      - patches/0003-Use-conda-packages-for-build-tools.patch                    # [unix]
+      - patches/0004-grpc-java-plugin-from-build.patch                           # [unix]
+      - patches/0005-bazel-bin-loader-path.patch                                 # [osx]
+      - patches/0006-Adjust-cross-bazel-resultpath.patch                         # [unix]
+      - patches/0007-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch  # [unix]
+      - patches/0008-Build-with-native-dependencies.patch                        # [unix]
+
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 9a601cb16c254b77a220a1fa04b520b87d2e4539af26be33837322cdcfabdb68  # [win]
+    sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8  # [win]
 
 build:
   number: 0
@@ -43,12 +41,12 @@ requirements:
     - sed                      # [unix]
     - openjdk 21.*             # [unix]
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
-    - grpc_java_plugin <1.74   # [unix]
+    - grpc_java_plugin         # [unix]
     - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
-    - bazel-toolchain >=0.2.0,<0.5  # [unix]
+    - bazel-toolchain >=0.5.1  # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
     - python *                 # [win]
@@ -57,6 +55,7 @@ requirements:
     - libgrpc               # [unix]
     - libprotobuf           # [unix]
     - protobuf-bazel-rules  # [unix]
+    - grpc-bazel-rules      # [unix]
     - openjdk 21.*          # [win]
     - posix                 # [win]
   run:
@@ -69,7 +68,7 @@ test:
   requires:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - bazel-toolchain >=0.2,<0.5  # [unix]
+    - bazel-toolchain >=0.5.1  # [unix]
   commands:
     - bazel -h
     - bazel version

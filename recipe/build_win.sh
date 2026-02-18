@@ -9,7 +9,6 @@ ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out 
 	--nojava_header_compilation \
 	--strategy=Javac=worker \
 	--worker_quit_after_build \
-	--ignore_unsupported_sandboxing \
 	--compilation_mode=opt \
 	--enable_bzlmod \
 	--check_direct_dependencies=error \
