@@ -1,19 +1,19 @@
-From 256d2179f61d9be2416cfbcbe7e824af13fe34f4 Mon Sep 17 00:00:00 2001
+From 74ddabcd27691b7acc82ec64463cd8e4b6e33f25 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 10/12] Enable new protobuf major release
 
 ---
- MODULE.bazel                                  | 38 ++++++++-----------
- compile.sh                                    |  9 +++++
- third_party/systemlibs/protobuf/BUILD         | 12 ++++--
- third_party/systemlibs/protobuf/MODULE.bazel  | 12 +++---
- .../src/google/protobuf/compiler/BUILD        |  7 ++++
- 5 files changed, 47 insertions(+), 31 deletions(-)
+ MODULE.bazel                                  | 56 ++++++++-----------
+ compile.sh                                    |  9 +++
+ third_party/systemlibs/protobuf/BUILD         | 12 +++-
+ third_party/systemlibs/protobuf/MODULE.bazel  | 12 ++--
+ .../src/google/protobuf/compiler/BUILD        |  7 +++
+ 5 files changed, 56 insertions(+), 40 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 6cfd004d0c..1b6669557f 100644
+index 6cfd004d0c..6e00ee3e29 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -14,13 +14,15 @@ module(
@@ -94,6 +94,31 @@ index 6cfd004d0c..1b6669557f 100644
  bazel_dep(name = "rules_kotlin", version = "1.9.6")
  bazel_dep(name = "re2", version = "2024-07-02.bcr.1")
  
+@@ -152,15 +144,15 @@ maven.install(
+         "commons-collections:commons-collections:3.2.2",
+         "commons-lang:commons-lang:2.6",
+         "io.github.java-diff-utils:java-diff-utils:4.12",
+-        "io.grpc:grpc-api:1.66.0",
+-        "io.grpc:grpc-auth:1.66.0",
+-        "io.grpc:grpc-context:1.66.0",
+-        "io.grpc:grpc-core:1.66.0",
+-        "io.grpc:grpc-inprocess:1.66.0",
+-        "io.grpc:grpc-netty:1.66.0",
+-        "io.grpc:grpc-protobuf:1.66.0",
+-        "io.grpc:grpc-protobuf-lite:1.66.0",
+-        "io.grpc:grpc-stub:1.66.0",
++        "io.grpc:grpc-api:GRPC_VERSION",
++        "io.grpc:grpc-auth:GRPC_VERSION",
++        "io.grpc:grpc-context:GRPC_VERSION",
++        "io.grpc:grpc-core:GRPC_VERSION",
++        "io.grpc:grpc-inprocess:GRPC_VERSION",
++        "io.grpc:grpc-netty:GRPC_VERSION",
++        "io.grpc:grpc-protobuf:GRPC_VERSION",
++        "io.grpc:grpc-protobuf-lite:GRPC_VERSION",
++        "io.grpc:grpc-stub:GRPC_VERSION",
+         "io.netty:netty-buffer:4.1.119.Final",
+         "io.netty:netty-codec:4.1.119.Final",
+         "io.netty:netty-codec-http:4.1.119.Final",
 diff --git a/compile.sh b/compile.sh
 index bd7a6397bc..f2cdac2d7e 100755
 --- a/compile.sh

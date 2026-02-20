@@ -1,4 +1,4 @@
-From 11df098d155ae436968dfc6ccea7edceb154c6a2 Mon Sep 17 00:00:00 2001
+From bd779d1cc6ee2796668837c2566d1ad7695d0e60 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
 Subject: [PATCH 11/12] Add missing absl dependency
@@ -13,7 +13,7 @@ Subject: [PATCH 11/12] Add missing absl dependency
  create mode 100644 third_party/systemlibs/protobuf/toolchain/platforms.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 1b6669557f..1af34a02d0 100644
+index 6e00ee3e29..c7dabcab7b 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -32,7 +32,7 @@ bazel_dep(name = "rules_proto", version = "7.0.2")
