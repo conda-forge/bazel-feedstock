@@ -1,4 +1,4 @@
-From a6de47510fb204805bd0b2f67196a17e61b4b083 Mon Sep 17 00:00:00 2001
+From 3a8c43e1a21fdd671e492a4838b1576b8f5488a2 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
 Subject: [PATCH 7/8] avoid linking to grpc{,++}_unsecure; use regular variant
