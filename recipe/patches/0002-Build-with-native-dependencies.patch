@@ -1,7 +1,7 @@
 From 7256535f492da9b8e056963c9202605bf705fba0 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/11] Build with native dependencies
+Subject: [PATCH 02/12] Build with native dependencies
 
 ---
  MODULE.bazel                                  |   6 +

@@ -1,0 +1,46 @@
+From c262737ff1d876a259f682499884a47b641b8c4a Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Tue, 10 Feb 2026 11:43:39 +1100
+Subject: [PATCH 12/12] avoid linking to grpc{,++}_unsecure; use regular
+ variant instead
+
+also link to absl_strings, whose linkage has been made private in grpc, see
+https://github.com/conda-forge/grpc-cpp-feedstock/blob/main/recipe/patches/0005-mark-linkages-of-grpc-_unsecure-as-private.patch
+---
+ src/main/protobuf/BUILD | 2 +-
+ third_party/grpc/BUILD  | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/protobuf/BUILD b/src/main/protobuf/BUILD
+index 5649080a6b..69d70a10a6 100644
+--- a/src/main/protobuf/BUILD
++++ b/src/main/protobuf/BUILD
+@@ -212,7 +212,7 @@ cc_grpc_library(
+     extra_cc_library_kwargs = {"defines": ["GRPC_USE_PROTO_LITE=ON"]},
+     deps = [
+         ":command_server_cc_proto",
+-        "//third_party/grpc:grpc++_unsecure",
++        "//third_party/grpc:grpc++",
+     ],
+ )
+ 
+diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+index f9c470f388..63542f8cfa 100644
+--- a/third_party/grpc/BUILD
++++ b/third_party/grpc/BUILD
+@@ -49,12 +49,12 @@ genrule(
+ 
+ alias(
+     name = "grpc++_codegen_proto",
+-    actual = "grpc++_unsecure",
++    actual = "grpc++",
+ )
+ 
+ cc_library(
+-    name = "grpc++_unsecure",
+-    linkopts = ["-lgrpc++_unsecure", "-lgrpc_unsecure","-lgpr"],
++    name = "grpc++",
++    linkopts = ["-lgrpc++", "-lgrpc", "-lgpr", "-labsl_strings"],
+     visibility = ["//visibility:public"],
+ )
+ 

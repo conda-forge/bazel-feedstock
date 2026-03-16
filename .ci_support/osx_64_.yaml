@@ -19,11 +19,11 @@ cxx_compiler:
 cxx_compiler_version:
 - '19'
 libabseil:
-- '20250512'
+- '20260107'
 libgrpc:
-- '1.73'
+- '1.78'
 libprotobuf:
-- 6.31.1
+- 6.33.5
 macos_machine:
 - x86_64-apple-darwin13.4.0
 target_platform:
