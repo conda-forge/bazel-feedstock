@@ -79,33 +79,25 @@ source run_conda_forge_build_setup
 
 ( endgroup "Configuring conda" ) 2> /dev/null
 
-echo -e "\n\nMaking the build clobber file"
-make_build_number ./ ./recipe ./.ci_support/${CONFIG}.yaml
-
 if [[ -f LICENSE.txt ]]; then
   cp LICENSE.txt "recipe/recipe-scripts-license.txt"
 fi
 
 if [[ "${BUILD_WITH_CONDA_DEBUG:-0}" == 1 ]]; then
-    if [[ "x${BUILD_OUTPUT_ID:-}" != "x" ]]; then
-        EXTRA_CB_OPTIONS="${EXTRA_CB_OPTIONS:-} --output-id ${BUILD_OUTPUT_ID}"
-    fi
-    conda debug ./recipe -m ./.ci_support/${CONFIG}.yaml \
-        ${EXTRA_CB_OPTIONS:-} \
-        --clobber-file ./.ci_support/clobber_${CONFIG}.yaml
-
-    # Drop into an interactive shell
-    /bin/bash
+    echo "rattler-build does not currently support debug mode"
 else
 
     if [[ "${HOST_PLATFORM}" != "${BUILD_PLATFORM}" ]]; then
-        EXTRA_CB_OPTIONS="${EXTRA_CB_OPTIONS:-} --no-test"
+        EXTRA_CB_OPTIONS="${EXTRA_CB_OPTIONS:-} --test skip"
     fi
 
-    conda-build ./recipe -m ./.ci_support/${CONFIG}.yaml \
-        --suppress-variables ${EXTRA_CB_OPTIONS:-} \
-        --clobber-file ./.ci_support/clobber_${CONFIG}.yaml \
-        --extra-meta flow_run_id="$flow_run_id" remote_url="$remote_url" sha="$sha"
+    rattler-build build --recipe ./recipe \
+        -m ./.ci_support/${CONFIG}.yaml \
+        ${EXTRA_CB_OPTIONS:-} \
+        --target-platform "${HOST_PLATFORM}" \
+        --extra-meta flow_run_id="$flow_run_id" \
+        --extra-meta remote_url="$remote_url" \
+        --extra-meta sha="$sha"
 
     ( startgroup "Inspecting artifacts" ) 2> /dev/null
 
