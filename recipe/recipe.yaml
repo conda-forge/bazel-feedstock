@@ -13,7 +13,7 @@ source:
     sha256: 3f336b4510a8210f954fa3a7d6cfbd271b6f9d639732fdc11c000b6fbfca3fbe
     patches:
       - if: unix
-        then: 
+        then:
           - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
           - patches/0002-use-C-17.patch
           - patches/0003-Use-conda-packages-for-build-tools.patch
@@ -68,8 +68,10 @@ requirements:
     - if: unix
       then:
         - libabseil
+        - libabseil-bazel-systemlib
         - libgrpc
         - libprotobuf
+        - libprotobuf-bazel-systemlib
         - protobuf-bazel-rules
         - grpc-bazel-rules
     - if: win
