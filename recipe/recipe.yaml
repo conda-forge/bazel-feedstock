@@ -1,0 +1,113 @@
+schema_version: 1
+
+context:
+  version: "9.0.1"
+  base_url: https://github.com/bazelbuild/bazel/releases/download
+
+package:
+  name: bazel
+  version: ${{ version }}
+
+source:
+  - url: ${{ base_url }}/${{ version }}/bazel-${{ version }}-dist.zip
+    sha256: 3f336b4510a8210f954fa3a7d6cfbd271b6f9d639732fdc11c000b6fbfca3fbe
+    patches:
+      - if: unix
+        then: 
+          - patches/0001-allow-args-to-be-passed-to-bazel_build.patch
+          - patches/0002-use-C-17.patch
+          - patches/0003-Use-conda-packages-for-build-tools.patch
+          - patches/0004-grpc-java-plugin-from-build.patch
+      - if: osx
+        then: patches/0005-bazel-bin-loader-path.patch
+      - if: unix
+        then:
+          - patches/0006-Adjust-cross-bazel-resultpath.patch
+          - patches/0007-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch
+          - patches/0008-Build-with-native-dependencies.patch
+  - if: win
+    then:
+      url: ${{ base_url }}/${{ version }}/bazel-${{ version }}-windows-x86_64.exe
+      sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8
+
+build:
+  # We are currently unable to select a JDK toolchain for the build.
+  # This can be re-enabled once someone finds the correct option.
+  number: 0
+  skip: ppc64le
+  prefix_detection:
+    ignore: true
+  dynamic_linking:
+    binary_relocation: false
+
+requirements:
+  build:
+    - ${{ stdlib('c') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - if: win
+      then:
+        - m2-sed
+        - python *
+    - if: unix
+      then: 
+        - sed
+        - openjdk 21.*
+        # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
+        - grpc_java_plugin
+        - libgrpc
+        - libprotobuf
+        - ijar ${{ version }}.*
+        - singlejar ${{ version }}.*
+        - bazel-toolchain >=0.5.8
+    - if: linux
+      then:
+        - zip
+        - unzip
+  host:
+    - if: unix
+      then:
+        - libabseil
+        - libgrpc
+        - libprotobuf
+        - protobuf-bazel-rules
+        - grpc-bazel-rules
+    - if: win
+      then:
+        - openjdk 21.*
+        - posix
+  run:
+    - openjdk >=21
+    - if: win
+      then: posix
+    - if: unix
+      then:
+        - ijar ${{ version }}.*
+        - singlejar ${{ version }}.*
+
+tests:
+  - requirements:
+      run:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - if: unix
+          then: bazel-toolchain >=0.5.8
+    script:
+      - bazel -h
+      - bazel version
+
+about:
+  summary: a fast, scalable, multi-language and extensible build system
+  license: Apache-2.0
+  license_file: LICENSE
+  homepage: https://bazel.build/
+  repository: https://github.com/bazelbuild/bazel
+
+extra:
+  recipe-maintainers:
+    - h-vetinari
+    - nehaljwani
+    - abhi18av
+    - jschueller
+    - adrianchia
+    - xhochy
