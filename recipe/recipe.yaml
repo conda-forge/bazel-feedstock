@@ -28,7 +28,7 @@ source:
   - if: win
     then:
       url: ${{ base_url }}/${{ version }}/bazel-${{ version }}-windows-x86_64.exe
-      sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8
+      sha256: 481da3cc9ebf0dd58139b1875319d9c8a0169d14f4c590ce27629c593001e85e
 
 build:
   # We are currently unable to select a JDK toolchain for the build.
