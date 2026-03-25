@@ -31,9 +31,9 @@ source:
       sha256: 481da3cc9ebf0dd58139b1875319d9c8a0169d14f4c590ce27629c593001e85e
 
 build:
+  number: 0
   # We are currently unable to select a JDK toolchain for the build.
   # This can be re-enabled once someone finds the correct option.
-  number: 0
   skip: ppc64le
   prefix_detection:
     ignore: true
@@ -94,9 +94,17 @@ tests:
         - ${{ compiler('cxx') }}
         - if: unix
           then: bazel-toolchain >=0.5.8
+    files:
+      recipe:
+        - tutorial/
+        - run_test.sh
+        - run_test.bat
     script:
       - bazel -h
       - bazel version
+      - if: win
+        then: run_test.bat
+        else: bash run_test.sh
 
 about:
   summary: a fast, scalable, multi-language and extensible build system
