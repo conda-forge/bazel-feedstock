@@ -100,11 +100,12 @@ tests:
         - run_test.sh
         - run_test.bat
     script:
-      - bazel -h
-      - bazel version
       - if: win
         then: run_test.bat
-        else: bash run_test.sh
+        else:
+          - bash run_test.sh
+          - bazel -h
+          - bazel version
 
 about:
   summary: a fast, scalable, multi-language and extensible build system

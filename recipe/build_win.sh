@@ -17,3 +17,4 @@ ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out 
 
 cp bazel-bin/src/bazel_nojdk.exe ${LIBRARY_PREFIX}/bin/bazel.exe
 ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe clean --expunge
+${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe shutdown
