@@ -23,10 +23,11 @@ for _tc_cfg in bazel_toolchain/cc_toolchain_config.bzl bazel_toolchain/cc_toolch
 done
 
 # Prepare systemlibs defintions
-rm -rf third_party/systemlibs/
-cp -ap $RECIPE_DIR/systemlibs third_party/
-
-cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
+mkdir -p third_party/systemlibs/
+cp -ap "${RECIPE_DIR}/systemlibs/grpc" third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/systemlibs/absl" third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/systemlibs/protobuf" third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/protobuf/bazel" third_party/systemlibs/protobuf/
 cp -ap $PREFIX/share/bazel/grpc/bazel third_party/systemlibs/grpc/
 
 # TODO: Patch grpc-bazel-rules
@@ -61,6 +62,7 @@ export GRPC_VERSION=$(conda list -p $PREFIX libgrpc --fields version | grep -v '
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
+export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --define=PROTOC_PREFIX=${BUILD_PREFIX}"
 export BAZEL_BUILD_OPTS="${BAZEL_BUILD_OPTS} --platforms=//bazel_toolchain:target_platform --host_platform=//bazel_toolchain:build_platform --extra_toolchains=//bazel_toolchain:cc_cf_toolchain --extra_toolchains=//bazel_toolchain:cc_cf_host_toolchain --noincompatible_enable_proto_toolchain_resolution"
 export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=21"
 
@@ -69,8 +71,6 @@ sed -i "s:\${PREFIX}:${PREFIX}:" src/BUILD
 sed -i "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
         third_party/grpc/BUILD \
         third_party/grpc-java/BUILD \
-        third_party/systemlibs/protobuf/BUILD \
-	third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD \
 	third_party/systemlibs/grpc/BUILD \
 	third_party/ijar/BUILD \
         src/tools/singlejar/BUILD
