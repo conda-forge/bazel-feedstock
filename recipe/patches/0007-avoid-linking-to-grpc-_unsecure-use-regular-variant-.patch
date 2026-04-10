@@ -1,4 +1,4 @@
-From 3a8c43e1a21fdd671e492a4838b1576b8f5488a2 Mon Sep 17 00:00:00 2001
+From ef75e9701ebab667b025f967b423859dfbbe6915 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 10 Feb 2026 11:43:39 +1100
 Subject: [PATCH 7/8] avoid linking to grpc{,++}_unsecure; use regular variant
@@ -12,7 +12,7 @@ https://github.com/conda-forge/grpc-cpp-feedstock/blob/main/recipe/patches/0005-
  2 files changed, 6 insertions(+), 11 deletions(-)
 
 diff --git a/src/main/protobuf/BUILD b/src/main/protobuf/BUILD
-index f8fce15..2909801 100755
+index f8fce154cb..290980155d 100644
 --- a/src/main/protobuf/BUILD
 +++ b/src/main/protobuf/BUILD
 @@ -213,7 +213,7 @@ cc_grpc_library(
@@ -25,7 +25,7 @@ index f8fce15..2909801 100755
  )
  
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index 1ef653c..822d03d 100755
+index 1ef653cfdb..822d03db32 100644
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -49,18 +49,13 @@ alias(
