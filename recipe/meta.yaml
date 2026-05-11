@@ -1,4 +1,4 @@
-{% set version = "8.6.0" %}
+{% set version = "8.7.0" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: 13a84586429b6084b13bd5040d78deda58d523012151e71e7d4be0c63dd831f9
+    sha256: 75ed5aa189fd687e6e7c289ad86a3851844965a6c1479b7a5ce9b846a6e461bc
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
@@ -26,7 +26,7 @@ source:
       - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 461125dd78dd8c3c27eaf7caacf1c28b3e14062e1a42765c865738209dc820d0  # [win]
+    sha256: 29f1796f57379933340afa135f02703ffa21dd30135754bea695f8fd15103420  # [win]
 
 build:
   number: 0
