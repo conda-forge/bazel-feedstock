@@ -1,21 +1,21 @@
-From 9e684e0d02cce46dc38658b43b7cf04cb41fba49 Mon Sep 17 00:00:00 2001
+From af6cfcadfe94541eb46f762f4506f9b09355800f Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 8/8] Build with native dependencies
 
 ---
- MODULE.bazel                                  | 69 ++++++++-----------
+ MODULE.bazel                                  | 71 +++++++------------
  compile.sh                                    |  9 +++
  src/main/cpp/BUILD                            | 13 +++-
  .../java/com/google/devtools/build/lib/BUILD  |  2 +-
  third_party/grpc/BUILD                        | 11 +--
- 5 files changed, 54 insertions(+), 50 deletions(-)
+ 5 files changed, 53 insertions(+), 53 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index d33fff2..a7cb823 100755
+index 9b5945d..4fbf48d 100755
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -13,24 +13,24 @@ module(
+@@ -13,17 +13,17 @@ module(
  # Bazel module dependencies
  # =========================================
  
@@ -36,7 +36,8 @@ index d33fff2..a7cb823 100755
 +bazel_dep(name = "protobuf", version = "PROTOC_VERSION", repo_name = "com_google_protobuf")
  bazel_dep(name = "re2", version = "2025-11-05.bcr.1")
  bazel_dep(name = "rules_graalvm", version = "0.11.1")
- bazel_dep(name = "rules_java", version = "9.0.3")
+ bazel_dep(name = "rules_java", version = "9.1.0")
+@@ -31,7 +31,7 @@ bazel_dep(name = "bazel_features", version = "1.42.1")
  bazel_dep(name = "rules_jvm_external", version = "6.6")
  bazel_dep(name = "rules_license", version = "1.0.0")
  bazel_dep(name = "rules_pkg", version = "1.1.0")
@@ -45,15 +46,7 @@ index d33fff2..a7cb823 100755
  bazel_dep(name = "rules_shell", version = "0.6.1")
  bazel_dep(name = "rules_testing", version = "0.9.0")
  bazel_dep(name = "stardoc", version = "0.8.0", repo_name = "io_bazel_skydoc")
-@@ -41,13 +41,25 @@ bazel_dep(name = "zstd-jni", version = "1.5.6-9")
- # Depend on apple_support first and then rules_cc so that the Xcode toolchain
- # from apple_support wins over the generic Unix toolchain from rules_cc.
- bazel_dep(name = "apple_support", version = "1.24.5")
--bazel_dep(name = "rules_cc", version = "0.2.14")
-+bazel_dep(name = "rules_cc", version = "0.2.15")
- 
- # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
- # load the rule class directly, so we need to expose the cc_compatibility_proxy
+@@ -49,6 +49,18 @@ bazel_dep(name = "rules_cc", version = "0.2.17")
  # repo for access to the symbols
  cc_compatibility_proxy = use_extension("@rules_cc//cc:extensions.bzl", "compatibility_proxy")
  use_repo(cc_compatibility_proxy, "cc_compatibility_proxy")
@@ -72,7 +65,7 @@ index d33fff2..a7cb823 100755
  
  # TODO: wyv@ - add remoteapis to the BCR
  bazel_dep(name = "remoteapis", version = "")
-@@ -97,33 +109,6 @@ single_version_override(
+@@ -101,37 +113,6 @@ single_version_override(
      version = "1.2.1.bcr.1",
  )
  
@@ -81,6 +74,10 @@ index d33fff2..a7cb823 100755
 -# We need to package the lite runtime jar for Bazel's bootstrap build
 -# 2. Partially revert of https://github.com/protocolbuffers/protobuf/commit/7ec5e19c0743b80c5097434a05cc0e972e7b4e7a
 -# to support grpc
+-# 3. Pull in the removal of the memoizedIsInitialized field for messages with no
+-# required fields early. This reduces the memory usage of Bazel and avoids
+-# spread in memory usage between Bazel and Blaze.
+-# https://github.com/protocolbuffers/protobuf/blob/adf9e8b80fd10398b82e16c4ea72f2d2cffb0e9b/src/google/protobuf/compiler/java/full/message.cc#L884C1-L899C6
 -single_version_override(
 -    module_name = "protobuf",
 -    patch_strip = 1,
@@ -106,7 +103,7 @@ index d33fff2..a7cb823 100755
  local_path_override(
      module_name = "remoteapis",
      path = "./third_party/remoteapis",
-@@ -176,15 +161,15 @@ maven.install(
+@@ -184,15 +165,15 @@ maven.install(
          "commons-collections:commons-collections:3.2.2",
          "commons-lang:commons-lang:2.6",
          "io.github.java-diff-utils:java-diff-utils:4.12",
