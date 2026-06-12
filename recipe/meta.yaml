@@ -1,4 +1,4 @@
-{% set version = "9.0.0" %}
+{% set version = "9.1.1" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: dfa496089624d726a158afcac353725166f81c5708ee1ecc9e662f2891b3544d
+    sha256: a6f66e26c8f4ca04fa83c796a404eff0544bd78336fbbcd122c9e10cbec4a5d7
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
@@ -22,10 +22,10 @@ source:
       - patches/0008-Build-with-native-dependencies.patch                        # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 463faee497df2913854d80776784137cb47f42960b4ef4e4f85068c8da4849a8  # [win]
+    sha256: 65f3484025c95a9f93647fd6edb84b19c15c67d5265d364f17843fd12c5d28fe  # [win]
 
 build:
-  number: 1
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
