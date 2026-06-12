@@ -15,7 +15,11 @@ ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out 
 	--lockfile_mode=update \
 	--discard_analysis_cache \
 	--nokeep_state_after_build \
-	--notrack_incremental_state t\
+	--notrack_incremental_state \
+	--spawn_strategy=worker \
+	--strategy=Javac=worker \
+	--strategy=CppCompile=worker \
+	--worker_quit_after_build \
     src:bazel_nojdk.exe
 
 cp bazel-bin/src/bazel_nojdk.exe ${LIBRARY_PREFIX}/bin/bazel.exe
