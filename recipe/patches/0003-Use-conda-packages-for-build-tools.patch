@@ -1,4 +1,4 @@
-From d3852a82d4428647e3fb7f2338e6a8520c1090ea Mon Sep 17 00:00:00 2001
+From 4d726ecf03759d5c7067e3186801be72c088d9c9 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
 Subject: [PATCH 3/8] Use conda packages for build tools
@@ -70,7 +70,7 @@ index 93f4e6c..e930397 100755
  
  cc_test(
 diff --git a/third_party/ijar/BUILD b/third_party/ijar/BUILD
-index 0cca0e6..49ba24e 100755
+index b317ae2..e950db6 100755
 --- a/third_party/ijar/BUILD
 +++ b/third_party/ijar/BUILD
 @@ -72,21 +72,20 @@ cc_library(
