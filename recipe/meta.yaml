@@ -13,13 +13,13 @@ source:
       # which patches the same sources; the patches from singlejar should either be
       # taken over here, or synced back if change is necessary
       - patches/0001-allow-args-to-be-passed-to-bazel_build.patch                # [unix]
-      - patches/0002-use-C-17.patch                                              # [unix]
+      - patches/0002-use-C-17.patch                                              # [unix] or [win]
       - patches/0003-Use-conda-packages-for-build-tools.patch                    # [unix]
       - patches/0004-grpc-java-plugin-from-build.patch                           # [unix]
       - patches/0005-bazel-bin-loader-path.patch                                 # [osx]
       - patches/0006-Adjust-cross-bazel-resultpath.patch                         # [unix]
-      - patches/0007-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch  # [unix]
-      - patches/0008-Build-with-native-dependencies.patch                        # [unix]
+      - patches/0007-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch  # [unix] or [win]
+      - patches/0008-Build-with-native-dependencies.patch                        # [unix] or [win]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
     sha256: 65f3484025c95a9f93647fd6edb84b19c15c67d5265d364f17843fd12c5d28fe  # [win]
@@ -43,7 +43,9 @@ requirements:
     # we need $BUILD_PREFIX/bin/{grpc_cpp_plugin,grpc_java_plugin,protoc}
     - grpc_java_plugin         # [unix]
     - libgrpc                  # [unix]
+    - libgrpc                  # [win]
     - libprotobuf              # [unix]
+    - libprotobuf              # [win]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
     - bazel-toolchain >=0.5.1  # [unix]
@@ -52,10 +54,15 @@ requirements:
     - python *                 # [win]
   host:
     - libabseil             # [unix]
+    - libabseil             # [win]
     - libgrpc               # [unix]
+    - libgrpc               # [win]
     - libprotobuf           # [unix]
+    - libprotobuf           # [win]
     - protobuf-bazel-rules  # [unix]
+    - protobuf-bazel-rules  # [win]
     - grpc-bazel-rules      # [unix]
+    - grpc-bazel-rules      # [win]
     - openjdk 21.*          # [win]
     - posix                 # [win]
   run:

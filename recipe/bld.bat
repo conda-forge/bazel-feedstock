@@ -5,7 +5,7 @@ set "saved_recipe_dir=%RECIPE_DIR%"
 set "saved_source_dir=%SRC_DIR%"
 
 FOR /F "delims=" %%i IN ('cygpath.exe -u "%PYTHON%"') DO set "BAZEL_PYTHON=%%i"
-FOR /F "delims=" %%i IN ('cygpath.exe -u "%LIBRARY_PREFIX%\usr\bin\bash.exe"') DO set "BAZEL_SH=%%i"
+set "BAZEL_SH=%LIBRARY_PREFIX%\usr\bin\bash.exe"
 
 :: FOR /F "delims=" %%i IN ('cygpath.exe -u -p "%PATH%"') DO set "PATH_OVERRIDE=%%i"
 FOR /F "delims=" %%i IN ('cygpath.exe -u "%LIBRARY_PREFIX%"') DO set "LIBRARY_PREFIX=%%i"
