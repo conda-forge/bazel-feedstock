@@ -16,7 +16,6 @@ ${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out 
 	--discard_analysis_cache \
 	--nokeep_state_after_build \
 	--notrack_incremental_state \
-	--spawn_strategy=worker,sandboxed,local \
 	--strategy=Javac=worker \
 	--worker_quit_after_build \
     src:bazel_nojdk.exe
