@@ -55,24 +55,27 @@ sed -i 's/outs = \["grpc_python_plugin.bin"\]/outs = ["grpc_python_plugin.exe"]/
 sed -i 's/outs = \["grpc-cpp-plugin.out"\]/outs = ["grpc-cpp-plugin.exe"]/g' third_party/grpc/BUILD
 
 # Substitute placeholder paths and versions in BUILD and MODULE files
-sed -i "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" \
+# On Windows, BUILD_PREFIX is a Windows-native path (e.g. C:\bld\...). Convert to
+# cygwin path (e.g. /c/bld/...) to avoid issues with colons and backslashes in sed.
+BUILD_PREFIX_CYG=$(cygpath -u "$BUILD_PREFIX")
+sed -i "s|\${BUILD_PREFIX}|${BUILD_PREFIX_CYG}|" \
     third_party/grpc/BUILD \
     third_party/systemlibs/protobuf/BUILD \
     third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD \
     third_party/systemlibs/grpc/BUILD
 
-sed -i "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" \
+sed -i "s|ABSEIL_VERSION|${ABSEIL_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/absl/MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
-sed -i "s:GRPC_VERSION:${GRPC_VERSION}:" \
+sed -i "s|GRPC_VERSION|${GRPC_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
-sed -i "s:PROTOC_VERSION:${PROTOC_VERSION}:" \
+sed -i "s|PROTOC_VERSION|${PROTOC_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
-sed -i "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" \
+sed -i "s|PROTOBUF_JAVA_MAJOR_VERSION|${PROTOBUF_JAVA_MAJOR_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
 
