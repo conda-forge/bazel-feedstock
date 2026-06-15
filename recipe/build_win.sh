@@ -23,10 +23,11 @@ sed -i 's/if not hasattr(native,.*/if True:/' \
     third_party/systemlibs/protobuf/bazel/proto_library.bzl
 
 # Set version environment variables
+# conda is not available in bash on Windows, so extract versions from conda-meta JSON files
 export PROTOC=$BUILD_PREFIX/Library/bin/protoc.exe
-export ABSEIL_VERSION=$(conda list -p "$(cygpath -w "$PREFIX")" libabseil --fields version | grep -v '#')
-export GRPC_VERSION=$(conda list -p "$(cygpath -w "$PREFIX")" libgrpc --fields version | grep -v '#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+$/\1.0/')
-export PROTOC_VERSION=$(conda list -p "$(cygpath -w "$PREFIX")" libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
+export ABSEIL_VERSION=$(grep -o '"version": "[^"]*"' "$PREFIX/conda-meta"/libabseil-*.json | head -1 | sed 's/.*"version": "\(.*\)"/\1/')
+export GRPC_VERSION=$(grep -o '"version": "[^"]*"' "$PREFIX/conda-meta"/libgrpc-*.json | head -1 | sed 's/.*"version": "\(.*\)"/\1/' | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+$/\1.0/')
+export PROTOC_VERSION=$(grep -o '"version": "[^"]*"' "$PREFIX/conda-meta"/libprotobuf-*.json | head -1 | sed 's/.*"version": "\(.*\)"/\1/' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cxxopt=/std:c++17"
 
