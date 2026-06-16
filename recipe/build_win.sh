@@ -72,10 +72,6 @@ sed -i "s|ABSEIL_VERSION|${ABSEIL_VERSION}|" \
 sed -i "s|GRPC_VERSION|${GRPC_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
-sed -i "s|PROTOC_VERSION|${PROTOC_VERSION}|" \
-    MODULE.bazel \
-    third_party/systemlibs/protobuf/MODULE.bazel \
-    third_party/systemlibs/grpc/MODULE.bazel
 cp -a ${SRC_DIR}/maven_install.json third_party/systemlibs/protobuf/
 cat <<'EOF' | "${BUILD_PREFIX_CYG}/Library/bin/python.exe" -
 import sys
@@ -127,6 +123,11 @@ with open("third_party/systemlibs/protobuf/MODULE.bazel", "w") as f:
     f.write(content)
 print("Updated MODULE.bazel successfully")
 EOF
+
+sed -i "s|PROTOC_VERSION|${PROTOC_VERSION}|" \
+    MODULE.bazel \
+    third_party/systemlibs/protobuf/MODULE.bazel \
+    third_party/systemlibs/grpc/MODULE.bazel
 
 sed -i "s|PROTOBUF_JAVA_MAJOR_VERSION|${PROTOBUF_JAVA_MAJOR_VERSION}|" \
     MODULE.bazel \
