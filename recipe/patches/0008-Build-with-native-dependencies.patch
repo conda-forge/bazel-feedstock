@@ -29,7 +29,7 @@ index 9b5945d..4fbf48d 100755
  bazel_dep(name = "googletest", version = "1.17.0.bcr.2", repo_name = "com_google_googletest")
 -bazel_dep(name = "grpc-java", version = "1.71.0")
 -bazel_dep(name = "grpc", version = "1.76.0.bcr.1", repo_name = "com_github_grpc_grpc")
-+bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
++bazel_dep(name = "grpc-java", version = "1.71.0")
 +bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
  bazel_dep(name = "platforms", version = "1.0.0")
 -bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
