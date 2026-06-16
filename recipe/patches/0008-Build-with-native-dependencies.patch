@@ -12,16 +12,15 @@ Subject: [PATCH 8/8] Build with native dependencies
  5 files changed, 53 insertions(+), 53 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 9b5945d..0eb6e9a 100755
---- a/MODULE.bazel
-+++ b/MODULE.bazel
+--- a/MODULE.bazel	2026-06-16 08:16:37.646283343 +0000
++++ b/MODULE.bazel	2026-06-16 08:40:05.918149090 +0000
 @@ -27,6 +27,21 @@
  bazel_dep(name = "re2", version = "2025-11-05.bcr.1")
  bazel_dep(name = "rules_graalvm", version = "0.11.1")
  bazel_dep(name = "rules_java", version = "9.1.0")
 +local_path_override(
 +    module_name = "abseil-cpp",
-+    path = "./third_party/systemlibs/abseil-cpp",
++    path = "./third_party/systemlibs/absl",
 +)
 +
 +local_path_override(
