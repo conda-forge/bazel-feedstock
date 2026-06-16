@@ -76,6 +76,58 @@ sed -i "s|PROTOC_VERSION|${PROTOC_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
+cp -a ${SRC_DIR}/maven_install.json third_party/systemlibs/protobuf/
+cat <<'EOF' | "${BUILD_PREFIX}/Library/bin/python.exe" -
+import sys
+
+with open("third_party/systemlibs/protobuf/MODULE.bazel", "r") as f:
+    content = f.read()
+
+old_section = """maven_protobuf = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven_protobuf.install(
+    name = "maven_protobuf",
+    artifacts = [
+        # keep sorted
+        "com.google.protobuf:protobuf-java:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
+        "com.google.protobuf:protobuf-java-util:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
+    ],
+    fail_if_repin_required = False,
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+    strict_visibility = False,
+    strict_visibility_value = ["//visibility:public"],
+)
+
+use_repo(maven_protobuf, "maven_protobuf")"""
+
+new_section = """# Use shared maven repository with same lock file as upstream protobuf module
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        # keep sorted; match upstream protobuf 33.4 PROTOBUF_MAVEN_ARTIFACTS
+        "com.google.code.findbugs:jsr305:3.0.2",
+        "com.google.code.gson:gson:2.8.9",
+        "com.google.errorprone:error_prone_annotations:2.5.1",
+        "com.google.guava:guava:32.0.1-jre",
+        "com.google.j2objc:j2objc-annotations:2.8",
+        "com.google.protobuf:protobuf-java:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
+        "com.google.protobuf:protobuf-java-util:PROTOBUF_JAVA_MAJOR_VERSION.PROTOC_VERSION",
+    ],
+    lock_file = "//:maven_install.json",
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
+use_repo(maven, "maven")"""
+
+content = content.replace(old_section, new_section)
+with open("third_party/systemlibs/protobuf/MODULE.bazel", "w") as f:
+    f.write(content)
+print("Updated MODULE.bazel successfully")
+EOF
+
 sed -i "s|PROTOBUF_JAVA_MAJOR_VERSION|${PROTOBUF_JAVA_MAJOR_VERSION}|" \
     MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
