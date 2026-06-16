@@ -77,7 +77,7 @@ sed -i "s|PROTOC_VERSION|${PROTOC_VERSION}|" \
     third_party/systemlibs/protobuf/MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
 cp -a ${SRC_DIR}/maven_install.json third_party/systemlibs/protobuf/
-cat <<'EOF' | "${BUILD_PREFIX}/Library/bin/python.exe" -
+cat <<'EOF' | "${BUILD_PREFIX_CYG}/Library/bin/python.exe" -
 import sys
 
 with open("third_party/systemlibs/protobuf/MODULE.bazel", "r") as f:
