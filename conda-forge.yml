@@ -25,3 +25,5 @@ workflow_settings:
   pagefile_size:
     - value: 16
       os: win
+github_actions:
+  timeout_minutes: 720
