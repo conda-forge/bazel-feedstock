@@ -59,7 +59,6 @@ requirements:
     - protobuf-bazel-rules  # [unix]
     - grpc-bazel-rules      # [unix]
     - openjdk 21.*          # [win]
-    - m2-base               # [win]
   run:
     - openjdk >=21
     - m2-base                  # [win]
