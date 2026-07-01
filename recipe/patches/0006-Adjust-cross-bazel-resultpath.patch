@@ -1,4 +1,4 @@
-From 45dcfc014b5faf5e548aa758a712df999b2e7da9 Mon Sep 17 00:00:00 2001
+From 939a25f1d822a2bda3977bb55ed3e77b63569117 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:10:21 +0100
 Subject: [PATCH 6/8] Adjust cross bazel resultpath
