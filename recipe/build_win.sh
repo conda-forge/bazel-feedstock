@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe --output_base=${SRC_DIR}/out build \
+${SRC_DIR}/bazel-${PKG_VERSION}-windows-x86_64.exe "--output_base=${TMPDIR}/out" build \
 	--cxxopt=/std:c++17 \
 	--action_env=PATH \
 	--spawn_strategy=standalone \
