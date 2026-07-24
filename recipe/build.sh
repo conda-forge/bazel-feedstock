@@ -30,9 +30,6 @@ cp -ap "${PREFIX}/share/bazel/systemlibs/protobuf" third_party/systemlibs/
 cp -ap "${PREFIX}/share/bazel/protobuf/bazel" third_party/systemlibs/protobuf/
 cp -ap $PREFIX/share/bazel/grpc/bazel third_party/systemlibs/grpc/
 
-# TODO: Patch grpc-bazel-rules
-sed -i '/^load("\/\/bazel:protobuf\.bzl",/a load("@rules_cc//cc:cc_library.bzl", "cc_library")' third_party/systemlibs/grpc/bazel/cc_grpc_library.bzl
-sed -i 's/native.cc_library/cc_library/' third_party/systemlibs/grpc/bazel/cc_grpc_library.bzl
 # Make the rules repository-local
 sed -i 's/\@com_github_grpc_grpc//' third_party/systemlibs/grpc/bazel/*.bzl
 
