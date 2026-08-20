@@ -30,6 +30,7 @@ source:
       - patches/0014-Add-missing-absl-dependency.patch
       - patches/0015-Pin-to-older-bazel_features.patch
       - patches/0016-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
+      - patches/0017-Unbundle-absl.patch                           # [unix]
 
 build:
   number: 2
@@ -59,7 +60,10 @@ requirements:
     - unzip                    # [linux]
     - python *                 # [win]
   host:
-    - libabseil        # [unix]
+    - libabseil                    # [unix]
+    # provides share/bazel/systemlibs/absl, the bzlmod module that build.sh drops
+    # into third_party/systemlibs/absl so bazel builds against conda's abseil
+    - libabseil-bazel-systemlib    # [unix]
     - libgrpc          # [unix]
     - libprotobuf      # [unix]
     - openjdk 21.*     # [win]

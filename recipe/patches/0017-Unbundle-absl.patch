@@ -1,0 +1,43 @@
+From b524ba19141e2987adabf281600954eff573d31c Mon Sep 17 00:00:00 2001
+From: Jacob Oursland <jacob.oursland@gmail.com>
+Date: Thu, 20 Aug 2026 12:00:00 +0000
+Subject: [PATCH 17/17] Unbundle absl
+
+Use the abseil provided by conda-forge (libabseil-bazel-systemlib) rather than
+letting bzlmod fetch and compile abseil from the BCR.
+
+Bazel already links against conda's libgrpc/libprotobuf, but kept building a
+vendored abseil for headers. Since libgrpc 1.82 / libprotobuf 7.35.1 require
+abseil 20260526, that hybrid stops compiling:
+
+    include/grpcpp/impl/sync.h:56:61: error: 'lock' is not a member of
+        'absl::lts_20240722::Mutex'
+    include/google/protobuf/repeated_ptr_field.h:2155:27: error: conflicting
+        declaration of template '... ABSL_ATTRIBUTE_VIEW ... RepeatedPtrIterator'
+
+This mirrors what the main branch does for bazel 9.x.
+---
+ MODULE.bazel | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 66c50a6..b0d259c 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -35,7 +35,15 @@ bazel_dep(name = "rules_python", version = "0.33.2")
+ bazel_dep(name = "rules_testing", version = "0.6.0")
+ bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
+ bazel_dep(name = "with_cfg.bzl", version = "0.2.4")
+-bazel_dep(name = "abseil-cpp", version = "20240722.0")
++bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
++# Use the abseil shipped by conda-forge (via libabseil-bazel-systemlib) instead of
++# letting bzlmod fetch and build a vendored copy. Bazel links against conda's
++# libgrpc/libprotobuf, whose headers require a matching abseil; a vendored abseil
++# produces e.g. "'lock' is not a member of 'absl::lts_20240722::Mutex'".
++local_path_override(
++    module_name = "abseil-cpp",
++    path = "./third_party/systemlibs/absl",
++)
+ 
+ # Pin bazel_features to avoid issues with the `macro` global when building
+ # Bazel 7.x with a bootstrap Bazel 8.x

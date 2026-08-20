@@ -14,6 +14,22 @@ fi
 # Generate toolchain and set necessary environment variables
 source gen-bazel-toolchain
 
+# Prepare systemlibs definitions. libabseil-bazel-systemlib ships a ready-made
+# bzlmod module that resolves abseil targets to conda's headers and shared libs;
+# patch 0017 points MODULE.bazel at it via local_path_override.
+mkdir -p third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/systemlibs/absl" third_party/systemlibs/
+chmod -R u+w third_party/systemlibs/absl
+
+# The systemlib is authored for bazel 8/9, where cc_library must be loaded from
+# rules_cc. Bazel 7 still has cc_library and alias as natives, and pulling in
+# rules_cc 0.2.15 here would drag bazel_features >=1.28.0 into the module graph --
+# which patch 0015 deliberately pins to 1.9.1 for the bootstrap build. The
+# systemlib uses nothing from rules_cc beyond cc_library, so drop the dependency.
+find third_party/systemlibs/absl -name BUILD -exec \
+    sed -i '\|^load("@rules_cc//cc:|d' {} +
+sed -i '/bazel_dep(name = "rules_cc"/d' third_party/systemlibs/absl/MODULE.bazel
+
 if [[ "${target_platform}" == "osx-64" ]]; then
   export TARGET_CPU="darwin"
 fi
@@ -26,6 +42,8 @@ fi
 # See https://protobuf.dev/support/version-support/
 export PROTOC=$BUILD_PREFIX/bin/protoc
 export GRPC_JAVA_PLUGIN=$BUILD_PREFIX/bin/grpc_java_plugin
+# anchor the regex: a bare 'libabseil' would also match libabseil-bazel-systemlib
+export ABSEIL_VERSION=$(conda list -p $PREFIX '^libabseil$' | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ')
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
@@ -34,6 +52,7 @@ export EXTRA_BAZEL_ARGS="--tool_java_runtime_version=21 --java_runtime_version=2
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" WORKSPACE
 sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" WORKSPACE
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" MODULE.bazel
+sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" MODULE.bazel
 sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" MODULE.bazel
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:PROTOBUF_JAVA_MAJOR_VERSION:${PROTOBUF_JAVA_MAJOR_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
