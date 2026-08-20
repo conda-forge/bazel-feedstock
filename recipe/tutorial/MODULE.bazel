@@ -1,0 +1,11 @@
+# The generated //bazel_toolchain package (from the bazel-toolchain conda package)
+# loads @rules_cc//cc/common:cc_common.bzl and
+# @rules_cc//cc/toolchains:cc_toolchain_config_info.bzl. Without a MODULE.bazel,
+# Bazel synthesises an empty one and @rules_cc resolves to the stub bundled in the
+# install base, which has no cc/common package:
+#   Label '@@rules_cc//cc/common:cc_common.bzl' is invalid because
+#   'cc/common' is not a package
+# Declare the same versions Bazel 7.7.1 itself uses in its MODULE.bazel.
+# The main branch carries the equivalent file for 9.x.
+bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "rules_cc", version = "0.0.11")
