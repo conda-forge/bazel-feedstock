@@ -67,10 +67,10 @@ requirements:
     - libgrpc          # [unix]
     - libprotobuf      # [unix]
     - openjdk 21.*     # [win]
-    - posix            # [win]
+    - m2-base          # [win]
   run:
     - openjdk >=21
-    - posix                    # [win]
+    - m2-base                  # [win]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
 
