@@ -56,8 +56,10 @@ requirements:
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
     - bazel-toolchain >=0.2.0  # [unix]
-    - zip
-    - unzip
+    - zip                      # [linux]
+    - unzip                    # [linux]
+    - m2-zip                   # [win]
+    - m2-unzip                 # [win]
     - python *                 # [win]
   host:
     - libabseil                    # [unix]
