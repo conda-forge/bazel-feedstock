@@ -28,8 +28,13 @@ set "BAZEL_VC=%VSINSTALLDIR%VC"
 set "BAZEL_VS=%VSINSTALLDIR%"
 set "EXTRA_BAZEL_ARGS=--tool_java_runtime_version=21 --java_runtime_version=21"
 
-:: We need to unset some environment variables to make the java command line short enough
+:: We need to unset some environment variables to make the java command line short enough.
+:: scripts/bootstrap/compile.sh passes one --client_env flag per variable in scope, and
+:: Windows caps a command line at 32767 characters. These are CI-runner and toolchain
+:: variables that the bazel bootstrap never reads.
+set ACTIONS_ORCHESTRATION_ID=
 set ACTIONS_RUNNER_ACTION_ARCHIVE_CACHE=
+set ACTIONS_RUNNER_RETURN_JOB_RESULT_FOR_HOSTED=
 set AGENT_BUILDDIRECTORY=
 set AGENT_CLOUDID=
 set AGENT_DISABLELOGPLUGIN_TESTFILEPUBLISHERPLUGIN=
@@ -185,6 +190,43 @@ set DOTNET_SKIP_FIRST_TIME_EXPERIENCE=
 set EDGEWEBDRIVER=
 set FSHARPINSTALLDIR=
 set GECKOWEBDRIVER=
+set GITHUB_ACTION=
+set GITHUB_ACTIONS=
+set GITHUB_ACTOR=
+set GITHUB_ACTOR_ID=
+set GITHUB_API_URL=
+set GITHUB_ARTIFACTS=
+set GITHUB_ARTIFACTS_LIST=
+set GITHUB_BASE_REF=
+set GITHUB_ENV=
+set GITHUB_EVENT_NAME=
+set GITHUB_EVENT_PATH=
+set GITHUB_GRAPHQL_URL=
+set GITHUB_HEAD_REF=
+set GITHUB_JOB=
+set GITHUB_OUTPUT=
+set GITHUB_PATH=
+set GITHUB_REF=
+set GITHUB_REF_NAME=
+set GITHUB_REF_PROTECTED=
+set GITHUB_REF_TYPE=
+set GITHUB_REPOSITORY=
+set GITHUB_REPOSITORY_ID=
+set GITHUB_REPOSITORY_OWNER=
+set GITHUB_REPOSITORY_OWNER_ID=
+set GITHUB_RETENTION_DAYS=
+set GITHUB_RUN_ATTEMPT=
+set GITHUB_RUN_ID=
+set GITHUB_RUN_NUMBER=
+set GITHUB_SERVER_URL=
+set GITHUB_SHA=
+set GITHUB_STATE=
+set GITHUB_STEP_SUMMARY=
+set GITHUB_TRIGGERING_ACTOR=
+set GITHUB_WORKFLOW=
+set GITHUB_WORKFLOW_REF=
+set GITHUB_WORKFLOW_SHA=
+set GITHUB_WORKSPACE=
 set GOROOT_1_19_X64=
 set GOROOT_1_20_X64=
 set GOROOT_1_21_X64=
@@ -192,6 +234,7 @@ set GOROOT_1_22_X64=
 set GOROOT_1_23_X64=
 set GOROOT_1_24_X64=
 set GOROOT_1_25_X64=
+set GOROOT_1_26_X64=
 set JAVA_HOME_11_X64=
 set JAVA_HOME_17_X64=
 set JAVA_HOME_21_X64=
@@ -234,6 +277,14 @@ set ROSETTA2_WARNING=
 set RTOOLS43_HOME=
 set RTOOLS44_HOME=
 set RTOOLS45_HOME=
+set RUNNER_ARCH=
+set RUNNER_ENVIRONMENT=
+set RUNNER_NAME=
+set RUNNER_OS=
+set RUNNER_TEMP=
+set RUNNER_TOOL_CACHE=
+set RUNNER_TRACKING_ID=
+set RUNNER_WORKSPACE=
 set R_VER=
 set SBT_HOME=
 :: show remaining environment variables, in case the list grows enough

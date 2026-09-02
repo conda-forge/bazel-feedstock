@@ -1,0 +1,51 @@
+From 0297e597e63e925266885e894d3ce0f0d85cf862 Mon Sep 17 00:00:00 2001
+From: Jacob Oursland <jacob.oursland@gmail.com>
+Date: Tue, 1 Sep 2026 19:04:56 -0600
+Subject: [PATCH 18/18] win: don't propagate pre-activation env vars to bootstrap
+ Bazel
+
+On Windows the bootstrap invokes java with a --client_env flag for every
+environment variable in scope. conda-forge's build environment (conda
+activation + vcvarsall + the GitHub Actions runner image) is large enough
+that the resulting command line exceeds the 32767-character limit
+CreateProcess imposes, and the bootstrap dies with
+
+    scripts/bootstrap/compile.sh: line 440:
+    .../java: Argument list too long
+
+ORIGINAL_PATH and __VSCMD_PREINIT_PATH alone account for ~8.7k of it: they
+are snapshots of %PATH% taken before MSYS2 and MSVC activation, kept only so
+those environments can be restored later. Bazel never reads them, so skip
+them (along with the matching ORIGINAL_TMP/TEMP and __VSCMD_PREINIT_*
+snapshots) when building the client environment.
+---
+ scripts/bootstrap/compile.sh | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/bootstrap/compile.sh b/scripts/bootstrap/compile.sh
+index d7e6b9c..6a8408b 100644
+--- a/scripts/bootstrap/compile.sh
++++ b/scripts/bootstrap/compile.sh
+@@ -428,8 +428,20 @@ function run_bazel_jar() {
+   local env_vars="$(awk 'END { for (name in ENVIRON) { if(name != "_" && name ~ /^[A-Za-z0-9_]*$/) print name; } }' </dev/null)"
+   for varname in $env_vars; do
+     eval value=\$$varname
+-    if [ "${PLATFORM}" = "windows" ] && echo "$varname" | grep -q -i "^\(path\|tmp\|temp\|tempdir\|systemroot\|systemdrive\)$" ; then
+-      varname="$(echo "$varname" | tr [:lower:] [:upper:])"
++    if [ "${PLATFORM}" = "windows" ]; then
++      # Windows caps a command line at 32k characters, and this one carries one
++      # --client_env flag per variable. Drop the variables that only record the
++      # environment from before shell/MSVC activation: they are among the longest
++      # here (each holds a full copy of %PATH%), nothing in the bootstrap reads
++      # them back, and keeping them overflows the limit with "Argument list too
++      # long". The ORIGINAL_* ones cannot be cleared by the caller instead --
++      # MSYS2's /etc/profile recreates them for every login shell.
++      case "$varname" in
++        ORIGINAL_PATH|ORIGINAL_TMP|ORIGINAL_TEMP|__VSCMD_PREINIT_*) continue ;;
++      esac
++      if echo "$varname" | grep -q -i "^\(path\|tmp\|temp\|tempdir\|systemroot\|systemdrive\)$" ; then
++        varname="$(echo "$varname" | tr [:lower:] [:upper:])"
++      fi
+     fi
+     if [ "${value}" ]; then
+       client_env=("${client_env[@]}" --client_env="${varname}=${value}")
