@@ -13,6 +13,18 @@ fi
 # Generate toolchain and set necessary environment variables
 source gen-bazel-toolchain
 
+mkdir -p third_party/systemlibs/
+# Stub module standing in for the grpc module from the BCR; patch 0013 points
+# MODULE.bazel at it with local_path_override. See its MODULE.bazel for why.
+cp -ap "${RECIPE_DIR}/systemlibs/grpc" third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/grpc/bazel" third_party/systemlibs/grpc/
+chmod -R u+w third_party/systemlibs/grpc
+
+# Those rules refer to gRPC's own repo by name (e.g. the cc_grpc_library plugin
+# is @com_github_grpc_grpc//:grpc_cpp_plugin); make them repo-relative so they
+# resolve against the targets in third_party/systemlibs/grpc/BUILD.
+sed -i 's/@com_github_grpc_grpc//' third_party/systemlibs/grpc/bazel/*.bzl
+
 if [[ "${target_platform}" == "osx-64" ]]; then
   export TARGET_CPU="darwin"
 fi
@@ -50,6 +62,9 @@ sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" MODULE.bazel
 sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
+sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" third_party/systemlibs/grpc/MODULE.bazel
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" third_party/systemlibs/grpc/MODULE.bazel
+sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/grpc/BUILD
 
 cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
 

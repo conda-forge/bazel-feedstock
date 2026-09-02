@@ -24,6 +24,7 @@ source:
       - patches/0010-Enable-new-protobuf-major-release.patch       # [unix]
       - patches/0011-Add-missing-absl-dependency.patch             # [unix]
       - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
+      - patches/0013-Unbundle-grpc.patch                          # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
     sha256: 29f1796f57379933340afa135f02703ffa21dd30135754bea695f8fd15103420  # [win]
@@ -61,6 +62,7 @@ requirements:
     - libgrpc               # [unix]
     - libprotobuf           # [unix]
     - protobuf-bazel-rules  # [unix]
+    - grpc-bazel-rules      # [unix]
     - openjdk 21.*          # [win]
     - m2-base               # [win]
   run:
