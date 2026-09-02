@@ -25,6 +25,7 @@ source:
       - patches/0011-Add-missing-absl-dependency.patch             # [unix]
       - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
       - patches/0013-Unbundle-grpc.patch                          # [unix]
+      - patches/0014-Give-the-protobuf-systemlib-a-rules_shell-dep.patch    # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
     sha256: 29f1796f57379933340afa135f02703ffa21dd30135754bea695f8fd15103420  # [win]
