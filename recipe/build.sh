@@ -13,7 +13,13 @@ fi
 # Generate toolchain and set necessary environment variables
 source gen-bazel-toolchain
 
+# Prepare systemlibs definitions. libabseil-bazel-systemlib ships a ready-made
+# bzlmod module resolving abseil targets to conda's headers and shared libs;
+# patch 0016 points MODULE.bazel at it with local_path_override.
 mkdir -p third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/systemlibs/absl" third_party/systemlibs/
+chmod -R u+w third_party/systemlibs/absl
+
 # Stub module standing in for the grpc module from the BCR; patch 0013 points
 # MODULE.bazel at it with local_path_override. See its MODULE.bazel for why.
 cp -ap "${RECIPE_DIR}/systemlibs/grpc" third_party/systemlibs/
@@ -37,7 +43,8 @@ fi
 # See https://protobuf.dev/support/version-support/
 export PROTOC=$BUILD_PREFIX/bin/protoc
 export GRPC_JAVA_PLUGIN=$BUILD_PREFIX/bin/grpc_java_plugin
-export ABSEIL_VERSION=$(conda list -p $PREFIX libabseil --fields version | grep -v '#')
+# anchor the regex: a bare 'libabseil' would also match libabseil-bazel-systemlib
+export ABSEIL_VERSION=$(conda list -p $PREFIX '^libabseil$' --fields version | grep -v '#')
 # grpc-java often does not have matching `X.Y.1` versions; use `X.Y.0` always
 export GRPC_VERSION=$(conda list -p $PREFIX libgrpc --fields version | grep -v '#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+$/\1.0/')
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')

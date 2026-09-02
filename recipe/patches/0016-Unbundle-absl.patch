@@ -1,0 +1,62 @@
+From efd27535dc8cf5ad601936415f10fd3dac3162d8 Mon Sep 17 00:00:00 2001
+From: Jacob Oursland <jacob.oursland@gmail.com>
+Date: Wed, 2 Sep 2026 13:33:12 -0600
+Subject: [PATCH 16/16] Unbundle absl
+
+Use the abseil provided by conda-forge (libabseil-bazel-systemlib) rather than
+letting bzlmod fetch and compile abseil from the BCR.
+
+Bazel already links against conda's libgrpc/libprotobuf, but kept building a
+vendored abseil for headers. Pinning that vendored copy to the same version as
+conda's libabseil (which is what MODULE.bazel's ABSEIL_VERSION placeholder
+does) keeps the two ABI-compatible, but it does not make them the same headers:
+they still arrive from two different roots. Anything that includes a protobuf
+or grpc header and gets abseil transitively then picks up
+external/abseil-cpp+/absl/**, which the rule never declared:
+
+    ERROR: external/grpc-java+/compiler/BUILD.bazel:7:10: Compiling
+    compiler/src/java_plugin/cpp/java_plugin.cpp [for tool] failed: undeclared
+    inclusion(s) in rule '@@grpc-java+//compiler:grpc_java_plugin':
+    this rule is missing dependency declarations for the following files
+    included by 'compiler/src/java_plugin/cpp/java_plugin.cpp':
+      'external/abseil-cpp+/absl/base/attributes.h'
+      ...
+
+With the systemlib there is no external/abseil-cpp+ tree at all: the abseil
+targets become linkopts, and the headers come from ${PREFIX}/include, which the
+generated toolchain already lists as a builtin include directory and which the
+strict-header check therefore does not police.
+
+All eleven abseil targets the tree references after patch 0011 are present in
+the systemlib, so nothing needs dropping here (unlike 7.x, which also had to
+drop absl/utility:if_constexpr).
+
+This mirrors what the main branch does for 9.x and what #299 does for 7.x.
+---
+ MODULE.bazel | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 1538882..71590f0 100755
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -36,6 +36,16 @@ bazel_dep(name = "rules_testing", version = "0.6.0")
+ bazel_dep(name = "googletest", version = "1.17.0.bcr.2", repo_name = "com_google_googletest")
+ bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
+ bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
++# Use the abseil shipped by conda-forge (via libabseil-bazel-systemlib) instead of
++# letting bzlmod fetch and build a vendored copy. Bazel links against conda's
++# libgrpc/libprotobuf, and the headers those pull in have to be the same abseil;
++# with a bzlmod-built abseil the two meet in third-party compiles that then fail
++# the strict-header check, e.g. @grpc-java//compiler:grpc_java_plugin reporting
++# undeclared inclusions of external/abseil-cpp+/absl/**.
++local_path_override(
++    module_name = "abseil-cpp",
++    path = "./third_party/systemlibs/absl",
++)
+ bazel_dep(name = "rules_shell", version = "0.6.1")
+ bazel_dep(name = "chicory", version = "1.1.0")
+ 
+-- 
+2.55.0
+
