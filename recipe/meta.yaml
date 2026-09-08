@@ -30,9 +30,13 @@ source:
       - patches/0014-Add-missing-absl-dependency.patch
       - patches/0015-Pin-to-older-bazel_features.patch
       - patches/0016-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
+      - patches/0017-Unbundle-absl.patch                           # [unix]
+      # the bootstrap passes one --client_env flag per environment variable, which
+      # overflows the 32767-char Windows command line on our CI ("Argument list too long")
+      - patches/0018-win-Shorten-the-bootstrap-java-command-line.patch
 
 build:
-  number: 1
+  number: 2
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
@@ -57,16 +61,21 @@ requirements:
     - bazel-toolchain >=0.2.0  # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
+    - m2-zip                   # [win]
+    - m2-unzip                 # [win]
     - python *                 # [win]
   host:
-    - libabseil        # [unix]
+    - libabseil                    # [unix]
+    # provides share/bazel/systemlibs/absl, the bzlmod module that build.sh drops
+    # into third_party/systemlibs/absl so bazel builds against conda's abseil
+    - libabseil-bazel-systemlib    # [unix]
     - libgrpc          # [unix]
     - libprotobuf      # [unix]
     - openjdk 21.*     # [win]
-    - posix            # [win]
+    - m2-base          # [win]
   run:
     - openjdk >=21
-    - posix                    # [win]
+    - m2-base                  # [win]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
 
