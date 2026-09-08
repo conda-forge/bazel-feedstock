@@ -1,0 +1,76 @@
+From bc64d48411bda25b41f3620122fd2a217cf512f3 Mon Sep 17 00:00:00 2001
+From: Jacob Oursland <jacob.oursland@gmail.com>
+Date: Wed, 2 Sep 2026 13:25:32 -0600
+Subject: [PATCH 15/15] Use ProtoInfo.transitive_sources in the vendored grpc rules
+
+Bazel keeps a simplified fork of gRPC's Starlark rules in third_party/grpc,
+and three of those files read ProtoInfo.transitive_imports. That field only
+exists on Bazel's own built-in ProtoInfo, where
+src/main/starlark/builtins_bzl/common/proto/proto_info.bzl still carries it as
+a deprecated alias for transitive_sources. The vendored rules do not use that
+one: they load ProtoInfo from
+@com_google_protobuf//bazel/common:proto_info.bzl, and protobuf dropped the
+alias, so analysis fails as soon as a cc_grpc_library is reached:
+
+    ERROR: src/main/protobuf/BUILD:209:16: in generate_cc rule
+    //src/main/protobuf:_command_server_cc_grpc_grpc_codegen:
+    third_party/grpc/bazel/generate_cc.bzl, line 62, in generate_cc_impl
+        for f in src[ProtoInfo].transitive_imports.to_list()
+    Error: 'ProtoInfo' value has no field or method 'transitive_imports'
+    Available attributes: check_deps_sources, direct_descriptor_set,
+    direct_sources, proto_source_root, transitive_descriptor_sets,
+    transitive_extension_declarations, transitive_proto_path,
+    transitive_sources
+
+The two names are the same depset -- proto_info.bzl builds the alias as
+`transitive_imports = transitive_sources` -- so this is a rename, not a change
+in behaviour. gRPC made the identical substitution upstream: the copy shipped
+in grpc 1.82 reads transitive_sources.
+---
+ third_party/grpc/bazel/generate_cc.bzl | 2 +-
+ third_party/grpc/bazel/protobuf.bzl    | 2 +-
+ third_party/grpc/build_defs.bzl        | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/third_party/grpc/bazel/generate_cc.bzl b/third_party/grpc/bazel/generate_cc.bzl
+index 67d017c..a3e251e 100755
+--- a/third_party/grpc/bazel/generate_cc.bzl
++++ b/third_party/grpc/bazel/generate_cc.bzl
+@@ -59,7 +59,7 @@ def generate_cc_impl(ctx):
+     includes = [
+         f
+         for src in ctx.attr.srcs
+-        for f in src[ProtoInfo].transitive_imports.to_list()
++        for f in src[ProtoInfo].transitive_sources.to_list()
+     ]
+     outs = []
+     proto_root = get_proto_root(
+diff --git a/third_party/grpc/bazel/protobuf.bzl b/third_party/grpc/bazel/protobuf.bzl
+index b36327d..bdd43ec 100755
+--- a/third_party/grpc/bazel/protobuf.bzl
++++ b/third_party/grpc/bazel/protobuf.bzl
+@@ -162,7 +162,7 @@ def includes_from_deps(deps):
+     return [
+         file
+         for src in deps
+-        for file in src[ProtoInfo].transitive_imports.to_list()
++        for file in src[ProtoInfo].transitive_sources.to_list()
+     ]
+ 
+ def get_proto_arguments(protos, genfiles_dir_path):
+diff --git a/third_party/grpc/build_defs.bzl b/third_party/grpc/build_defs.bzl
+index f436069..64ee093 100755
+--- a/third_party/grpc/build_defs.bzl
++++ b/third_party/grpc/build_defs.bzl
+@@ -28,7 +28,7 @@ def _gensource_impl(ctx):
+                    "same package as consuming rule").format(ctx.label, s.label))
+     srcdotjar = ctx.actions.declare_file(ctx.label.name + ".jar")
+     srcs = [f for dep in ctx.attr.srcs for f in dep[ProtoInfo].direct_sources]
+-    includes = [f for dep in ctx.attr.srcs for f in dep[ProtoInfo].transitive_imports.to_list()]
++    includes = [f for dep in ctx.attr.srcs for f in dep[ProtoInfo].transitive_sources.to_list()]
+ 
+     ctx.actions.run_shell(
+         command = " ".join([
+-- 
+2.55.0
+

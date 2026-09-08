@@ -1,4 +1,4 @@
-From 2dc82a8cbfdea4486df5b53115a4f09b016785a5 Mon Sep 17 00:00:00 2001
+From 3810d936d9023ead604b812c5e529bf38fb21b76 Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Fri, 16 Mar 2018 12:10:51 -0500
 Subject: [PATCH 01/12] allow args to be passed to bazel_build

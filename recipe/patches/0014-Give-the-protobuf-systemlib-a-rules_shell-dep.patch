@@ -1,0 +1,38 @@
+From ea8a0c67731463b1ab7e84fc30b67f7957c2e9e0 Mon Sep 17 00:00:00 2001
+From: Jacob Oursland <jacob.oursland@gmail.com>
+Date: Tue, 2 Sep 2026 12:00:00 +0000
+Subject: [PATCH 14/14] Give the protobuf systemlib a rules_shell dep
+
+build.sh drops protobuf's Starlark rules (from the protobuf-bazel-rules
+package) into the systemlib module. Since protobuf 35, bazel/flags/cc/BUILD in
+those rules loads @rules_shell//shell:sh_binary.bzl, and the systemlib's
+MODULE.bazel never declared the dependency, so the package fails to load as
+soon as anything pulls in a cc_proto_library:
+
+    ERROR: error loading package '@@protobuf+//bazel/flags/cc': Unable to find
+    package for @@[unknown repo 'rules_shell' requested from
+    @@protobuf+]//shell:sh_binary.bzl
+    ERROR: .../src/main/protobuf/BUILD:230:17: every rule of type
+    cc_proto_library implicitly depends upon the target
+    '@@protobuf+//bazel/flags/cc:proto_toolchain_for_cc', but this target could
+    not be found
+
+Declare it, at the same lower bound the libprotobuf-bazel-systemlib package
+uses; MVS resolves it up to the rules_shell that Bazel's own MODULE.bazel asks
+for.
+---
+ third_party/systemlibs/protobuf/MODULE.bazel | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
+index e7b2a46891..8c1d4f2a10 100644
+--- a/third_party/systemlibs/protobuf/MODULE.bazel
++++ b/third_party/systemlibs/protobuf/MODULE.bazel
+@@ -18,6 +18,7 @@ bazel_dep(name = "jsoncpp", version = "1.9.5")
+ bazel_dep(name = "rules_cc", version = "0.0.9")
+ bazel_dep(name = "rules_java", version = "5.3.5")
+ bazel_dep(name = "rules_jvm_external", version = "5.1")
++bazel_dep(name = "rules_shell", version = "0.6.0")
+ bazel_dep(name = "rules_pkg", version = "0.7.0")
+ bazel_dep(name = "rules_python", version = "0.10.2")
+ bazel_dep(name = "platforms", version = "0.0.8")

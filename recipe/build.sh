@@ -13,6 +13,24 @@ fi
 # Generate toolchain and set necessary environment variables
 source gen-bazel-toolchain
 
+# Prepare systemlibs definitions. libabseil-bazel-systemlib ships a ready-made
+# bzlmod module resolving abseil targets to conda's headers and shared libs;
+# patch 0016 points MODULE.bazel at it with local_path_override.
+mkdir -p third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/systemlibs/absl" third_party/systemlibs/
+chmod -R u+w third_party/systemlibs/absl
+
+# Stub module standing in for the grpc module from the BCR; patch 0013 points
+# MODULE.bazel at it with local_path_override. See its MODULE.bazel for why.
+cp -ap "${RECIPE_DIR}/systemlibs/grpc" third_party/systemlibs/
+cp -ap "${PREFIX}/share/bazel/grpc/bazel" third_party/systemlibs/grpc/
+chmod -R u+w third_party/systemlibs/grpc
+
+# Those rules refer to gRPC's own repo by name (e.g. the cc_grpc_library plugin
+# is @com_github_grpc_grpc//:grpc_cpp_plugin); make them repo-relative so they
+# resolve against the targets in third_party/systemlibs/grpc/BUILD.
+sed -i 's/@com_github_grpc_grpc//' third_party/systemlibs/grpc/bazel/*.bzl
+
 if [[ "${target_platform}" == "osx-64" ]]; then
   export TARGET_CPU="darwin"
 fi
@@ -25,7 +43,8 @@ fi
 # See https://protobuf.dev/support/version-support/
 export PROTOC=$BUILD_PREFIX/bin/protoc
 export GRPC_JAVA_PLUGIN=$BUILD_PREFIX/bin/grpc_java_plugin
-export ABSEIL_VERSION=$(conda list -p $PREFIX libabseil --fields version | grep -v '#')
+# anchor the regex: a bare 'libabseil' would also match libabseil-bazel-systemlib
+export ABSEIL_VERSION=$(conda list -p $PREFIX '^libabseil$' --fields version | grep -v '#')
 # grpc-java often does not have matching `X.Y.1` versions; use `X.Y.0` always
 export GRPC_VERSION=$(conda list -p $PREFIX libgrpc --fields version | grep -v '#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+$/\1.0/')
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
@@ -50,6 +69,9 @@ sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" MODULE.bazel
 sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
+sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" third_party/systemlibs/grpc/MODULE.bazel
+sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" third_party/systemlibs/grpc/MODULE.bazel
+sed -ie "s:\${BUILD_PREFIX}:${BUILD_PREFIX}:" third_party/systemlibs/grpc/BUILD
 
 cp -ap $PREFIX/share/bazel/protobuf/bazel third_party/systemlibs/protobuf/
 

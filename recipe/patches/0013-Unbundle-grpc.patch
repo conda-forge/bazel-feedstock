@@ -1,0 +1,47 @@
+From d0a1bcd09033abb0315f4d98169dde78060797d0 Mon Sep 17 00:00:00 2001
+From: Jacob Oursland <jacob.oursland@gmail.com>
+Date: Tue, 2 Sep 2026 12:00:00 +0000
+Subject: [PATCH 13/14] Unbundle grpc
+
+Replace the grpc module from the BCR with the stub in
+third_party/systemlibs/grpc (installed by build.sh from recipe/systemlibs).
+
+Bazel never builds gRPC from source: third_party/grpc/BUILD links conda's
+libgrpc, and the Starlark rules it needs are vendored in
+third_party/grpc/bazel. The BCR module is only there to satisfy the bazel_dep
+-- but its MODULE.bazel calls register_toolchains, which forces its root
+package to load, and grpc's BUILD files load
+@com_google_protobuf//bazel:upb_proto_reflection_library.bzl, which protobuf
+ships as a shim forwarding to //upb/bazel -- a package our protobuf systemlib
+does not have:
+
+    ERROR: ... invalid registered toolchain
+    '//:python_3_11_ios_sim_arm64_workaround': error loading package '@@grpc+//':
+    ... Label '@@protobuf+//upb/bazel:upb_proto_reflection_library.bzl' is
+    invalid because 'upb/bazel' is not a package
+
+The grpc-java module is left on the BCR: its Java artifacts are really used,
+and it does not drag in grpc's BUILD files.
+
+This mirrors what the main branch does for 9.x.
+---
+ MODULE.bazel | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 42f384e5a5..3b7a5c1f00 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -50,6 +50,12 @@ local_path_override(
+     path = "./third_party/systemlibs/protobuf",
+ )
+ 
++# See third_party/systemlibs/grpc/MODULE.bazel for why the BCR module is replaced.
++local_path_override(
++    module_name = "grpc",
++    path = "./third_party/systemlibs/grpc",
++)
++
+ # TODO: wyv@ - add remoteapis to the BCR
+ bazel_dep(name = "remoteapis", version = "")
+ 

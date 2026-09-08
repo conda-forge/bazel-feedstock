@@ -1,4 +1,4 @@
-From 7256535f492da9b8e056963c9202605bf705fba0 Mon Sep 17 00:00:00 2001
+From ab3dac464a958babd6da947ad03a439ea2cf9ab2 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 02/12] Build with native dependencies
@@ -20,7 +20,7 @@ Subject: [PATCH 02/12] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index aed123b97d..6cfd004d0c 100644
+index 903391f7e5..279256b5a8 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -43,6 +43,10 @@ bazel_dep(name = "rules_cc", version = "0.1.1")

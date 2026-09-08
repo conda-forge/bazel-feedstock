@@ -1,32 +1,18 @@
-From bd779d1cc6ee2796668837c2566d1ad7695d0e60 Mon Sep 17 00:00:00 2001
+From edb54026818508cacd0a47dfa8e24380633dea67 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Fri, 8 Nov 2024 22:04:59 +0100
 Subject: [PATCH 11/12] Add missing absl dependency
 
 ---
- MODULE.bazel                                  |  2 +-
  src/main/cpp/BUILD                            | 28 +++++++-
  .../systemlibs/protobuf/toolchain/BUILD       |  0
  .../protobuf/toolchain/platforms.bzl          | 64 +++++++++++++++++++
- 4 files changed, 91 insertions(+), 3 deletions(-)
+ 3 files changed, 90 insertions(+), 2 deletions(-)
  create mode 100644 third_party/systemlibs/protobuf/toolchain/BUILD
  create mode 100644 third_party/systemlibs/protobuf/toolchain/platforms.bzl
 
-diff --git a/MODULE.bazel b/MODULE.bazel
-index 6e00ee3e29..c7dabcab7b 100644
---- a/MODULE.bazel
-+++ b/MODULE.bazel
-@@ -32,7 +32,7 @@ bazel_dep(name = "rules_proto", version = "7.0.2")
- bazel_dep(name = "rules_jvm_external", version = "6.0")
- bazel_dep(name = "rules_python", version = "1.5.4")
- bazel_dep(name = "rules_testing", version = "0.6.0")
--bazel_dep(name = "googletest", version = "1.15.2", repo_name = "com_google_googletest")
-+bazel_dep(name = "googletest", version = "1.17.0", repo_name = "com_google_googletest")
- bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
- bazel_dep(name = "abseil-cpp", version = "ABSEIL_VERSION")
- bazel_dep(name = "rules_shell", version = "0.3.0")
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index dd3bc40397..b7b2a65659 100644
+index 04456da11e..22b1131434 100644
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -90,6 +90,15 @@ cc_library(
