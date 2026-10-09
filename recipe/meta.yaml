@@ -25,7 +25,7 @@ source:
     sha256: 5fc2f2805b8c697a54732558576938d06bab63aa0f9b6610cc01d2cae0388705  # [win]
 
 build:
-  number: 0
+  number: 1
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
