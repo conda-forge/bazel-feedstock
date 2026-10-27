@@ -1,7 +1,7 @@
-From d0a1bcd09033abb0315f4d98169dde78060797d0 Mon Sep 17 00:00:00 2001
+From 4eb79fbe52c41bd5f0186dc64c2c5d8c1ab68361 Mon Sep 17 00:00:00 2001
 From: Jacob Oursland <jacob.oursland@gmail.com>
-Date: Tue, 2 Sep 2026 12:00:00 +0000
-Subject: [PATCH 13/14] Unbundle grpc
+Date: Wed, 2 Sep 2026 12:00:00 +0000
+Subject: [PATCH 13/16] Unbundle grpc
 
 Replace the grpc module from the BCR with the stub in
 third_party/systemlibs/grpc (installed by build.sh from recipe/systemlibs).
@@ -29,10 +29,10 @@ This mirrors what the main branch does for 9.x.
  1 file changed, 6 insertions(+)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 42f384e5a5..3b7a5c1f00 100644
+index c4b1680473..4eaf0d1434 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
-@@ -50,6 +50,12 @@ local_path_override(
+@@ -51,6 +51,12 @@ local_path_override(
      path = "./third_party/systemlibs/protobuf",
  )
  

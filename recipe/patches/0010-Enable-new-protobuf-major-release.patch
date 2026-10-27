@@ -1,7 +1,7 @@
-From 37bab1d9c29230b61e8e18ca54af26b09c0559ca Mon Sep 17 00:00:00 2001
+From 02a4a270c4b6d178f11e97413f6800f3d0447b81 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
-Subject: [PATCH 10/12] Enable new protobuf major release
+Subject: [PATCH 10/16] Enable new protobuf major release
 
 ---
  MODULE.bazel                                  | 75 +++++++++----------
@@ -13,7 +13,7 @@ Subject: [PATCH 10/12] Enable new protobuf major release
  create mode 100644 third_party/systemlibs/protobuf/src/google/protobuf/compiler/BUILD
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 279256b5a8..42f384e5a5 100644
+index 81b7c1e089..c4b1680473 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -14,35 +14,38 @@ module(

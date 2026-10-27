@@ -1,4 +1,4 @@
-{% set version = "8.7.0" %}
+{% set version = "8.8.2" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: 75ed5aa189fd687e6e7c289ad86a3851844965a6c1479b7a5ce9b846a6e461bc
+    sha256: d14a2e18a02a1d50ef06ba5fdcf636587d595b41e1661903cfce916df43284a0
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
@@ -30,10 +30,10 @@ source:
       - patches/0016-Unbundle-absl.patch                          # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 29f1796f57379933340afa135f02703ffa21dd30135754bea695f8fd15103420  # [win]
+    sha256: 07e467a78e709a4c9b0dca13da15121b4fcd7c6a037dfb4b17c72e527d4d6785  # [win]
 
 build:
-  number: 2
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.

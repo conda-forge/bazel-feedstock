@@ -1,14 +1,14 @@
-From 0bfcce1dc30e11b08de68bd705cfbd56884d67f4 Mon Sep 17 00:00:00 2001
+From 4111bca0209449d59a717cd667ba8c904a4a439a Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:08:16 +0100
-Subject: [PATCH 06/12] bazel bin loader path
+Subject: [PATCH 06/16] bazel bin loader path
 
 ---
  src/BUILD | 29 +++++++++++++++++++++++++++--
  1 file changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/src/BUILD b/src/BUILD
-index 1d46d82ef5..d71c0527d9 100644
+index e82cf881b3..707c109fac 100644
 --- a/src/BUILD
 +++ b/src/BUILD
 @@ -316,16 +316,41 @@ genrule(
@@ -50,8 +50,8 @@ index 1d46d82ef5..d71c0527d9 100644
      # In msys, a file path without .exe suffix(say foo), refers to a file with .exe
      # suffix(say foo.exe), if foo.exe exists and foo doesn't. So, on windows, we
      # need to remove bazel.exe first, so that cat to bazel won't fail.
--    cmd = "rm -f $@; cat $(location //src/main/cpp:client) $(location :package-zip" + jdk + ") > $@ && zip -qA $@ && chmod a+x $@",
-+    cmd = "rm -f $@; cat $(location :bazel-bin-install-name" + suffix + ") $(location :package-zip" + jdk + ") > $@ && zip -qA $@ && chmod a+x $@",
+-    cmd = "rm -f $@ $@.unaligned; cat $(location //src/main/cpp:client) $(location :package-zip" + jdk + ") > $@.unaligned && $(location //src/java_tools/singlejar/java/com/google/devtools/build/zip:adjust_sfx) $@.unaligned $@ && rm -f $@.unaligned && chmod a+x $@",
++    cmd = "rm -f $@ $@.unaligned; cat $(location :bazel-bin-install-name" + suffix + ") $(location :package-zip" + jdk + ") > $@.unaligned && $(location //src/java_tools/singlejar/java/com/google/devtools/build/zip:adjust_sfx) $@.unaligned $@ && rm -f $@.unaligned && chmod a+x $@",
      executable = 1,
      output_to_bindir = 1,
-     visibility = [
+     tools = ["//src/java_tools/singlejar/java/com/google/devtools/build/zip:adjust_sfx"],

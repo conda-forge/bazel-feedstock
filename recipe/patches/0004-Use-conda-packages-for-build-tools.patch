@@ -1,7 +1,7 @@
-From 8067667fd23715ba4912634056cc2f5165d3459a Mon Sep 17 00:00:00 2001
+From 531de261289d9aaec5dfbea8d0487650876c1e57 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
-Subject: [PATCH 04/12] Use conda packages for build tools
+Subject: [PATCH 04/16] Use conda packages for build tools
 
 ---
  src/tools/singlejar/BUILD | 44 +++++++++------------------------------
@@ -10,7 +10,7 @@ Subject: [PATCH 04/12] Use conda packages for build tools
  3 files changed, 27 insertions(+), 47 deletions(-)
 
 diff --git a/src/tools/singlejar/BUILD b/src/tools/singlejar/BUILD
-index 7043e27b34..f82ebbe64c 100644
+index 0cf8cd84fb..6808b984c1 100644
 --- a/src/tools/singlejar/BUILD
 +++ b/src/tools/singlejar/BUILD
 @@ -73,44 +73,20 @@ release_archive(
