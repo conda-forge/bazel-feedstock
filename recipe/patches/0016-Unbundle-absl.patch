@@ -1,4 +1,4 @@
-From efd27535dc8cf5ad601936415f10fd3dac3162d8 Mon Sep 17 00:00:00 2001
+From 8de0960f430106ab97530c1d7f6b697809dea88c Mon Sep 17 00:00:00 2001
 From: Jacob Oursland <jacob.oursland@gmail.com>
 Date: Wed, 2 Sep 2026 13:33:12 -0600
 Subject: [PATCH 16/16] Unbundle absl
@@ -37,7 +37,7 @@ This mirrors what the main branch does for 9.x and what #299 does for 7.x.
  1 file changed, 10 insertions(+)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 1538882..71590f0 100755
+index 4eaf0d1434..80dd3aea0e 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -36,6 +36,16 @@ bazel_dep(name = "rules_testing", version = "0.6.0")
@@ -57,6 +57,3 @@ index 1538882..71590f0 100755
  bazel_dep(name = "rules_shell", version = "0.6.1")
  bazel_dep(name = "chicory", version = "1.1.0")
  
--- 
-2.55.0
-

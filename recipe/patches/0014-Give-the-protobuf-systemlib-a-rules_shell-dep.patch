@@ -1,7 +1,7 @@
-From ea8a0c67731463b1ab7e84fc30b67f7957c2e9e0 Mon Sep 17 00:00:00 2001
+From 82e1c0c81f3858f2dec58e3a6bce048975bff4b7 Mon Sep 17 00:00:00 2001
 From: Jacob Oursland <jacob.oursland@gmail.com>
-Date: Tue, 2 Sep 2026 12:00:00 +0000
-Subject: [PATCH 14/14] Give the protobuf systemlib a rules_shell dep
+Date: Wed, 2 Sep 2026 12:00:00 +0000
+Subject: [PATCH 14/16] Give the protobuf systemlib a rules_shell dep
 
 build.sh drops protobuf's Starlark rules (from the protobuf-bazel-rules
 package) into the systemlib module. Since protobuf 35, bazel/flags/cc/BUILD in
@@ -25,7 +25,7 @@ for.
  1 file changed, 1 insertion(+)
 
 diff --git a/third_party/systemlibs/protobuf/MODULE.bazel b/third_party/systemlibs/protobuf/MODULE.bazel
-index e7b2a46891..8c1d4f2a10 100644
+index e7b2a46891..15570204af 100644
 --- a/third_party/systemlibs/protobuf/MODULE.bazel
 +++ b/third_party/systemlibs/protobuf/MODULE.bazel
 @@ -18,6 +18,7 @@ bazel_dep(name = "jsoncpp", version = "1.9.5")

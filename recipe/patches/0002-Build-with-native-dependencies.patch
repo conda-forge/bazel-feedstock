@@ -1,7 +1,7 @@
-From ab3dac464a958babd6da947ad03a439ea2cf9ab2 Mon Sep 17 00:00:00 2001
+From 8689fba6e49ee0e9f0f8d5611462baa1f3821c4c Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
-Subject: [PATCH 02/12] Build with native dependencies
+Subject: [PATCH 02/16] Build with native dependencies
 
 ---
  MODULE.bazel                                  |   6 +
@@ -20,7 +20,7 @@ Subject: [PATCH 02/12] Build with native dependencies
  create mode 100644 third_party/systemlibs/protobuf_deps.bzl
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 903391f7e5..279256b5a8 100644
+index e662cbd2de..81b7c1e089 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -43,6 +43,10 @@ bazel_dep(name = "rules_cc", version = "0.1.1")
@@ -44,10 +44,10 @@ index 903391f7e5..279256b5a8 100644
          "com.ryanharter.auto.value:auto-value-gson-extension:1.3.1",
          "com.ryanharter.auto.value:auto-value-gson-factory:1.3.1",
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index a2e6752c24..4394aa3160 100644
+index 4ad86766f3..66e41dd74a 100644
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
-@@ -517,7 +517,7 @@ java_library(
+@@ -530,7 +530,7 @@ java_library(
          "//third_party:guava",
          "//third_party:jsr305",
          "@com_google_protobuf//:protobuf_java",
