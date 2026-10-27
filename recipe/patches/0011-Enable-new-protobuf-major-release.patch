@@ -1,4 +1,4 @@
-From 1b5fde08ec659cdb27aad1646c91bf22c61434a8 Mon Sep 17 00:00:00 2001
+From b23764e4ddc4b1ab3bd1d1155c4ca77753db4447 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 28 Sep 2024 08:46:03 +0200
 Subject: [PATCH 11/16] Enable new protobuf major release
