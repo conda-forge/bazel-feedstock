@@ -40,7 +40,7 @@ description = "Build bazel-feedstock directly (without setup scripts), no partic
 [feature.build.tasks.debug]
 cmd = "conda-build debug recipe"
 description = "Debug bazel-feedstock directly (without setup scripts), no particular variant specified"
-[feature.build.tasks."build-linux_64_"]
+[feature.build.tasks."build-"]
 cmd = "conda-build build recipe -m .ci_support/linux_64_.yaml --suppress-variables --clobber-file .ci_support/clobber_linux_64_.yaml"
 description = "Build bazel-feedstock with variant linux_64_ directly (without setup scripts)"
 [feature.build.tasks."debug-linux_64_"]
@@ -49,7 +49,7 @@ description = "Debug bazel-feedstock with variant linux_64_ directly (without se
 [feature.build.tasks."inspect-linux_64_"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_.yaml"
 description = "List contents of bazel-feedstock packages built for variant linux_64_"
-[feature.build.tasks."build-linux_aarch64_"]
+[feature.build.tasks."build-"]
 cmd = "conda-build build recipe -m .ci_support/linux_aarch64_.yaml --suppress-variables --clobber-file .ci_support/clobber_linux_aarch64_.yaml"
 description = "Build bazel-feedstock with variant linux_aarch64_ directly (without setup scripts)"
 [feature.build.tasks."debug-linux_aarch64_"]
@@ -58,7 +58,7 @@ description = "Debug bazel-feedstock with variant linux_aarch64_ directly (witho
 [feature.build.tasks."inspect-linux_aarch64_"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_.yaml"
 description = "List contents of bazel-feedstock packages built for variant linux_aarch64_"
-[feature.build.tasks."build-osx_64_"]
+[feature.build.tasks."build-"]
 cmd = "conda-build build recipe -m .ci_support/osx_64_.yaml --suppress-variables --clobber-file .ci_support/clobber_osx_64_.yaml"
 description = "Build bazel-feedstock with variant osx_64_ directly (without setup scripts)"
 [feature.build.tasks."debug-osx_64_"]
@@ -67,7 +67,7 @@ description = "Debug bazel-feedstock with variant osx_64_ directly (without setu
 [feature.build.tasks."inspect-osx_64_"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_.yaml"
 description = "List contents of bazel-feedstock packages built for variant osx_64_"
-[feature.build.tasks."build-osx_arm64_"]
+[feature.build.tasks."build-"]
 cmd = "conda-build build recipe -m .ci_support/osx_arm64_.yaml --suppress-variables --clobber-file .ci_support/clobber_osx_arm64_.yaml"
 description = "Build bazel-feedstock with variant osx_arm64_ directly (without setup scripts)"
 [feature.build.tasks."debug-osx_arm64_"]
@@ -76,7 +76,7 @@ description = "Debug bazel-feedstock with variant osx_arm64_ directly (without s
 [feature.build.tasks."inspect-osx_arm64_"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_.yaml"
 description = "List contents of bazel-feedstock packages built for variant osx_arm64_"
-[feature.build.tasks."build-win_64_"]
+[feature.build.tasks."build-"]
 cmd = "conda-build build recipe -m .ci_support/win_64_.yaml --suppress-variables --clobber-file .ci_support/clobber_win_64_.yaml"
 description = "Build bazel-feedstock with variant win_64_ directly (without setup scripts)"
 [feature.build.tasks."debug-win_64_"]
