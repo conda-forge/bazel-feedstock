@@ -1,4 +1,4 @@
-From af6cfcadfe94541eb46f762f4506f9b09355800f Mon Sep 17 00:00:00 2001
+From cd9cea29cc48a775c3158b267946a1b963c08eef Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 8/8] Build with native dependencies
@@ -12,7 +12,7 @@ Subject: [PATCH 8/8] Build with native dependencies
  5 files changed, 53 insertions(+), 53 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 9b5945d..4fbf48d 100755
+index c947f9f7d1..7994d73dbf 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -13,17 +13,17 @@ module(
@@ -129,7 +129,7 @@ index 9b5945d..4fbf48d 100755
          "io.netty:netty-codec:4.1.119.Final",
          "io.netty:netty-codec-http:4.1.119.Final",
 diff --git a/compile.sh b/compile.sh
-index 0c0edf6..abadf80 100755
+index 0c0edf6eb3..abadf8088e 100755
 --- a/compile.sh
 +++ b/compile.sh
 @@ -60,8 +60,17 @@ if [[ $PLATFORM == "darwin" ]] && \
@@ -151,7 +151,7 @@ index 0c0edf6..abadf80 100755
  display "."
  log "Building output/bazel"
 diff --git a/src/main/cpp/BUILD b/src/main/cpp/BUILD
-index c973f0a..5cc542c 100755
+index c973f0ad0a..5cc542cc02 100644
 --- a/src/main/cpp/BUILD
 +++ b/src/main/cpp/BUILD
 @@ -93,6 +93,15 @@ cc_library(
@@ -189,10 +189,10 @@ index c973f0a..5cc542c 100755
              "-ldl",
          ],
 diff --git a/src/main/java/com/google/devtools/build/lib/BUILD b/src/main/java/com/google/devtools/build/lib/BUILD
-index d385177..db65056 100755
+index 3083138d93..e20f77f621 100644
 --- a/src/main/java/com/google/devtools/build/lib/BUILD
 +++ b/src/main/java/com/google/devtools/build/lib/BUILD
-@@ -582,7 +582,7 @@ java_library(
+@@ -584,7 +584,7 @@ java_library(
          "//third_party:guava",
          "//third_party:jsr305",
          "@com_google_protobuf//:protobuf_java",
@@ -202,7 +202,7 @@ index d385177..db65056 100755
      ],
  )
 diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
-index 822d03d..f307b1d 100755
+index 822d03db32..f307b1d919 100644
 --- a/third_party/grpc/BUILD
 +++ b/third_party/grpc/BUILD
 @@ -13,6 +13,7 @@
