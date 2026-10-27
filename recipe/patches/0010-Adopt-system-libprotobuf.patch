@@ -1,4 +1,4 @@
-From 8d7992cbc2c7c7021493f03c8d1f9b581c53fc66 Mon Sep 17 00:00:00 2001
+From 6001a96dd80ea37d343e5476421abdd21be7dda7 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 27 Jun 2024 17:08:56 +0200
 Subject: [PATCH 10/16] Adopt system libprotobuf

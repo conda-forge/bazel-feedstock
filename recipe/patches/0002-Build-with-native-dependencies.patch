@@ -1,4 +1,4 @@
-From ed6240292cb6a61b3df59f14bd9f70b3af442e53 Mon Sep 17 00:00:00 2001
+From 7076596b6a588c3f0b62bab937faf64a5c4339fb Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwelk@xhochy.com>
 Date: Sun, 21 Mar 2021 21:26:54 +0100
 Subject: [PATCH 02/16] Build with native dependencies

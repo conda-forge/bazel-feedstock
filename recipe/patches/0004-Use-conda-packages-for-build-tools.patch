@@ -1,4 +1,4 @@
-From 3d55924d82514c60c59f4ae220cdbb53dc02962a Mon Sep 17 00:00:00 2001
+From b779a8e5b77847c3645bf5bb5e8a88802a93f4a0 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:04:35 +0100
 Subject: [PATCH 04/16] Use conda packages for build tools

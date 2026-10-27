@@ -1,4 +1,4 @@
-From 8d4dea7ca338033edc70bb7ef71d8607a7d9a893 Mon Sep 17 00:00:00 2001
+From da55edbb13a0c40d1bf1f3688768003113cc66fe Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Sat, 12 Feb 2022 22:05:55 +0100
 Subject: [PATCH 05/16] grpc-java-plugin from build
