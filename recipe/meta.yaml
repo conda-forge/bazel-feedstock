@@ -1,4 +1,4 @@
-{% set version = "7.7.2" %}
+{% set version = "7.7.3" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: f40c88b52da292746b6ccf742a0e3f0897a7e4ac24d0143b860f1857f220d5ec
+    sha256: a6b7ddcb809bded9a3a736aabc2084a43c84668b0a3007921b91c70e1a3ad814
     patches:
       ## bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       ## which patches the same sources; the patches from singlejar should either be
@@ -36,7 +36,7 @@ source:
       - patches/0018-win-Shorten-the-bootstrap-java-command-line.patch
 
 build:
-  number: 1
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
