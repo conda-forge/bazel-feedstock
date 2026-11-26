@@ -36,7 +36,7 @@ source:
       - patches/0018-win-Shorten-the-bootstrap-java-command-line.patch
 
 build:
-  number: 1
+  number: 2
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
@@ -74,7 +74,8 @@ requirements:
     - openjdk 21.*     # [win]
     - m2-base          # [win]
   run:
-    - openjdk >=21
+    # Bazel <=9.2 passes -Xverify:none, removed in JDK 27 (JDK-8373481)
+    - openjdk >=21,<27
     - m2-base                  # [win]
     - ijar {{ version }}       # [unix]
     - singlejar {{ version }}  # [unix]
