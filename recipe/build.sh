@@ -119,7 +119,9 @@ pushd install-archive
   export INSTALL_BASE_KEY=$(cat install_base_key)
 popd
 mv install-archive $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
-chmod -R a+w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+# PackageZipper in Bazel 9.3 drops Unix permissions from the embedded zip,
+# so restore 0755 to match what Bazel's own extractor writes.
+chmod -R 0755 $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
 for executable in "daemonize" "linux-sandbox" "process-wrapper"; do
   if [[ "${target_platform}" == osx-* ]]; then
     ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
