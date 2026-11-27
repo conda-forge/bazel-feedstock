@@ -27,7 +27,7 @@ index 81b7c1e089..c4b1680473 100644
 -bazel_dep(name = "platforms", version = "1.0.0")
 +bazel_dep(name = "bazel_skylib", version = "1.9.0")
 +bazel_dep(name = "grpc", version = "GRPC_VERSION", repo_name = "com_github_grpc_grpc")
-+bazel_dep(name = "grpc-java", version = "GRPC_VERSION")
++bazel_dep(name = "grpc-java", version = "GRPC_JAVA_VERSION")
 +bazel_dep(name = "googleapis", version = "0.0.0-20260514-1dbb1a14")
 +bazel_dep(name = "googleapis-java", version = "1.0.0")
 +bazel_dep(name = "googleapis-grpc-java", version = "1.0.0")
@@ -122,15 +122,15 @@ index 81b7c1e089..c4b1680473 100644
 -        "io.grpc:grpc-protobuf:1.66.0",
 -        "io.grpc:grpc-protobuf-lite:1.66.0",
 -        "io.grpc:grpc-stub:1.66.0",
-+        "io.grpc:grpc-api:GRPC_VERSION",
-+        "io.grpc:grpc-auth:GRPC_VERSION",
-+        "io.grpc:grpc-context:GRPC_VERSION",
-+        "io.grpc:grpc-core:GRPC_VERSION",
-+        "io.grpc:grpc-inprocess:GRPC_VERSION",
-+        "io.grpc:grpc-netty:GRPC_VERSION",
-+        "io.grpc:grpc-protobuf:GRPC_VERSION",
-+        "io.grpc:grpc-protobuf-lite:GRPC_VERSION",
-+        "io.grpc:grpc-stub:GRPC_VERSION",
++        "io.grpc:grpc-api:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-auth:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-context:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-core:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-inprocess:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-netty:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-protobuf:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-protobuf-lite:GRPC_JAVA_VERSION",
++        "io.grpc:grpc-stub:GRPC_JAVA_VERSION",
          "io.netty:netty-buffer:4.1.119.Final",
          "io.netty:netty-codec:4.1.119.Final",
          "io.netty:netty-codec-http:4.1.119.Final",
