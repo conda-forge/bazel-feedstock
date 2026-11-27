@@ -223,6 +223,7 @@ Feedstock Maintainers
 
 * [@abhi18av](https://github.com/abhi18av/)
 * [@adrianchia](https://github.com/adrianchia/)
+* [@flferretti](https://github.com/flferretti/)
 * [@h-vetinari](https://github.com/h-vetinari/)
 * [@jschueller](https://github.com/jschueller/)
 * [@nehaljwani](https://github.com/nehaljwani/)
