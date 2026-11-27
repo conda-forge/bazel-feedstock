@@ -45,8 +45,9 @@ export PROTOC=$BUILD_PREFIX/bin/protoc
 export GRPC_JAVA_PLUGIN=$BUILD_PREFIX/bin/grpc_java_plugin
 # anchor the regex: a bare 'libabseil' would also match libabseil-bazel-systemlib
 export ABSEIL_VERSION=$(conda list -p $PREFIX '^libabseil$' --fields version | grep -v '#')
-# grpc-java often does not have matching `X.Y.1` versions; use `X.Y.0` always
 export GRPC_VERSION=$(conda list -p $PREFIX libgrpc --fields version | grep -v '#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+$/\1.0/')
+# grpc-java on BCR lags C++ libgrpc (1.85 is missing and 1.84 pulls in rules_java 9.3)
+export GRPC_JAVA_VERSION="1.82.0"
 export PROTOC_VERSION=$(conda list -p $PREFIX libprotobuf | grep -v '^#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
@@ -68,6 +69,7 @@ sed -ie "s:TARGET_CPU:${TARGET_CPU}:" compile.sh
 sed -ie "s:BUILD_CPU:${BUILD_CPU}:" compile.sh
 sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" third_party/systemlibs/protobuf/MODULE.bazel
 sed -ie "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" MODULE.bazel
+sed -ie "s:GRPC_JAVA_VERSION:${GRPC_JAVA_VERSION}:" MODULE.bazel
 sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" MODULE.bazel
 sed -ie "s:GRPC_VERSION:${GRPC_VERSION}:" third_party/systemlibs/grpc/MODULE.bazel
 sed -ie "s:PROTOC_VERSION:${PROTOC_VERSION}:" third_party/systemlibs/grpc/MODULE.bazel

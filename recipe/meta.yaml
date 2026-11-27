@@ -1,4 +1,4 @@
-{% set version = "8.8.2" %}
+{% set version = "8.9.0" %}
 {% set base_url = "https://github.com/bazelbuild/bazel/releases/download" %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-dist.zip
-    sha256: d14a2e18a02a1d50ef06ba5fdcf636587d595b41e1661903cfce916df43284a0
+    sha256: 6320f08f70285bcae626ce10dc3e281088b748532b182d7ad77453acd146a8b3
     patches:
       # bazel depends on https://github.com/conda-forge/singlejar-feedstock to build,
       # which patches the same sources; the patches from singlejar should either be
@@ -26,14 +26,14 @@ source:
       - patches/0012-avoid-linking-to-grpc-_unsecure-use-regular-variant-.patch     # [unix]
       - patches/0013-Unbundle-grpc.patch                          # [unix]
       - patches/0014-Give-the-protobuf-systemlib-a-rules_shell-dep.patch    # [unix]
-      - patches/0015-Use-ProtoInfo-transitive_sources-in-vendored-grpc-rul.patch    # [unix]
+      - patches/0015-Use-ProtoInfo.transitive_sources-in-the-vendored-grp.patch     # [unix]
       - patches/0016-Unbundle-absl.patch                          # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 07e467a78e709a4c9b0dca13da15121b4fcd7c6a037dfb4b17c72e527d4d6785  # [win]
+    sha256: cf2268e306a888ece92c7821de8db7602fd5651ce6ae827de475adb59d5e959e  # [win]
 
 build:
-  number: 1
+  number: 0
   ignore_prefix_files: true
   binary_relocation: false
   # We are currently unable to select a JDK toolchain for the build.
