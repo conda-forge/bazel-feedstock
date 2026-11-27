@@ -15,11 +15,14 @@ PREFIX_DIR=$(dirname ${PREFIX_DIR})
 
 # FIXME: Since migrating to gRPC 1.78.0, we are seeing spurious hangs with
 # the client/server setup on macOS. Remove again if those are gone.
-if [[ "$*" = *"--version"* ]]; then
-  $PREFIX_DIR/bin/bazel-real --batch $*
-elif [[ "$*" != *"--output_user_root"* ]]; then
-  $PREFIX_DIR/bin/bazel-real --batch --output_user_root ${PREFIX_DIR}/share/bazel $*
-else
-  $PREFIX_DIR/bin/bazel-real --batch $*
+if [[ $(uname) == "Darwin" ]]; then
+  BATCH_ARG="--batch"
 fi
 
+if [[ "$*" = *"--version"* ]]; then
+  $PREFIX_DIR/bin/bazel-real ${BATCH_ARG} $*
+elif [[ "$*" != *"--output_user_root"* ]]; then
+  $PREFIX_DIR/bin/bazel-real ${BATCH_ARG} --output_user_root ${PREFIX_DIR}/share/bazel $*
+else
+  $PREFIX_DIR/bin/bazel-real ${BATCH_ARG} $*
+fi
