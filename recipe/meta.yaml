@@ -30,7 +30,7 @@ source:
       - patches/0016-Unbundle-absl.patch                          # [unix]
 
   - url: {{ base_url }}/{{ version }}/bazel-{{ version }}-windows-x86_64.exe  # [win]
-    sha256: 07e467a78e709a4c9b0dca13da15121b4fcd7c6a037dfb4b17c72e527d4d6785  # [win]
+    sha256: cf2268e306a888ece92c7821de8db7602fd5651ce6ae827de475adb59d5e959e  # [win]
 
 build:
   number: 0
