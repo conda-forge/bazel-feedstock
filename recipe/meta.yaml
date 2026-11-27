@@ -57,7 +57,8 @@ requirements:
     - libgrpc                  # [unix]
     - libprotobuf              # [unix]
     - ijar {{ version }}       # [unix]
-    - singlejar {{ version }}  # [unix]
+    # singlejar 7.7.3 only has a libabseil 20260817 build, which clashes with grpc_java_plugin <1.70 in build
+    - singlejar 7.7.*          # [unix]
     - bazel-toolchain >=0.2.0  # [unix]
     - zip                      # [linux]
     - unzip                    # [linux]
