@@ -54,8 +54,9 @@ fi
 export PROTOC=$BUILD_PREFIX/bin/protoc
 export GRPC_JAVA_PLUGIN=$BUILD_PREFIX/bin/grpc_java_plugin
 export ABSEIL_VERSION="$(conda list -p $PREFIX libabseil --fields version | awk '!/^#/ && NF { print $1; exit }')"
-# grpc-java often does not have matching `X.Y.1` versions; use `X.Y.0` always
 export GRPC_VERSION=$(conda list -p $PREFIX libgrpc --fields version | grep -v '#' | tr -s ' ' | cut -f 2 -d ' ' | sed -E 's/^([0-9]+\.[0-9]+)\.[0-9]+$/\1.0/')
+# grpc-java on BCR lags C++ libgrpc (1.85 is missing and 1.84 pulls in rules_java 9.3)
+export GRPC_JAVA_VERSION="1.82.0"
 export PROTOC_VERSION="$(conda list -p $PREFIX libprotobuf | awk '!/^#/ && NF { print $2; exit }' | sed -E 's/^[0-9]+\.([0-9]+\.[0-9]+)$/\1/')"
 export PROTOBUF_JAVA_MAJOR_VERSION="4"
 export BAZEL_BUILD_OPTS="--crosstool_top=//bazel_toolchain:toolchain --define=PROTOBUF_INCLUDE_PATH=${PREFIX}/include --cpu=${TARGET_CPU} --cxxopt=-std=c++17"
@@ -77,6 +78,7 @@ sed -i "s:ABSEIL_VERSION:${ABSEIL_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/absl/MODULE.bazel \
     third_party/systemlibs/protobuf/MODULE.bazel
+sed -i "s:GRPC_JAVA_VERSION:${GRPC_JAVA_VERSION}:" MODULE.bazel
 sed -i "s:GRPC_VERSION:${GRPC_VERSION}:" \
     MODULE.bazel \
     third_party/systemlibs/grpc/MODULE.bazel
@@ -119,7 +121,9 @@ pushd install-archive
   export INSTALL_BASE_KEY=$(cat install_base_key)
 popd
 mv install-archive $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
-chmod -R a+w $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
+# PackageZipper in Bazel 9.3 drops Unix permissions from the embedded zip,
+# so restore 0755 to match what Bazel's own extractor writes.
+chmod -R 0755 $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}
 for executable in "daemonize" "linux-sandbox" "process-wrapper"; do
   if [[ "${target_platform}" == osx-* ]]; then
     ${INSTALL_NAME_TOOL} -rpath ${PREFIX}/lib '@loader_path/../../../../lib' $PREFIX/share/bazel/install/${INSTALL_BASE_KEY}/$executable
